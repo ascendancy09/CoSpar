@@ -1,0 +1,9 @@
+numpy
+scipy
+scikit-learn
+scanpy
+pandas
+statsmodels
+plotnine
+matplotlib
+pot
