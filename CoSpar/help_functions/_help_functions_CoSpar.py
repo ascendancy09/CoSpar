@@ -338,7 +338,7 @@ def converting_id_from_subSpace_to_fullSpace(query_id_array_subSpace,subSpace_id
 
 
 
-def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=False,backward_map=True):
+def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=False,map_backwards=True):
 
     '''
         input_matrix: transition map 
@@ -351,44 +351,27 @@ def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=Fals
     '''
     
     if not ssp.issparse(input_matrix): input_matrix=ssp.csr_matrix(input_matrix).copy()
+    resol=10**(-10)
+    input_matrix=sparse_rowwise_multiply(input_matrix,1/(resol+np.sum(input_matrix,1).A.flatten()))
+    fate_N=len(fate_array)
+    N1,N2=input_matrix.shape
 
-    if backward_map:
-
-        resol=10**(-10)
-        input_matrix=sparse_rowwise_multiply(input_matrix,1/(resol+np.sum(input_matrix,1).A.flatten()))
-        #fate_array=list(set(state_annote))
-        fate_N=len(fate_array)
-        N1,N2=input_matrix.shape
-
-
+    if map_backwards:
         idx_array=np.zeros((N2,fate_N),dtype=bool)
         for k in range(fate_N):
             idx_array[:,k]=(state_annote==fate_array[k])
 
-
         potential_vector=np.zeros((N1,fate_N))
         fate_entropy=np.zeros(N1)
-
 
         for k in range(fate_N):
             potential_vector[:,k]=np.sum(input_matrix[:,idx_array[:,k]],1).A.flatten()
 
-
-
     ### forward map
     else:
-        resol=10**(-10)
-        #pdb.set_trace()
-        input_matrix=sparse_column_multiply(input_matrix,1/(resol+np.sum(input_matrix,0).A.flatten()))
-        #input_matrix[input_matrix<10**(-5)]=0 # get rid of artifact transitions through normalization 
-
-        fate_N=len(fate_array)
-        N1,N2=input_matrix.shape
-
         idx_array=np.zeros((N1,fate_N),dtype=bool)
         for k in range(fate_N):
             idx_array[:,k]=(state_annote==fate_array[k])
-
 
         potential_vector=np.zeros((N2,fate_N))
         fate_entropy=np.zeros(N2)
@@ -396,12 +379,11 @@ def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=Fals
         for k in range(fate_N):
             potential_vector[:,k]=np.sum(input_matrix[idx_array[:,k],:],0).A.flatten()
 
-
     return potential_vector
 
 
 
-def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_map'):
+def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_map',map_backwards=True):
     '''
         fate_array: targeted fate clusters. If not provided, use all fates in the annotation list. 
         use_transition_map: True, use transitino map; False, use demultiplexed map
@@ -410,8 +392,14 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
     #transition_map=adata.uns['transition_map']
     #demultiplexed_map=adata.uns['demultiplexed_map']
     state_annote_0=adata.obs['state_annotation']
-    Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
-    Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
+    if map_backwards:
+        cell_id_t1=adata.uns['Tmap_cell_id_t1']
+        cell_id_t2=adata.uns['Tmap_cell_id_t2']
+
+    else:
+        cell_id_t2=adata.uns['Tmap_cell_id_t1']
+        cell_id_t1=adata.uns['Tmap_cell_id_t2']
+
     x_emb=adata.obsm['X_umap'][:,0]
     y_emb=adata.obsm['X_umap'][:,1]
     data_des=adata.uns['data_des'][0]
@@ -419,12 +407,12 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
     if len(fate_array)==0: fate_array=list(set(state_annote_0))
     
 
-    state_annote_BW=state_annote_0[Tmap_cell_id_t2]
+    state_annote_BW=state_annote_0[cell_id_t2]
     
     if used_map_name in adata.uns.keys():
         used_map=adata.uns[used_map_name]
 
-        potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,backward_map=True)
+        potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,map_backwards=map_backwards)
 
         adata.uns['fate_map']={'fate_array':fate_array,'fate_map':potential_vector}
 
@@ -432,10 +420,13 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
         print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
 
         
-def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_map'):
+def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True):
 
     state_annote=adata.obs['state_annotation']
-    cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    if map_backwards:
+        cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    else:
+        cell_id_t2=adata.uns['Tmap_cell_id_t1']
 
     if len(selected_fates)==0: selected_fates=list(set(state_annote))
 
@@ -456,7 +447,7 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
             fate_array_flat.append(xx)
             fate_list_descrip.append(str(xx))
 
-    compute_fate_probability_map(adata,fate_array=fate_array_flat,used_map_name=used_map_name)
+    compute_fate_probability_map(adata,fate_array=fate_array_flat,used_map_name=used_map_name,map_backwards=map_backwards)
     fate_map_0=adata.uns['fate_map']['fate_map']
 
     N_macro=len(fate_list_array)
@@ -481,49 +472,46 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
     return fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array
     
 
-def compute_state_probability_map(adata,fate_array=[],used_map_name='transition_map'):
-    '''
-        Probability that a given state cluster progress to each state at the next time point
+# def compute_state_probability_map(adata,fate_array=[],used_map_name='transition_map'):
+#     '''
+#         Probability that a given state cluster progress to each state at the next time point
         
-        fate_array: targeted fate clusters. If not provided, use all fates in the annotation list. 
-        use_transition_map: True, use transitino map; False, use demultiplexed map
+#         fate_array: targeted fate clusters. If not provided, use all fates in the annotation list. 
+#         use_transition_map: True, use transitino map; False, use demultiplexed map
+#     '''
+    
+#     transition_map=adata.uns['transition_map']
+#     demultiplexed_map=adata.uns['demultiplexed_map']
+#     state_annote_0=adata.obs['state_annotation']
+#     Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
+#     Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
+#     x_emb=adata.obsm['X_umap'][:,0]
+#     y_emb=adata.obsm['X_umap'][:,1]
+#     data_des=adata.uns['data_des'][0]
+    
+#     if len(fate_array): fate_array=list(set(state_annote_0))
+    
+
+#     state_annote_BW=state_annote_0[Tmap_cell_id_t2]
+    
+
+#     if used_map_name in adata.uns.keys():
+#         used_map=adata.uns[used_map_name]
+
+#         potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,backward_map=False)
+
+#         adata.obsm['state_map']=potential_vector
+
+#     else:
+#         print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
+
+
+    
+
+def mapout_trajectories(input_map,expre_0r,threshold=0.1,cell_id_t1=[],cell_id_t2=[]):
     '''
-    
-    transition_map=adata.uns['transition_map']
-    demultiplexed_map=adata.uns['demultiplexed_map']
-    state_annote_0=adata.obs['state_annotation']
-    Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
-    Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
-    x_emb=adata.obsm['X_umap'][:,0]
-    y_emb=adata.obsm['X_umap'][:,1]
-    data_des=adata.uns['data_des'][0]
-    
-    if len(fate_array): fate_array=list(set(state_annote_0))
-    
-
-    state_annote_BW=state_annote_0[Tmap_cell_id_t2]
-    
-
-    if used_map_name in adata.uns.keys():
-        used_map=adata.uns[used_map_name]
-
-        potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,backward_map=False)
-
-        adata.obsm['state_map']=potential_vector
-
-    else:
-        print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
-
-
-    
-
-
-
-
-def mapout_backward_trajectories_v1(clonal_coupling,expre_0r,threshold=0.1,cell_id_t1=[],cell_id_t2=[],row_norm=True):
-    '''
-        clonal_coupling: a transition matrix (dimension: N1*N2) that connects subspace t1 (cell states in t1, total number N1) and subspace t2 (cell states in t2, total number N2) 
-
+        input_map: a transition matrix (dimension: N1*N2) that connects subspace t1 (cell states in t1, total number N1) and subspace t2 (cell states in t2, total number N2) 
+                    We assume that the input_map has been properly normalized. 
         The map is row-normalized first, before downstream application. This enhandce the robustness of the results.
 
         expre_0r: a continuous-valued vector (dimension N2) that defines the final cell states to be mapped to. 
@@ -538,17 +526,17 @@ def mapout_backward_trajectories_v1(clonal_coupling,expre_0r,threshold=0.1,cell_
         The fate probability vector is relatively thresholded
 
     '''
-    
-    if row_norm:
-        if not ssp.issparse(clonal_coupling): clonal_coupling=ssp.csr_matrix(clonal_coupling).copy()
-        resol=10**(-10)
-        clonal_coupling=sparse_rowwise_multiply(clonal_coupling,1/(resol+np.sum(clonal_coupling,1).A.flatten()))
 
-    if ssp.issparse(clonal_coupling): clonal_coupling=clonal_coupling.A
+    ########## We assume that the input_map has been properly normalized.    
+    # if not ssp.issparse(input_map): input_map=ssp.csr_matrix(input_map).copy()
+    # resol=10**(-10)
+    # input_map=sparse_rowwise_multiply(input_map,1/(resol+np.sum(input_map,1).A.flatten()))
 
-    N1,N2=clonal_coupling.shape
+    if ssp.issparse(input_map): input_map=input_map.A
+
+    N1,N2=input_map.shape
     if len(cell_id_t1)==0 and N1==N2: # two idx at t1 and t2 are the same
-        expre_1r=clonal_coupling.dot(expre_0r)
+        expre_1r=input_map.dot(expre_0r)
         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
         expre_1r_id=np.nonzero(expre_1r_idx)[0]
         expre_1r_truc=np.zeros(len(expre_1r))
@@ -560,7 +548,7 @@ def mapout_backward_trajectories_v1(clonal_coupling,expre_0r,threshold=0.1,cell_
         cell_id_t2=np.array(cell_id_t2)
         expre_0r_subspace=expre_0r[cell_id_t2]
 
-        expre_1r=clonal_coupling.dot(expre_0r_subspace)
+        expre_1r=input_map.dot(expre_0r_subspace)
         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
         expre_1r_id=np.nonzero(expre_1r_idx)[0] # id in t1 subspace
         expre_1r_truc=expre_1r[expre_1r_id]
@@ -569,43 +557,92 @@ def mapout_backward_trajectories_v1(clonal_coupling,expre_0r,threshold=0.1,cell_
 
     return expre_1r_truc
 
+# def mapout_backward_trajectories_v1(input_map,expre_0r,threshold=0.1,cell_id_t1=[],cell_id_t2=[],row_norm=True):
+#     '''
+#         input_map: a transition matrix (dimension: N1*N2) that connects subspace t1 (cell states in t1, total number N1) and subspace t2 (cell states in t2, total number N2) 
+
+#         The map is row-normalized first, before downstream application. This enhandce the robustness of the results.
+
+#         expre_0r: a continuous-valued vector (dimension N2) that defines the final cell states to be mapped to. 
+#                   The vector providues the weight of each cell state 
+
+#         cell_id_t1: the id array for cell states at t1
+#         cell_id_t2: the id array for cell states at t2
+
+
+#         Returns the fate probability of each cell state to enter a given cluster, as defined by the continuous-value vector expre_0r, at the next time point
+
+#         The fate probability vector is relatively thresholded
+
+#     '''
+    
+#     if row_norm:
+#         if not ssp.issparse(input_map): input_map=ssp.csr_matrix(input_map).copy()
+#         resol=10**(-10)
+#         input_map=sparse_rowwise_multiply(input_map,1/(resol+np.sum(input_map,1).A.flatten()))
+
+#     if ssp.issparse(input_map): input_map=input_map.A
+
+#     N1,N2=input_map.shape
+#     if len(cell_id_t1)==0 and N1==N2: # two idx at t1 and t2 are the same
+#         expre_1r=input_map.dot(expre_0r)
+#         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
+#         expre_1r_id=np.nonzero(expre_1r_idx)[0]
+#         expre_1r_truc=np.zeros(len(expre_1r))
+#         expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
+#     else:
+#         # both cell_id_t1 and cell_id_t2 are id's in the full space
+#         # selected_cell_id is also in the full space
+#         cell_id_t1=np.array(cell_id_t1)
+#         cell_id_t2=np.array(cell_id_t2)
+#         expre_0r_subspace=expre_0r[cell_id_t2]
+
+#         expre_1r=input_map.dot(expre_0r_subspace)
+#         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
+#         expre_1r_id=np.nonzero(expre_1r_idx)[0] # id in t1 subspace
+#         expre_1r_truc=expre_1r[expre_1r_id]
+#         expre_1r_truc=np.zeros(len(expre_1r))
+#         expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
+
+#     return expre_1r_truc
 
 
 
-def mapout_forward_trajectories_v1(clonal_coupling,expre_0r,threshold=0.1,cell_id_t1=[],cell_id_t2=[],column_norm=True):
-    '''
-        Returns the ancestor states two-days/four-days backwards
-    '''
 
-    if column_norm:
-        if not ssp.issparse(clonal_coupling): clonal_coupling=ssp.csr_matrix(clonal_coupling).copy()
-        resol=10**(-10)
-        clonal_coupling=sparse_column_multiply(clonal_coupling,1/(resol+np.sum(clonal_coupling,0).A.flatten()))
+# def mapout_forward_trajectories_v1(input_map,expre_0r,threshold=0.1,cell_id_t1=[],cell_id_t2=[],column_norm=True):
+#     '''
+#         Returns the ancestor states two-days/four-days backwards
+#     '''
 
-    if ssp.issparse(clonal_coupling): clonal_coupling=clonal_coupling.A
+#     if column_norm:
+#         if not ssp.issparse(input_map): input_map=ssp.csr_matrix(input_map).copy()
+#         resol=10**(-10)
+#         input_map=sparse_column_multiply(input_map,1/(resol+np.sum(input_map,0).A.flatten()))
 
-    N1,N2=clonal_coupling.shape
-    if len(cell_id_t1)==0 and N1==N2: # two idx at t1 and t2 are the same
-        expre_1r=expre_0r.dot(clonal_coupling)
-        expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
-        expre_1r_id=np.nonzero(expre_1r_idx)[0]
-        expre_1r_truc=np.zeros(len(expre_1r))
-        expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
-    else:
-        # both cell_id_t1 and cell_id_t2 are id's in the full space
-        # selected_cell_id is also in the full space
-        cell_id_t1=np.array(cell_id_t1)
-        cell_id_t2=np.array(cell_id_t2)
-        expre_0r_subspace=expre_0r[cell_id_t1]
+#     if ssp.issparse(input_map): input_map=input_map.A
 
-        expre_1r=expre_0r_subspace.dot(clonal_coupling)
-        expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
-        expre_1r_id=np.nonzero(expre_1r_idx)[0] # id in t1 subspace
-        expre_1r_truc=expre_1r[expre_1r_id]
-        expre_1r_truc=np.zeros(len(expre_1r))
-        expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
+#     N1,N2=input_map.shape
+#     if len(cell_id_t1)==0 and N1==N2: # two idx at t1 and t2 are the same
+#         expre_1r=expre_0r.dot(input_map)
+#         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
+#         expre_1r_id=np.nonzero(expre_1r_idx)[0]
+#         expre_1r_truc=np.zeros(len(expre_1r))
+#         expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
+#     else:
+#         # both cell_id_t1 and cell_id_t2 are id's in the full space
+#         # selected_cell_id is also in the full space
+#         cell_id_t1=np.array(cell_id_t1)
+#         cell_id_t2=np.array(cell_id_t2)
+#         expre_0r_subspace=expre_0r[cell_id_t1]
 
-    return expre_1r_truc
+#         expre_1r=expre_0r_subspace.dot(input_map)
+#         expre_1r_idx=expre_1r>threshold*np.max(expre_1r)
+#         expre_1r_id=np.nonzero(expre_1r_idx)[0] # id in t1 subspace
+#         expre_1r_truc=expre_1r[expre_1r_id]
+#         expre_1r_truc=np.zeros(len(expre_1r))
+#         expre_1r_truc[expre_1r_id]=expre_1r[expre_1r_id]
+
+#     return expre_1r_truc
 
 
 def compute_shortest_path_distance_from_raw_matrix(data_matrix,num_neighbors_target=5,mode='connectivity',limit=np.inf):
