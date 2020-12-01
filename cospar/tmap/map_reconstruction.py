@@ -28,7 +28,7 @@ import cospar.plotting as CSpl
 
 
 
-def initialize_input_adata_object(cell_by_feature_count_matrix,gene_names,time_info,cell_by_clone_matrix,
+def initialize_input_adata_object(cell_by_feature_count_matrix,gene_names,time_info,cell_by_clone_matrix=np.zeros(0),
         X_pca=[],X_emb=[],state_annotation=[],data_path='',figure_path='',data_des='',
         normalized_counts_per_cell=10000,min_counts=3, min_cells=3, min_gene_variability_pctl=85,n_pca_comp=40,n_neighbors=5,umap_min_dist=0.3,leiden_resolution=0.5):
     '''
@@ -103,10 +103,16 @@ def initialize_input_adata_object(cell_by_feature_count_matrix,gene_names,time_i
         os.mkdir(figure_path)
     except OSError as error:
         print(error)
-    #!mkdir -p $data_path
 
+    time_info=time_info.astype(str)
+
+    #!mkdir -p $data_path
     adata_orig=sc.AnnData(ssp.csr_matrix(cell_by_feature_count_matrix))
     adata_orig.var_names=list(gene_names)
+
+    if cell_by_clone_matrix.shape[0]==0:
+        cell_by_clone_matrix=np.zeros((adata_orig.shape[0],1))
+
     adata_orig.obsm['cell_by_clone_matrix']=ssp.csr_matrix(cell_by_clone_matrix)
     adata_orig.obs['time_info']=pd.Categorical(time_info)
     adata_orig.uns['data_des']=[data_des]
@@ -181,7 +187,7 @@ def initialize_input_adata_object(cell_by_feature_count_matrix,gene_names,time_i
 ####################
 
 
-def generate_full_kernel_matrix_single_v0(adata,file_name,round_of_smooth=10,neighbor_N=20,beta=0.1,truncation_threshold=0.001,save_subset=False,verbose=True,compute_new_Smatrix=False):
+def generate_full_kernel_matrix_single_v0(adata,file_name,round_of_smooth=10,neighbor_N=20,beta=0.1,truncation_threshold=0.001,save_subset=True,verbose=True,compute_new_Smatrix=False):
     '''
         At each iteration, truncate the similarity matrix (the kernel) using truncation_threshold. This promotes the sparsity of the matrix, thus the speed of computation.
         We set the truncation threshold to be small, to guarantee accracy. This method is used in our actual analysis
@@ -309,9 +315,13 @@ def generate_final_kernel(kernel_matrix,final_index_0,final_index_1,verbose=True
 
 
 
+def select_time_points_v0(adata_orig,time_point=['day_1','day_2'],verbose=True,use_all_cells=False):
+    '''
+        use_all_cells: use all cells at each time point. 
+        we assume that the time_point are arranged in ascending order
+    '''
 
-def select_time_points(adata_orig,time_point=[1,2],verbose=True,use_all_cells=False):
-    
+
     
     #x_emb_orig=adata_orig.obsm['X_umap'][:,0]
     #y_emb_orig=adata_orig.obsm['X_umap'][:,1]
@@ -448,7 +458,155 @@ def select_time_points(adata_orig,time_point=[1,2],verbose=True,use_all_cells=Fa
         for x in time_point:
             time_label=time_label+f'*{x}'
 
-        data_des=data_des_0+f'_TwoTimeClones_SubSampledTime{time_label}'
+        data_des=data_des_0+f'_TwoTimeClone_{time_label}'
+        adata.uns['data_des']=[data_des]
+
+        if verbose:
+            N_cell,N_clone=clone_annot.shape;
+            print(f"Cell number={N_cell}, Clone number={N_clone}")
+            x_emb=adata.obsm['X_umap'][:,0]
+            y_emb=adata.obsm['X_umap'][:,1]
+            CSpl.plot_one_gene_SW(x_emb,y_emb,-x_emb)
+
+        return adata        
+
+
+
+def select_time_points(adata_orig,time_point=['day_1','day_2'],verbose=True,use_all_cells=False):
+    '''
+        use_all_cells: use all cells at each time point. 
+        we assume that the time_point are arranged in ascending order
+    '''
+
+
+    
+    #x_emb_orig=adata_orig.obsm['X_umap'][:,0]
+    #y_emb_orig=adata_orig.obsm['X_umap'][:,1]
+    time_info_orig=np.array(adata_orig.obs['time_info'])
+    clone_annot_orig=adata_orig.obsm['cell_by_clone_matrix']
+    if len(time_point)==0: # use all clonally labelled cell states 
+        time_point=np.sort(list(set(time_info_orig)))
+
+    if (len(time_point)<2):
+        print("Error! Must select more than 1 time point!")
+    else:
+
+        At=[]
+        for j, time_0 in enumerate(time_point):
+            At.append(ssp.csr_matrix(clone_annot_orig[time_info_orig==time_0]))
+
+        ### Day t - t+1
+        Clonal_cell_ID_FOR_t=[]
+        for j in range(len(time_point)-1):
+            idx_t=np.array((At[j]*At[j+1].T).sum(1)>0).flatten()
+            time_index_t=time_info_orig==time_point[j]
+            temp=np.nonzero(time_index_t)[0][idx_t]
+            Clonal_cell_ID_FOR_t.append(temp) # this index is in the original space, without sampling etc
+            if verbose:
+                print(f"Clonal cell fraction (day {time_point[j]}-{time_point[j+1]}):",len(temp)/np.sum(time_index_t))
+
+        ### Day t+1 - t
+        Clonal_cell_ID_BACK_t=[]
+        for j in range(len(time_point)-1):
+            idx_t=np.array((At[j+1]*At[j].T).sum(1)>0).flatten()
+            time_index_t=time_info_orig==time_point[j+1]
+            temp=np.nonzero(time_index_t)[0][idx_t]
+            Clonal_cell_ID_BACK_t.append(temp) # this index is in the original space, without sampling etc
+            if verbose:
+                print(f"Clonal cell fraction (day {time_point[j+1]}-{time_point[j]}):",len(temp)/np.sum(time_index_t))
+
+        if verbose:
+            for j in range(len(time_point)-1):    
+                print(f"Numer of cells that are clonally related -- day {time_point[j]}: {len(Clonal_cell_ID_FOR_t[j])}  and day {time_point[j+1]}: {len(Clonal_cell_ID_BACK_t[j])}")
+
+        proportion=np.ones(len(time_point))
+        # flatten the list
+        flatten_clonal_cell_ID_FOR=np.array([sub_item for item in Clonal_cell_ID_FOR_t for sub_item in item])
+        flatten_clonal_cell_ID_BACK=np.array([sub_item for item in Clonal_cell_ID_BACK_t for sub_item in item])
+        valid_clone_N_FOR=np.sum(clone_annot_orig[flatten_clonal_cell_ID_FOR].A.sum(0)>0)
+        valid_clone_N_BACK=np.sum(clone_annot_orig[flatten_clonal_cell_ID_BACK].A.sum(0)>0)
+
+        if verbose:
+            print("Valid clone number 'FOR' post selection",valid_clone_N_FOR)
+            #print("Valid clone number 'BACK' post selection",valid_clone_N_BACK)
+
+
+        ###################### select initial and later cell states
+
+        if use_all_cells:
+            old_Tmap_cell_id_t1=[]
+            for t_temp in time_point[:-1]:
+                old_Tmap_cell_id_t1=old_Tmap_cell_id_t1+list(np.nonzero(time_info_orig==t_temp)[0])
+            old_Tmap_cell_id_t1=np.array(old_Tmap_cell_id_t1)
+
+            ########
+            old_Tmap_cell_id_t2=[]
+            for t_temp in time_point[1:]:
+                old_Tmap_cell_id_t2=old_Tmap_cell_id_t2+list(np.nonzero(time_info_orig==t_temp)[0])
+            old_Tmap_cell_id_t2=np.array(old_Tmap_cell_id_t2)
+
+        else:
+            old_Tmap_cell_id_t1=flatten_clonal_cell_ID_FOR
+            old_Tmap_cell_id_t2=flatten_clonal_cell_ID_BACK
+
+
+        old_clonal_cell_id_t1=flatten_clonal_cell_ID_FOR
+        old_clonal_cell_id_t2=flatten_clonal_cell_ID_BACK
+        ########################
+
+        sp_id=np.sort(list(set(list(old_Tmap_cell_id_t1)+list(old_Tmap_cell_id_t2))))
+        sp_idx=np.zeros(clone_annot_orig.shape[0],dtype=bool)
+        sp_idx[sp_id]=True
+
+        Tmap_cell_id_t1=hf.converting_id_from_fullSpace_to_subSpace(old_Tmap_cell_id_t1,sp_id)[0]
+        clonal_cell_id_t1=hf.converting_id_from_fullSpace_to_subSpace(old_clonal_cell_id_t1,sp_id)[0]
+        clonal_cell_id_t2=hf.converting_id_from_fullSpace_to_subSpace(old_clonal_cell_id_t2,sp_id)[0]
+        Tmap_cell_id_t2=hf.converting_id_from_fullSpace_to_subSpace(old_Tmap_cell_id_t2,sp_id)[0]
+
+        Clonal_cell_ID_FOR_t_new=[]
+        for temp_id_list in Clonal_cell_ID_FOR_t:
+            convert_list=hf.converting_id_from_fullSpace_to_subSpace(temp_id_list,sp_id)[0]
+            Clonal_cell_ID_FOR_t_new.append(convert_list)
+
+        Clonal_cell_ID_BACK_t_new=[]
+        for temp_id_list in Clonal_cell_ID_BACK_t:
+            convert_list=hf.converting_id_from_fullSpace_to_subSpace(temp_id_list,sp_id)[0]
+            Clonal_cell_ID_BACK_t_new.append(convert_list)
+
+
+        sp_id_0=np.sort(list(old_clonal_cell_id_t1)+list(old_clonal_cell_id_t2))
+        sp_idx_0=np.zeros(clone_annot_orig.shape[0],dtype=bool)
+        sp_idx_0[sp_id_0]=True
+
+        barcode_id=np.nonzero(clone_annot_orig[sp_idx_0].A.sum(0).flatten()>0)[0]
+        #sp_id=np.nonzero(sp_idx)[0]
+        clone_annot=clone_annot_orig[sp_idx][:,barcode_id]
+
+        adata=sc.AnnData(adata_orig.X[sp_idx]);
+        adata.var_names=adata_orig.var_names
+        adata.obsm['X_pca']=adata_orig.obsm['X_pca'][sp_idx]
+        adata.obsm['X_umap']=adata_orig.obsm['X_umap'][sp_idx]
+        adata.obs['state_annotation']=pd.Categorical(adata_orig.obs['state_annotation'][sp_idx])
+        adata.obs['time_info']=pd.Categorical(adata_orig.obs['time_info'][sp_idx])
+        adata.uns['data_path']=adata_orig.uns['data_path']
+        adata.uns['figure_path']=adata_orig.uns['figure_path']
+
+        adata.obsm['cell_by_clone_matrix']=clone_annot
+        adata.uns['clonal_cell_id_t1']=clonal_cell_id_t1
+        adata.uns['clonal_cell_id_t2']=clonal_cell_id_t2
+        adata.uns['Tmap_cell_id_t1']=Tmap_cell_id_t1
+        adata.uns['Tmap_cell_id_t2']=Tmap_cell_id_t2
+        adata.uns['multiTime_cell_id_t1']=Clonal_cell_ID_FOR_t_new
+        adata.uns['multiTime_cell_id_t2']=Clonal_cell_ID_BACK_t_new
+        adata.uns['proportion']=np.ones(len(time_point)-1)
+        adata.uns['sp_idx']=sp_idx
+
+        data_des_0=adata_orig.uns['data_des'][0]
+        time_label='t'
+        for x in time_point:
+            time_label=time_label+f'*{x}'
+
+        data_des=data_des_0+f'_TwoTimeClone_{time_label}'
         adata.uns['data_des']=[data_des]
 
         if verbose:
@@ -689,13 +847,13 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime(MultiTime_cell_id_arr
 
 
 
-def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_id_array_t1,MultiTime_cell_id_array_t2,proportion,clonal_map,cell_by_clone_matrix,intra_clone_threshold=0,global_threshold=0.1,normalization_mode=0,verbose=True):
+def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_id_array_t1,MultiTime_cell_id_array_t2,proportion,clonal_map,cell_by_clone_matrix,intra_clone_threshold=0,noise_threshold=0.1,normalization_mode=0,verbose=True):
     # updated on Nov 10, 2020
 
     '''
         This is the same as 'refine_clonal_map_by_integrating_clonal_info_multiTime', except that there is a local thresholding controlled by 'intra_clone_threshold', and there is no smoothing afterwards
 
-        global_threshold: for all clones
+        noise_threshold: across all cell states (for transition profiles starting from a given state)
         intra_clone_threshold: clone-specific 
 
     '''
@@ -709,7 +867,7 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
         if normalization_mode==1: print("Clone normalization: N2/N1")
         if normalization_mode==2: print("Clone normalization: N2")
 
-    clonal_map=hf.matrix_row_or_column_thresholding(clonal_map,global_threshold,row_threshold=True)
+    clonal_map=hf.matrix_row_or_column_thresholding(clonal_map,noise_threshold,row_threshold=True)
     
     if not ssp.issparse(clonal_map): clonal_map=ssp.csr_matrix(clonal_map)
     if not ssp.issparse(cell_by_clone_matrix): cell_by_clone_matrix=ssp.csr_matrix(cell_by_clone_matrix)
@@ -773,9 +931,9 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
                 weight_factor=np.sqrt(np.mean(idx1[idx1>0])*np.mean(idx2[idx2>0])) # the contribution of a particular clone can be tuned by its average entries
                 if verbose and (weight_factor>1):
                     print("marker gene weight",weight_factor)
-
+                #print("marker gene weight",weight_factor)
                 ############## New edition  
-                #new_coupling_matrix[id_1[:,np.newaxis],id_2]=proportion[j]*prob*weight_factor 
+                #new_coupling_matrix[id_1[:,np.newaxis],id_2]=proportion[j]*prob
                 new_coupling_matrix[id_1[:,np.newaxis],id_2]=new_coupling_matrix[id_1[:,np.newaxis],id_2]+proportion[j]*prob*weight_factor 
 
         ## update offset
@@ -792,13 +950,13 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
 
 ###############
 
-def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=[1,2],SM_array=[15,10,5],CoSpar_KNN=20,noise_threshold=0.2,normalization_mode=0,use_all_cells=False,save_subset=False,use_full_kernel=True,verbose=True,trunca_threshold=0.001,compute_new_Smatrix=False):
+def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=['1','2'],SM_array=[15,10,5],CoSpar_KNN=20,noise_threshold=0.1,demulti_threshold=0.05,normalization_mode=0,use_all_cells=False,save_subset=True,use_full_kernel=False,verbose=True,trunca_threshold=0.001,compute_new_Smatrix=False):
     '''
         Purpose: 
             Compute transition map for re-sampled clonal data with both stte and lineage information. We assume that the lineage information spans at least two time points.
 
         Input:
-            selected_clonal_time_points: the time point to be included for analysis
+            selected_clonal_time_points: the time point to be included for analysis. It should be in ascending order: 'day_1','day_2'.... We assume that it is string
 
             The adata object should encode the following information
                 
@@ -849,7 +1007,7 @@ def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=[1,2],SM_array=[
 
     for xx in selected_clonal_time_points:
         if xx not in adata_orig.uns['clonal_time_points']:
-            print(f"Error! 'selected_clonal_time_points' contain time points without clonal information. Please set clonal_time_point to be at least two of {adata_orig.uns['clonal_time_points']}. If there is only one clonal time point, plesae run ----CS.tmap.CoSpar_OneTimeClones----")
+            print(f"Error! 'selected_clonal_time_points' contain time points without clonal information. Please set clonal_time_point to be at least two of {adata_orig.uns['clonal_time_points']}. If there is only one clonal time point, plesae run ----cospar.tmap.CoSpar_OneTimeClones----")
             return adata_orig
 
 
@@ -867,17 +1025,19 @@ def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=[1,2],SM_array=[
         round_of_smooth=np.max(SM_array)
 
         kernel_file_name=f'{data_path}/Similarity_matrix_with_all_cell_states_kNN{CoSpar_KNN}_Truncate{temp_str}_v0_fullkernel{use_full_kernel}'
-        kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
+        if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new_Smatrix)):
+            kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
                         neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new_Smatrix)
     if verbose:
         print("-------Step 3: Optimize the transition map recursively---------")
-    CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,normalization_mode=normalization_mode,use_all_cells=use_all_cells,
+    CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,demulti_threshold=demulti_threshold,normalization_mode=normalization_mode,
             save_subset=save_subset,use_full_kernel=use_full_kernel,verbose=verbose,trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
+
 
     return adata
     
 
-def CoSpar_TwoTimeClones_private(adata,SM_array=[15,10,5],neighbor_N=20,noise_threshold=0.2,normalization_mode=0,use_all_cells=False,save_subset=False,use_full_kernel=True,verbose=True,trunca_threshold=0.001,compute_new_Smatrix=False):
+def CoSpar_TwoTimeClones_private(adata,SM_array=[15,10,5],neighbor_N=20,noise_threshold=0.1,demulti_threshold=0.05,normalization_mode=0,save_subset=True,use_full_kernel=False,verbose=True,trunca_threshold=0.001,compute_new_Smatrix=False):
     '''
         This function is for internal use. 
 
@@ -903,8 +1063,6 @@ def CoSpar_TwoTimeClones_private(adata,SM_array=[15,10,5],neighbor_N=20,noise_th
             use_full_kernel: True, we use all available cell states to generate the similarity matrix. We then sub-sample cell states that are relevant for downstream analysis from this full matrix. This tends to be more accurate.
                              False, we only use cell states for the selected time points to generate the similarity matrix. This is faster, yet could be less accurate.
 
-            use_all_cells: True, infer the transition map among all cell states in the selected time points (t1+t2)-(t1+t2) matrix.  This can be very slow for large datasets. 
-                           False, infer the transition map for cell states that are clonally labeled (except that you only select two time points.)
 
             verbose: True, print information of the analysis; False, do not print.
             trunca_threshold: this value is only for reducing the computed matrix size for saving. We set entries to zero in the similarity matrix that are smaller than this threshold. This threshld should be small, but not too small. 
@@ -1030,35 +1188,57 @@ def CoSpar_TwoTimeClones_private(adata,SM_array=[15,10,5],neighbor_N=20,noise_th
 
 
     ### expand the map to other cell states
-    if verbose:
-        print("Final round of SM")
-
-    if j<len(SM_array):
-        used_initial_kernel_ext=initial_kernel_array_ext[j]
-        used_final_kernel_ext=final_kernel_array_ext[j]
+    ratio_t1=np.sum(np.in1d(Tmap_cell_id_t1,clonal_cell_id_t1))/len(Tmap_cell_id_t1)
+    ratio_t2=np.sum(np.in1d(Tmap_cell_id_t2,clonal_cell_id_t2))/len(Tmap_cell_id_t2)
+    if (ratio_t1==1) and (ratio_t2==1): # no need to SM the map
+        if verbose:
+            print("No need for Final Smooth")
+            adata.uns['transition_map']=ssp.csr_matrix(clonal_coupling)
     else:
-        used_initial_kernel_ext=initial_kernel_array_ext[-1]
-        used_final_kernel_ext=final_kernel_array_ext[-1]
+        if verbose:
+            print("Final round of SM")
 
-    unSM_sc_coupling=ssp.csr_matrix(unSM_sc_coupling)
-    t=time.time()
-    temp=unSM_sc_coupling*used_final_kernel_ext
+        if j<len(SM_array):
+            used_initial_kernel_ext=initial_kernel_array_ext[j]
+            used_final_kernel_ext=final_kernel_array_ext[j]
+        else:
+            used_initial_kernel_ext=initial_kernel_array_ext[-1]
+            used_final_kernel_ext=final_kernel_array_ext[-1]
+
+        unSM_sc_coupling=ssp.csr_matrix(unSM_sc_coupling)
+        t=time.time()
+        temp=unSM_sc_coupling*used_final_kernel_ext
+        if verbose:
+            print("Phase I: time elapsed -- ", time.time()-t)
+        clonal_map_1=used_initial_kernel_ext.dot(temp)
+        if verbose:
+            print("Phase II: time elapsed -- ", time.time()-t)
+
+
+        adata.uns['transition_map']=ssp.csr_matrix(clonal_map_1)
+        #adata.uns['transition_map_unExtended']=ssp.csr_matrix(clonal_coupling)
+
+
     if verbose:
-        print("Phase I: time elapsed -- ", time.time()-t)
-    clonal_map_1=used_initial_kernel_ext.dot(temp)
-    if verbose:
-        print("Phase II: time elapsed -- ", time.time()-t)
+        print("----Demultiplexed transition map----")
+
+    #pdb.set_trace()
+    demultiplexed_map_0=refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(multiTime_cell_id_t1,multiTime_cell_id_t2,proportion,clonal_coupling,
+        cell_by_clone_matrix,intra_clone_threshold=0,noise_threshold=demulti_threshold,normalization_mode=normalization_mode)
+
+    idx_t1=hf.converting_id_from_fullSpace_to_subSpace(clonal_cell_id_t1,Tmap_cell_id_t1)[0]
+    idx_t2=hf.converting_id_from_fullSpace_to_subSpace(clonal_cell_id_t2,Tmap_cell_id_t2)[0]
+    demultiplexed_map=np.zeros((len(Tmap_cell_id_t1),len(Tmap_cell_id_t2)))
+    demultiplexed_map[idx_t1[:,np.newaxis],idx_t2]=demultiplexed_map_0.A
+    adata.uns['demulti_transition_map']=ssp.csr_matrix(demultiplexed_map)
 
 
-    adata.uns['transition_map']=ssp.csr_matrix(clonal_map_1)
 
-
-
-
-
-def CoSpar_TwoTimeClones_demultiplexing(adata,intra_clone_threshold=0,global_threshold=0.2,normalization_mode=0):
+def CoSpar_TwoTimeClones_demultiplexing(adata,intra_clone_threshold=0,demulti_threshold=0.05,normalization_mode=0):
     '''
         Infer transition amplitude of cell states towards clonally-related cell states
+
+        If the transition map is further smoothed to expand the cell states to cover all possible states, due to normalization, the probability at individual cell states now gets diluted. You will need to lower the demulti_threshold. 
     '''
     ########## extract data
     if 'transition_map' not in adata.uns.keys():
@@ -1067,14 +1247,9 @@ def CoSpar_TwoTimeClones_demultiplexing(adata,intra_clone_threshold=0,global_thr
     else:
 
         clone_annot=adata.obsm['cell_by_clone_matrix']
-        #clonal_cell_id_t1=adata.uns['clonal_cell_id_t1']
-        #clonal_cell_id_t2=adata.uns['clonal_cell_id_t2']
-        #Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
-        #Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
-        #sp_idx=adata.uns['sp_idx']
-        #data_des=adata.uns['data_des']
-        multiTime_cell_id_t1=adata.uns['multiTime_cell_id_t1']
-        multiTime_cell_id_t2=adata.uns['multiTime_cell_id_t2']
+
+        multiTime_cell_id_t1=[adata.uns['Tmap_cell_id_t1']]
+        multiTime_cell_id_t2=[adata.uns['Tmap_cell_id_t2']]
         proportion=adata.uns['proportion']
         #data_path=adata.uns['data_path']
         transition_map=adata.uns['transition_map']
@@ -1084,15 +1259,16 @@ def CoSpar_TwoTimeClones_demultiplexing(adata,intra_clone_threshold=0,global_thr
             cell_by_clone_matrix=ssp.csr_matrix(cell_by_clone_matrix)
 
         demultiplexed_map=refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(multiTime_cell_id_t1,multiTime_cell_id_t2,proportion,transition_map,
-            cell_by_clone_matrix,intra_clone_threshold=intra_clone_threshold,global_threshold=global_threshold,normalization_mode=normalization_mode)
+            cell_by_clone_matrix,intra_clone_threshold=intra_clone_threshold,noise_threshold=demulti_threshold,normalization_mode=normalization_mode)
 
-        adata.uns['demultiplexed_map']=ssp.csr_matrix(demultiplexed_map)
+        adata.uns['demulti_transition_map']=ssp.csr_matrix(demultiplexed_map)
+
 
 
 
 
 def Transition_map_from_highly_variable_genes(adata,min_counts=3,min_cells=3,min_vscore_pctl=85,noise_threshold=0.2,neighbor_N=20,normalization_mode=0,
-    use_full_kernel=True,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
+    use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
     '''
         Input:
             adata: assumed to be preprocessed, only has two time points.
@@ -1195,7 +1371,7 @@ def Transition_map_from_highly_variable_genes(adata,min_counts=3,min_cells=3,min
     adata.uns['data_des'][0]=[data_des_1]
 
     CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=neighbor_N,noise_threshold=noise_threshold,
-        normalization_mode=normalization_mode,use_all_cells=use_all_cells,save_subset=True,use_full_kernel=use_full_kernel,
+        normalization_mode=normalization_mode,save_subset=True,use_full_kernel=use_full_kernel,
         verbose=verbose,trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
 
     adata.uns['HighVar_transition_map']=adata.uns['transition_map']
@@ -1271,10 +1447,10 @@ def Compute_custom_OT_transition_map(adata,OT_epsilon=0.02,OT_max_iter=1000,OT_s
     adata.uns['OT_transition_map']=ssp.csr_matrix(OT_transition_map)
     data_des_0=adata.uns['data_des'][0]
     data_des_1=data_des_0+'_OT' # to record which initialization is used
-    adata.uns['data_des'][0]=[data_des_1]
+    adata.uns['data_des']=[data_des_1]
 
 def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_update_iter_N=1,normalization_mode=0,
-    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=True,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
+    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
     '''
         the adata structure must be prepared by preprocessing steps
 
@@ -1352,7 +1528,7 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
         adata.uns['proportion']=[1]
 
         CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,
-            normalization_mode=normalization_mode,use_all_cells=use_all_cells,save_subset=True,use_full_kernel=use_full_kernel,verbose=verbose,
+            normalization_mode=normalization_mode,save_subset=True,use_full_kernel=use_full_kernel,verbose=verbose,
             trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
 
         ## update, for the next iteration
@@ -1361,7 +1537,7 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
 
 
 def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point='2',initialize_method='OT',OT_epsilon=0.02,OT_dis_KNN=5,OT_max_iter=1000,OT_stopThr=1e-09,HighVar_gene_pctl=85,
-    Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=True,SM_array=[15,10,5],
+    Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],
     verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=False):
 
 
@@ -1456,18 +1632,21 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
             print(f"Error! the 'initial_time_points' are not valid. Please select from {list(set(adata_orig.obs['time_info']))}")
             return adata_orig
 
-    if clonal_time_point not in adata_orig.uns['clonal_time_points']:
-        print(f"Error! 'clonal_time_point' do not contain clonal information. Please set clonal_time_point to be one of {adata_orig.uns['clonal_time_points']}")
-        return adata_orig
+    with_clonal_info=(clonal_time_point in adata_orig.uns['clonal_time_points'])
+    if not with_clonal_info:
+        print(f"'clonal_time_point' do not contain clonal information. Please set clonal_time_point to be one of {adata_orig.uns['clonal_time_points']}")
+        #print("Consider run ----cs.tmap.CoSpar_NoClonalInfo------")
+        print("Keep running but without clonal information")
+        #return adata_orig
 
     sp_idx=np.zeros(adata_orig.shape[0],dtype=bool)
     time_info_orig=np.array(adata_orig.obs['time_info'])
     all_time_points=initial_time_points+[clonal_time_point]
-    label=''
+    label='t'
     for xx in all_time_points:
         id_array=np.nonzero(time_info_orig==xx)[0]
         sp_idx[id_array]=True
-        label=label+str(xx)+'*'
+        label=label+'*'+str(xx)
 
     adata=sc.AnnData(adata_orig.X[sp_idx]);
     adata.var_names=adata_orig.var_names
@@ -1477,7 +1656,7 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
     adata.obs['time_info']=pd.Categorical(adata_orig.obs['time_info'][sp_idx])
     adata.uns['data_path']=adata_orig.uns['data_path']
     data_des_0=adata_orig.uns['data_des'][0]
-    data_des=data_des_0+f'_OneTimeClone_SubSampledTime{label}'
+    data_des=data_des_0+f'_OneTimeClone_{label}'
     adata.uns['data_des']=[data_des]
     adata.uns['figure_path']=adata_orig.uns['figure_path']
 
@@ -1517,8 +1696,9 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
         temp_id_t1=np.nonzero(time_info==yy)[0]
         sp_id_t1=hf.converting_id_from_fullSpace_to_subSpace(temp_id_t1,Tmap_cell_id_t1)[0]
         
-        transition_map_temp=adata_temp.uns['transition_map'].A
-        transition_map[sp_id_t1,:]=transition_map_temp
+        if with_clonal_info:
+            transition_map_temp=adata_temp.uns['transition_map'].A
+            transition_map[sp_id_t1,:]=transition_map_temp
 
         if initialize_method=='OT':
             transition_map_ini_temp=adata_temp.uns['OT_transition_map']
@@ -1527,8 +1707,9 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
 
         ini_transition_map[sp_id_t1,:]=transition_map_ini_temp.A
 
-
-    adata.uns['transition_map']=ssp.csr_matrix(transition_map)
+    if with_clonal_info:
+        adata.uns['transition_map']=ssp.csr_matrix(transition_map)
+    
     if initialize_method=='OT':
         adata.uns['OT_transition_map']=ssp.csr_matrix(ini_transition_map)
     else:
@@ -1538,8 +1719,9 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
     return adata
 
 
+
 def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1','2'],initialize_method='OT',OT_epsilon=0.02,OT_dis_KNN=5,OT_max_iter=1000,OT_stopThr=1e-09,HighVar_gene_pctl=80,
-    Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=True,SM_array=[15,10,5],
+    Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],
     verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
 
     '''
@@ -1599,7 +1781,8 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
     sort_time_point=np.sort(list(set(time_info_orig)))
     N_valid_time=np.sum(np.in1d(sort_time_point,selected_two_time_points))
     if (N_valid_time!=2): 
-        print(f"Error! Must select only two time points among the list {sort_time_point}. The second time point in this list (not necessarily later time point) is assumed to have clonal data.")
+        print(f"Error! Must select only two time points among the list {sort_time_point}")
+        #The second time point in this list (not necessarily later time point) is assumed to have clonal data.")
     else:
         ####################################
         if verbose:
@@ -1615,7 +1798,7 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
         adata.obs['time_info']=pd.Categorical(adata_orig.obs['time_info'][sp_idx])
         adata.uns['data_path']=adata_orig.uns['data_path']
         data_des_0=adata_orig.uns['data_des'][0]
-        data_des=data_des_0+f'_OneTimeClone_SubSampledTime{selected_two_time_points[0]}*{selected_two_time_points[1]}'
+        data_des=data_des_0+f'_OneTimeClone_t*{selected_two_time_points[0]}*{selected_two_time_points[1]}'
         adata.uns['data_des']=[data_des]
         adata.uns['figure_path']=adata_orig.uns['figure_path']
 
@@ -1651,7 +1834,8 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
             round_of_smooth=np.max(SM_array)
 
             kernel_file_name=f'{data_path}/Similarity_matrix_with_all_cell_states_kNN{CoSpar_KNN}_Truncate{temp_str}_v0_fullkernel{use_full_kernel}'
-            kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
+            if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new_Smatrix)):
+                kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
                             neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new_Smatrix)
 
         
@@ -1684,17 +1868,77 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
 
 
         ########### Jointly optimize the transition map and the initial clonal states
-        if verbose:
-            print("----------------")
-            print("Step 2: Jointly optimize the transition map and the initial clonal states!")
+        if selected_two_time_points[1] in adata_orig.uns['clonal_time_points']:
+            if verbose:
+                print("----------------")
+                print("Step 2: Jointly optimize the transition map and the initial clonal states!")
 
-        t=time.time()
-        CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_update_iter_N=Clone_update_iter_N,normalization_mode=normalization_mode,noise_threshold=noise_threshold,
-            CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,use_all_cells=use_all_cells,
-            compute_new_Smatrix=compute_new_Smatrix)
+            t=time.time()
+            CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_update_iter_N=Clone_update_iter_N,normalization_mode=normalization_mode,noise_threshold=noise_threshold,
+                CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,use_all_cells=use_all_cells,
+                compute_new_Smatrix=compute_new_Smatrix)
 
-        if verbose:
-            print(f"Finishing computing transport map from CoSpar using inferred clonal data, used time {time.time()-t}")
+            if verbose:
+                print(f"Finishing computing transport map from CoSpar using inferred clonal data, used time {time.time()-t}")
+        else:
+            print("No clonal information available. Skip the joint optimization of clone and scRNAseq data")
 
 
         return adata
+
+def compute_naive_map(adata,include_undiff=True):
+    '''
+        Assume uniform transition within the same clone
+    '''
+
+    cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    cell_id_t1=adata.uns['Tmap_cell_id_t1']
+    clone_annot=adata.obsm['cell_by_clone_matrix']
+    state_annote=adata.obs['state_annotation']
+
+
+    weinreb_map=clone_annot[cell_id_t1]*clone_annot[cell_id_t2].T
+    weinreb_map=weinreb_map.astype(int)
+    adata.uns['naive_transition_map']=ssp.csr_matrix(weinreb_map)
+
+def compute_weinreb_map(adata,include_undiff=True):
+    '''
+        This is not supposed to be used outsides
+    '''
+
+    print("This method works when there are only time points, and only for LARRY dataset")
+    cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    cell_id_t1=adata.uns['Tmap_cell_id_t1']
+    clone_annot=adata.obsm['cell_by_clone_matrix']
+    state_annote=adata.obs['state_annotation']
+
+    if include_undiff:
+        fate_array=['Ccr7_DC',  'Mast', 'Meg', 'pDC', 'Eos', 'Lymphoid', 'Erythroid', 'Baso', 'Neutrophil', 'Monocyte','undiff']
+    else:
+        fate_array=['Ccr7_DC',  'Mast', 'Meg', 'pDC', 'Eos', 'Lymphoid', 'Erythroid', 'Baso', 'Neutrophil', 'Monocyte']
+    potential_vector_clone, fate_entropy_clone=hf.compute_state_potential(clone_annot[cell_id_t2].T,state_annote[cell_id_t2],fate_array,fate_count=True)
+
+
+    sel_unipotent_clone_id=np.array(list(set(np.nonzero(fate_entropy_clone==1)[0])))
+    #sel_unipotent_clone_id=core.converting_id_from_fullSpace_to_subSpace(Clone_id_with_single_fate,barcode_id)[0]
+    #sel_unipotent_clone_id=np.array(list(Clone_id_with_single_fate_on_day6.intersection(barcode_id)))
+    clone_annot_unipotent=clone_annot[:,sel_unipotent_clone_id]
+    weinreb_map=clone_annot_unipotent[cell_id_t1]*clone_annot_unipotent[cell_id_t2].T
+    weinreb_map=weinreb_map.astype(int)
+    print(f"Used clone fraction {len(sel_unipotent_clone_id)/clone_annot.shape[1]}")
+    adata.uns['weinreb_transition_map']=ssp.csr_matrix(weinreb_map)
+
+def save_map(adata):
+    data_des=adata.uns['data_des'][0]
+    data_path=adata.uns['data_path'][0]
+    adata.uns['state_trajectory']={} # need to set to empty, otherwise, it does not work
+    adata.uns['fate_trajectory']={} # need to set to empty, otherwise, it does not work
+    adata.uns['multiTime_cell_id_t1']={} 
+    adata.uns['multiTime_cell_id_t2']={} 
+    adata.uns['fate_map']={}
+    adata.uns['fate_map']={}
+    file_name=f'{data_path}/{data_des}_adata_with_transition_map.h5ad'
+    adata.write_h5ad(file_name, compression='gzip')
+    print(f"Saved file: data_des='{data_des}'")
+
+    

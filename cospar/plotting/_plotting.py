@@ -10,7 +10,7 @@ from plotnine import *
 from sklearn import manifold
 import pandas as pd
 import scanpy as sc
-#import pdb
+import pdb
 import os
 import scipy.sparse as ssp
 import cospar.help_functions as hf
@@ -35,6 +35,44 @@ def start_subplot_figure(n_subplots, n_columns=5, fig_width=14, row_height=3, dp
     n_rows = int(np.ceil(n_subplots / float(n_columns)))
     fig = plt.figure(figsize = (fig_width, n_rows * row_height), dpi=dpi)
     return fig, n_rows, n_columns
+
+def plot_one_gene(E, gene_list, gene_to_plot, x, y, normalize=False, ax=None, order_points=True, col_range=(0,100), buffer_pct=0.03, point_size=1, color_map=None, smooth_operator=None):
+    if color_map is None:
+        color_map = darken_cmap(plt.cm.Reds,.9)
+    if ax is None:
+        fig,ax=plt.subplots()
+        
+    if normalize:
+        E = tot_counts_norm(E, target_mean=1e6)[0]
+    
+    k = list(gene_list).index(gene_to_plot)
+    coldat = E[:,k].A
+    
+    if smooth_operator is None:
+        coldat = coldat.squeeze()
+    else:
+        coldat = np.dot(smooth_operator, coldat).squeeze()
+    
+    if order_points:
+        o = np.argsort(coldat)
+    else:
+        o = np.arange(len(coldat))
+        
+    vmin = np.percentile(coldat, col_range[0])
+    vmax = np.percentile(coldat, col_range[1])
+    if vmax==vmin:
+        vmax = coldat.max()
+        
+    pp = ax.scatter(x[o], y[o], c=coldat[o], s=point_size, cmap=color_map,
+               vmin=vmin, vmax=vmax)
+    
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xlim(x.min()-x.ptp()*buffer_pct, x.max()+x.ptp()*buffer_pct)
+    ax.set_ylim(y.min()-y.ptp()*buffer_pct, y.max()+y.ptp()*buffer_pct)
+    
+    return pp
+
 
 
 def plot_one_gene_SW(x, y, vector, normalize=False, title=None, ax=None, order_points=True, set_ticks=0, col_range=(0, 100), buffer_pct=0.03, point_size=1, color_map=None, smooth_operator=None,savefig=False,dpi=300,set_lim=True,vmax=np.nan,vmin=np.nan,color_bar=False):
@@ -87,8 +125,16 @@ def plot_one_gene_SW(x, y, vector, normalize=False, title=None, ax=None, order_p
         fig.savefig(f'figure/plot_one_gene_SW_fig_{int(np.round(np.random.rand()*100))}.png',dpi=dpi)
 
 
-def plot_fate_map(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True,plot_time_points=[],plot_target_state=True,normalize=False,
-               auto_color_scale=False,plot_color_bar=True,point_size=2):
+def check_transition_map(adata):
+    available_map=[]
+    for xx in adata.uns.keys():
+        if 'transition_map' in xx:
+            available_map.append(xx)
+    adata.uns['available_map']=available_map
+
+
+def plot_fate_map(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True,plot_time_points=[],plot_background=True,plot_target_state=True,normalize=False,
+               auto_color_scale=False,plot_color_bar=True,point_size=2,plot_fate_bias=False):
 
     '''
         input:
@@ -96,102 +142,116 @@ def plot_fate_map(adata,selected_fates=[],used_map_name='transition_map',map_bac
             used_map_name: transition_map, demultiplexed_map, OT_transition_map, or HighVar_transition_map
             normalize: True, normalize the map to enhance the fate choice difference among selected clusters
             auto_color_scale: True, auto_scale the color range to match the minimum and maximum of the predicted fate probability; False, set the range to be [0,1]
-
+            plot_fate_bias: plot the extent of fate bias as compared with null hypothesis: random transitions
+                            bias adjusted by the relative size of the target fate cluster at the second time point
 
         return: the predicted fate map at selected time points
 
     '''
 
-    state_annote=adata.obs['state_annotation']
-    if map_backwards:
-        cell_id_t1=adata.uns['Tmap_cell_id_t1']
-        cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    check_transition_map(adata)
 
-    else:
-        cell_id_t2=adata.uns['Tmap_cell_id_t1']
-        cell_id_t1=adata.uns['Tmap_cell_id_t2']
+    if used_map_name not in adata.uns['available_map']:
+        print(f"Error, used_map_name should be among {adata.uns['available_map']}")
 
+    else:        
+        state_annote=adata.obs['state_annotation']
+        if map_backwards:
+            cell_id_t1=adata.uns['Tmap_cell_id_t1']
+            cell_id_t2=adata.uns['Tmap_cell_id_t2']
 
-    time_info=np.array(adata.obs['time_info'])
-    if (len(plot_time_points)>0):
-        sp_idx=np.zeros(len(cell_id_t1),dtype=bool)
-        for xx in plot_time_points:
-            sp_id_temp=np.nonzero(time_info[cell_id_t1]==xx)[0]
-            sp_idx[sp_id_temp]=True
-    else:
-        sp_idx=np.ones(len(cell_id_t1),dtype=bool)
-
-
-    x_emb=adata.obsm['X_umap'][:,0]
-    y_emb=adata.obsm['X_umap'][:,1]
-    data_des=adata.uns['data_des'][0]
-    figure_path=adata.uns['figure_path'][0]
-
-
-
-    fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
-
-    # normalize the map to enhance the fate choice difference among selected clusters
-    if normalize and (fate_map.shape[1]>1):
-        resol=10**-10 
-        fate_map=hf.sparse_rowwise_multiply(fate_map,1/(resol+np.sum(fate_map,1)))
-        #fate_entropy_temp=fate_entropy_array[x0]
-
-
-    ################### plot fate probability
-    vector_array=[vector for vector in list(fate_map.T)]
-    description=[fate for fate in fate_list_descrip]
-    row = len(vector_array); col = 1
-    fig = plt.figure(figsize=(4.5 * col, 3.5 * row))
-    for j in range(len(vector_array)):
-        ax0 = plt.subplot(row, col, j + 1)
-        plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax0,title=description[j])
-        if plot_target_state:
-            for zz in fate_list_array[j]:
-                idx_2=state_annote==zz
-                ax0.plot(x_emb[idx_2],y_emb[idx_2],'.',color='darkorange',markersize=point_size*2,alpha=0.2)
-
-        if auto_color_scale:
-            plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],set_lim=False)
         else:
-            plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],set_lim=False,vmax=1,vmin=0)
-    
-    if plot_color_bar:
-        fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.Reds), ax=ax0,label='Fate probability')
-  
-
-    fig.savefig(f'{figure_path}/{data_des}_fate_map_overview.png',dpi=300)
+            cell_id_t2=adata.uns['Tmap_cell_id_t1']
+            cell_id_t1=adata.uns['Tmap_cell_id_t2']
 
 
-    ################# plot the extent of fate bias as compared with null hypothesis: random transitions
-    vector_array=[vector for vector in list(extent_of_bias.T)]
-    description=[fate for fate in fate_list_descrip]
-
-    row = len(vector_array);  col = 1
-    fig = plt.figure(figsize=(4.5 * col, 3.5 * row))
-    for j in range(len(vector_array)):
-        ax0 = plt.subplot(row, col, j + 1)
-        # plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax0,title=description[j])
-        # if plot_target_state:
-        #     for zz in fate_list_array[j]:
-        #         idx_2=state_annote==zz
-        #         ax0.plot(x_emb[idx_2],y_emb[idx_2],'.',color='darkorange',markersize=point_size*2,alpha=0.2)
-
-        if auto_color_scale:
-            plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],color_map=plt.cm.bwr,set_lim=False)
+        time_info=np.array(adata.obs['time_info'])
+        if (len(plot_time_points)>0):
+            sp_idx=np.zeros(len(cell_id_t1),dtype=bool)
+            for xx in plot_time_points:
+                sp_id_temp=np.nonzero(time_info[cell_id_t1]==xx)[0]
+                sp_idx[sp_id_temp]=True
         else:
-            plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],color_map=plt.cm.bwr,set_lim=False,vmax=1,vmin=0)
-    
-    if plot_color_bar:
-        fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.bwr), ax=ax0,label='Actual/expected bias')
-        #Clb.ax.set_title(f'description[j]')
-
-    fig.savefig(f'{figure_path}/{data_des}_fate_map_overview_extent_of_bias.png',dpi=300)
+            sp_idx=np.ones(len(cell_id_t1),dtype=bool)
 
 
-    # return fate map robability, and fate bias at selected time points
-    #return fate_map[sp_idx,:],extent_of_bias[sp_idx,:],expected_bias
-    adata.uns['fate_map_output']={"fate_map":fate_map[sp_idx,:],"extent_of_bias":extent_of_bias[sp_idx,:],"expected_bias":expected_bias}
+        x_emb=adata.obsm['X_umap'][:,0]
+        y_emb=adata.obsm['X_umap'][:,1]
+        data_des=adata.uns['data_des'][0]
+        figure_path=adata.uns['figure_path'][0]
+
+
+
+        fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
+
+        # normalize the map to enhance the fate choice difference among selected clusters
+        if normalize and (fate_map.shape[1]>1):
+            resol=10**-10 
+            fate_map=hf.sparse_rowwise_multiply(fate_map,1/(resol+np.sum(fate_map,1)))
+            #fate_entropy_temp=fate_entropy_array[x0]
+
+
+        ################### plot fate probability
+        vector_array=[vector for vector in list(fate_map.T)]
+        description=[fate for fate in fate_list_descrip]
+        row =1; col =len(vector_array); 
+        fig = plt.figure(figsize=(4.5 * col, 3.5 * row))
+        for j in range(len(vector_array)):
+            ax0 = plt.subplot(row, col, j + 1)
+            
+            if plot_background:
+                plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax0,title=description[j])            
+                if plot_target_state:
+                    for zz in fate_list_array[j]:
+                        idx_2=state_annote==zz
+                        ax0.plot(x_emb[idx_2],y_emb[idx_2],'.',color='cyan',markersize=point_size*2,alpha=0.2)
+            else:
+                plot_one_gene_SW(x_emb[cell_id_t1],y_emb[cell_id_t1],np.zeros(len(y_emb[cell_id_t1])),point_size=point_size,ax=ax0,title=description[j])
+
+            if auto_color_scale:
+                plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],set_lim=False)
+            else:
+                plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],vector_array[j][sp_idx],point_size=point_size,ax=ax0,title=description[j],set_lim=False,vmax=1,vmin=0)
+        
+        if plot_color_bar:
+            fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.Reds), ax=ax0,label='Fate probability')
+      
+
+        fig.savefig(f'{figure_path}/{data_des}_fate_map_overview.png',transparent=True,dpi=300)
+
+
+        if plot_fate_bias:
+            ################# plot the extent of fate bias as compared with null hypothesis: random transitions
+            vector_array=[vector for vector in list(extent_of_bias.T)]
+            description=[fate for fate in fate_list_descrip]
+
+            row =1;  col = len(vector_array); 
+            fig = plt.figure(figsize=(4.5 * col, 3.5 * row))
+            for j in range(len(vector_array)):
+                ax0 = plt.subplot(row, col, j + 1)
+                # plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax0,title=description[j])
+                # if plot_target_state:
+                #     for zz in fate_list_array[j]:
+                #         idx_2=state_annote==zz
+                #         ax0.plot(x_emb[idx_2],y_emb[idx_2],'.',color='darkorange',markersize=point_size*2,alpha=0.2)
+                temp_array=vector_array[j][sp_idx]
+                new_idx=np.argsort(abs(temp_array-0.5))
+                if auto_color_scale:
+                    plot_one_gene_SW(x_emb[cell_id_t1][sp_idx][new_idx],y_emb[cell_id_t1][sp_idx][new_idx],temp_array[new_idx],point_size=point_size,ax=ax0,title=description[j],color_map=plt.cm.bwr,set_lim=False)
+                else:
+                    plot_one_gene_SW(x_emb[cell_id_t1][sp_idx][new_idx],y_emb[cell_id_t1][sp_idx][new_idx],temp_array[new_idx],point_size=point_size,ax=ax0,title=description[j],color_map=plt.cm.bwr,set_lim=False,vmax=1,vmin=0)
+            
+            if plot_color_bar:
+                Clb=fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.bwr), ax=ax0,label='Actual/expected bias')
+                Clb.set_ticks([])
+                #Clb.ax.set_title(f'description[j]')
+
+            fig.savefig(f'{figure_path}/{data_des}_fate_map_overview_extent_of_bias.png',transparent=True,dpi=300)
+
+
+            # return fate map robability, and fate bias at selected time points
+            #return fate_map[sp_idx,:],extent_of_bias[sp_idx,:],expected_bias
+            adata.uns['fate_map_output']={"fate_map":fate_map[sp_idx,:],"extent_of_bias":extent_of_bias[sp_idx,:],"expected_bias":expected_bias}
 
 
 
@@ -205,7 +265,7 @@ def plot_single_cell_transition_probability(adata,selected_state_id_list=[0],use
             used_map_name: transition_map, demultiplexed_map, OT_transition_map, or HighVar_transition_map
 
     '''
-
+    check_transition_map(adata)
     state_annote=adata.obs['state_annotation']
     cell_id_t2=adata.uns['Tmap_cell_id_t2']
     cell_id_t1=adata.uns['Tmap_cell_id_t1']
@@ -214,8 +274,8 @@ def plot_single_cell_transition_probability(adata,selected_state_id_list=[0],use
     data_des=adata.uns['data_des'][0]
     figure_path=adata.uns['figure_path'][0]
 
-    if used_map_name not in adata.uns.keys():
-        print(f"Error, used_map_name should be among {adata.uns.keys()}, with _transition_map as suffix")
+    if used_map_name not in adata.uns['available_map']:
+        print(f"Error, used_map_name should be among {adata.uns['available_map']}")
 
     else:
         prediction_array=[adata.uns[used_map_name]]
@@ -278,115 +338,26 @@ def plot_binary_fate_choice(adata,selected_fates=[],used_map_name='transition_ma
         used_map_name: transition_map, demultiplexed_map, OT_transition_map, or HighVar_transition_map
         sum_fate_prob_thresh: to show a state, it needs to have a total probability threshold into all states within the selected clusters.  
     '''
-    state_annote=adata.obs['state_annotation']
-    if map_backwards:
-        cell_id_t1=adata.uns['Tmap_cell_id_t1']
-        cell_id_t2=adata.uns['Tmap_cell_id_t2']
+    check_transition_map(adata)
+    if used_map_name not in adata.uns['available_map']:
+        print(f"Error, used_map_name should be among {adata.uns['available_map']}")
 
     else:
-        cell_id_t2=adata.uns['Tmap_cell_id_t1']
-        cell_id_t1=adata.uns['Tmap_cell_id_t2']
+        state_annote=adata.obs['state_annotation']
+        if map_backwards:
+            cell_id_t1=adata.uns['Tmap_cell_id_t1']
+            cell_id_t2=adata.uns['Tmap_cell_id_t2']
 
-    x_emb=adata.obsm['X_umap'][:,0]
-    y_emb=adata.obsm['X_umap'][:,1]
-    data_des=adata.uns['data_des'][0]
-    figure_path=adata.uns['figure_path'][0]
-
-
-    ## select time points
-    time_info=np.array(adata.obs['time_info'])
-    if (len(plot_time_points)>0):
-        sp_idx=np.zeros(len(cell_id_t1),dtype=bool)
-        for xx in plot_time_points:
-            sp_id_temp=np.nonzero(time_info[cell_id_t1]==xx)[0]
-            sp_idx[sp_id_temp]=True
-    else:
-        sp_idx=np.ones(len(cell_id_t1),dtype=bool)
-
-    cell_id_t1_sp=cell_id_t1[sp_idx]
-        
-
-    if len(selected_fates)!=2: 
-        print("Error! Must have only two fates")
-    else:
-        fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
-
-
-        resol=10**(-10)
-
-        fig=plt.figure(figsize=(5,4))
-        ax=plt.subplot(1,1,1)
-        print(fate_map.shape)
-        potential_vector_temp=fate_map[sp_idx,:]
-
-
-        #potential_vector_temp=hf.sparse_rowwise_multiply(potential_vector_temp,1/(resol+np.sum(potential_vector_temp,1)))
-        potential_vector_temp=potential_vector_temp+resol
-        diff=potential_vector_temp[:,0]#-potential_vector_temp[:,1]
-        tot=potential_vector_temp.sum(1)
-
-        valid_idx=tot>sum_fate_prob_thresh # default 0.5
-        vector_array=np.zeros(np.sum(valid_idx))
-        vector_array=diff[valid_idx]/(tot[valid_idx])
-        #vector_array=2*potential_vector_temp[valid_idx,8]/tot[valid_idx]-1
-        #vector_array=potential_vector_temp[:,8]/potential_vector_temp[:,9]
-
-        #plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],np.zeros(len(y_emb[cell_id_t1][sp_idx])),point_size=point_size,ax=ax)
-        if include_target_states:
-            plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax)
- 
-            for zz in fate_list_array[0]:
-                idx_2=state_annote[cell_id_t2]==zz
-                ax.plot(x_emb[cell_id_t2[idx_2]],y_emb[cell_id_t2[idx_2]],'.',color='red',markersize=point_size*2,alpha=1)
-            for zz in fate_list_array[1]:
-                idx_2=state_annote[cell_id_t2]==zz
-                ax.plot(x_emb[cell_id_t2[idx_2]],y_emb[cell_id_t2[idx_2]],'.',color='blue',markersize=point_size*2,alpha=1)
-
-                
         else:
-            plot_one_gene_SW(x_emb[cell_id_t1_sp],y_emb[cell_id_t1_sp],np.zeros(len(y_emb[cell_id_t1_sp])),point_size=point_size,ax=ax)
-        #plot_one_gene_SW(x_emb[cell_id_t2],y_emb[cell_id_t2],np.zeros(len(y_emb[cell_id_t2])),point_size=point_size,ax=ax)
+            cell_id_t2=adata.uns['Tmap_cell_id_t1']
+            cell_id_t1=adata.uns['Tmap_cell_id_t2']
 
-        new_idx=np.argsort(abs(vector_array-0.5))
-        plot_one_gene_SW(x_emb[cell_id_t1_sp][valid_idx][new_idx],y_emb[cell_id_t1_sp][valid_idx][new_idx],
-                            vector_array[new_idx],vmax=1,vmin=0,
-                            point_size=point_size,set_lim=False,ax=ax,color_map=plt.cm.bwr,order_points=False)
-
-#         # remove un-wanted time points
-#         if len(cell_id_t1[~sp_idx])>0:
-#             plot_one_gene_SW(x_emb[cell_id_t1[~sp_idx]],y_emb[cell_id_t1[~sp_idx]],np.zeros(len(y_emb[cell_id_t1[~sp_idx]])),
-#                         point_size=point_size,set_lim=False,ax=ax,color_map=plt.cm.bwr,order_points=False)
-
-        Clb=fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.bwr), ax=ax,label='Fate bias')
-        Clb.ax.set_title(f'{fate_list_descrip[0]}')
-
-        fig.savefig(f'{figure_path}/{data_des}_binary_fate_bias_BW{map_backwards}.png',dpi=300)
+        x_emb=adata.obsm['X_umap'][:,0]
+        y_emb=adata.obsm['X_umap'][:,1]
+        data_des=adata.uns['data_des'][0]
+        figure_path=adata.uns['figure_path'][0]
 
 
-
-
-def plot_driver_genes(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True,plot_time_points=[],bias_threshold=0.2,plot_groups=True,gene_N=100,plot_gene_N=5,figure_path='figure',savefig=False,point_size=1):
-    '''
-        If only one fate is provided, find genes highly expressed in the ancestor states of this fate cluster, and genes enriched in the remaining states. 
-
-        If two fates provided (selected_fate=['A','B']), find genes highly enriched in ancester states for A, and enriched in ancestor states for B. 
-
-        bias_threshld: in the range [0,1], for the actual-over-expected bias. 0 selects any state where the actual bias is larger than the expected bias; 1 means that the commitment is 100%
-    '''
-    if map_backwards:
-        cell_id_t1=adata.uns['Tmap_cell_id_t1']
-        cell_id_t2=adata.uns['Tmap_cell_id_t2']
-
-    else:
-        cell_id_t2=adata.uns['Tmap_cell_id_t1']
-        cell_id_t1=adata.uns['Tmap_cell_id_t2']
-
-    figure_path=adata.uns['figure_path'][0]
-
-    if (len(selected_fates)!=1) and (len(selected_fates)!=2):
-        print("Error! Must provide one or two fates.")
-
-    else:
         ## select time points
         time_info=np.array(adata.obs['time_info'])
         if (len(plot_time_points)>0):
@@ -397,31 +368,171 @@ def plot_driver_genes(adata,selected_fates=[],used_map_name='transition_map',map
         else:
             sp_idx=np.ones(len(cell_id_t1),dtype=bool)
 
-        #if 'fate_map' not in adata.uns.keys():
-        fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
+        cell_id_t1_sp=cell_id_t1[sp_idx]
+            
 
-
-        if len(selected_fates)==1:
-            zz=2*extent_of_bias[:,0]-1
-            idx_for_group_A=zz>bias_threshold
-            idx_for_group_B=~idx_for_group_A
+        if len(selected_fates)!=2: 
+            print("Error! Must have only two fates")
         else:
-            zz=2*extent_of_bias[:,0]-1
-            idx_for_group_A=zz>bias_threshold
-            kk=2*extent_of_bias[:,1]-1
-            idx_for_group_B=kk>bias_threshold
+            fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
 
 
-        diff_gene_A,diff_gene_B=plot_differential_genes(adata[cell_id_t1[sp_idx]],idx_for_group_A[sp_idx],idx_for_group_B[sp_idx],plot_groups=plot_groups,gene_N=gene_N,plot_gene_N=plot_gene_N,figure_path=figure_path,savefig=savefig,point_size=point_size)
-        return diff_gene_A,diff_gene_B
+            resol=10**(-10)
+
+            fig=plt.figure(figsize=(5,4))
+            ax=plt.subplot(1,1,1)
+            print(fate_map.shape)
+            potential_vector_temp=fate_map[sp_idx,:]
 
 
-def plot_differential_genes(adata,idx_for_group_A,idx_for_group_B,plot_groups=True,gene_N=100,plot_gene_N=5,figure_path='figure',savefig=False,point_size=1):
+            #potential_vector_temp=hf.sparse_rowwise_multiply(potential_vector_temp,1/(resol+np.sum(potential_vector_temp,1)))
+            potential_vector_temp=potential_vector_temp+resol
+            diff=potential_vector_temp[:,0]#-potential_vector_temp[:,1]
+            tot=potential_vector_temp.sum(1)
+
+            valid_idx=tot>sum_fate_prob_thresh # default 0.5
+            vector_array=np.zeros(np.sum(valid_idx))
+            vector_array=diff[valid_idx]/(tot[valid_idx])
+            #vector_array=2*potential_vector_temp[valid_idx,8]/tot[valid_idx]-1
+            #vector_array=potential_vector_temp[:,8]/potential_vector_temp[:,9]
+
+            #plot_one_gene_SW(x_emb[cell_id_t1][sp_idx],y_emb[cell_id_t1][sp_idx],np.zeros(len(y_emb[cell_id_t1][sp_idx])),point_size=point_size,ax=ax)
+            if include_target_states:
+                plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),point_size=point_size,ax=ax)
+     
+                for zz in fate_list_array[0]:
+                    idx_2=state_annote[cell_id_t2]==zz
+                    ax.plot(x_emb[cell_id_t2[idx_2]],y_emb[cell_id_t2[idx_2]],'.',color='red',markersize=point_size*2,alpha=1)
+                for zz in fate_list_array[1]:
+                    idx_2=state_annote[cell_id_t2]==zz
+                    ax.plot(x_emb[cell_id_t2[idx_2]],y_emb[cell_id_t2[idx_2]],'.',color='blue',markersize=point_size*2,alpha=1)
+
+                    
+            else:
+                plot_one_gene_SW(x_emb[cell_id_t1_sp],y_emb[cell_id_t1_sp],np.zeros(len(y_emb[cell_id_t1_sp])),point_size=point_size,ax=ax)
+            #plot_one_gene_SW(x_emb[cell_id_t2],y_emb[cell_id_t2],np.zeros(len(y_emb[cell_id_t2])),point_size=point_size,ax=ax)
+
+            new_idx=np.argsort(abs(vector_array-0.5))
+            plot_one_gene_SW(x_emb[cell_id_t1_sp][valid_idx][new_idx],y_emb[cell_id_t1_sp][valid_idx][new_idx],
+                                vector_array[new_idx],vmax=1,vmin=0,
+                                point_size=point_size,set_lim=False,ax=ax,color_map=plt.cm.bwr,order_points=False)
+
+    #         # remove un-wanted time points
+    #         if len(cell_id_t1[~sp_idx])>0:
+    #             plot_one_gene_SW(x_emb[cell_id_t1[~sp_idx]],y_emb[cell_id_t1[~sp_idx]],np.zeros(len(y_emb[cell_id_t1[~sp_idx]])),
+    #                         point_size=point_size,set_lim=False,ax=ax,color_map=plt.cm.bwr,order_points=False)
+
+            Clb=fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.bwr), ax=ax,label='Fate bias')
+            Clb.ax.set_title(f'{fate_list_descrip[0]}')
+
+            fig.savefig(f'{figure_path}/{data_des}_binary_fate_bias_BW{map_backwards}.png',transparent=True,dpi=300)
+
+
+
+
+def plot_driver_genes(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True,plot_time_points=[],bias_threshold=0.2,plot_groups=True,gene_N=100,plot_gene_N=5,savefig=False,point_size=1,avoid_target_states=True):
+    '''
+        If only one fate is provided, find genes highly expressed in the ancestor states of this fate cluster, and genes enriched in the remaining states. 
+
+        If two fates provided (selected_fate=['A','B']), find genes highly enriched in ancester states for A, and enriched in ancestor states for B. 
+
+        map_threshld: in the range [0,1], for the actual-over-expected bias. 0 selects any state where the actual bias is larger than the expected bias; 1 means that the commitment is 100%
+        
+        avoid_target_states: if the ancestor states has the same cell state annotations, remove these states
+        
+    '''
+    diff_gene_A=[]
+    diff_gene_B=[]
+    check_transition_map(adata)
+    
+
+    if used_map_name not in adata.uns['available_map']:
+        print(f"Error, used_map_name should be among {adata.uns['available_map']}")
+
+
+    else:
+        if map_backwards:
+            cell_id_t1=adata.uns['Tmap_cell_id_t1']
+            cell_id_t2=adata.uns['Tmap_cell_id_t2']
+
+        else:
+            cell_id_t2=adata.uns['Tmap_cell_id_t1']
+            cell_id_t1=adata.uns['Tmap_cell_id_t2']
+
+        figure_path=adata.uns['figure_path'][0]
+        state_annote_t1=np.array(adata.obs['state_annotation'][cell_id_t1])
+
+        if (len(selected_fates)!=1) and (len(selected_fates)!=2):
+            print("Error! Must provide one or two fates.")
+
+        else:
+            ## select time points
+            time_info=np.array(adata.obs['time_info'])
+            if (len(plot_time_points)>0):
+                sp_idx=np.zeros(len(cell_id_t1),dtype=bool)
+                for xx in plot_time_points:
+                    sp_id_temp=np.nonzero(time_info[cell_id_t1]==xx)[0]
+                    sp_idx[sp_id_temp]=True
+            else:
+                sp_idx=np.ones(len(cell_id_t1),dtype=bool)
+
+            #if 'fate_map' not in adata.uns.keys():
+            fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array=hf.compute_fate_map_and_bias(adata,selected_fates=selected_fates,used_map_name=used_map_name,map_backwards=map_backwards)
+
+
+            if len(selected_fates)==1:
+                zz=2*extent_of_bias[:,0]-1
+                idx_for_group_A=zz>bias_threshold
+                idx_for_group_B=~idx_for_group_A
+              
+                ### remove states already exist in the selected fate cluster 
+                if avoid_target_states:
+                    for zz in fate_list_array[0]:
+                        id_A_t1=np.nonzero(state_annote_t1==zz)[0]
+                        idx_for_group_A[id_A_t1]=False
+              
+              
+            else:
+                zz=2*extent_of_bias[:,0]-1
+                idx_for_group_A=zz>bias_threshold
+                kk=2*extent_of_bias[:,1]-1
+                idx_for_group_B=kk>bias_threshold
+              
+                ### remove states already exist in the selected fate cluster 
+                if avoid_target_states:
+                    for zz in fate_list_array[0]:
+                        id_A_t1=np.nonzero(state_annote_t1==zz)[0]
+                        idx_for_group_A[id_A_t1]=False
+
+                    for zz in fate_list_array[1]:
+                        id_B_t1=np.nonzero(state_annote_t1==zz)[0]
+                        idx_for_group_B[id_B_t1]=False
+
+            
+            
+
+            group_A_idx_full=np.zeros(adata.shape[0],dtype=bool)
+            group_A_idx_full[cell_id_t1]=idx_for_group_A
+            group_B_idx_full=np.zeros(adata.shape[0],dtype=bool)
+            group_B_idx_full[cell_id_t1]=idx_for_group_B
+            adata.obs['DGE_cell_group_A']=group_A_idx_full
+            adata.obs['DGE_cell_group_B']=group_B_idx_full
+
+            diff_gene_A,diff_gene_B=plot_differential_genes(adata[cell_id_t1[sp_idx]],idx_for_group_A[sp_idx],idx_for_group_B[sp_idx],plot_groups=plot_groups,gene_N=gene_N,plot_gene_N=plot_gene_N,savefig=savefig,point_size=point_size)
+    
+    return diff_gene_A,diff_gene_B
+
+
+def plot_differential_genes(adata,idx_for_group_A,idx_for_group_B,plot_groups=True,gene_N=100,plot_gene_N=5,savefig=False,point_size=1):
     '''
 
     '''
+    diff_gene_A=[]
+    diff_gene_B=[]
+    check_transition_map(adata)
     if (np.sum(idx_for_group_A)==0) or (np.sum(idx_for_group_B)==0):
-        print("Group A or B has zero selected cell states. Could be that the cluser name is wrong.")
+        print("Group A or B has zero selected cell states. Could be that the cluser name is wrong; Or, the selection is too stringent. Consider use a smaller 'bias_threshold'")
+
     else:
 
         dge=hf.get_dge_SW(adata,idx_for_group_B,idx_for_group_A)
@@ -436,6 +547,7 @@ def plot_differential_genes(adata,idx_for_group_A,idx_for_group_B,plot_groups=Tr
 
         x_emb=adata.obsm['X_umap'][:,0]
         y_emb=adata.obsm['X_umap'][:,1]
+        figure_path=adata.uns['figure_path'][0]
         
         if plot_groups:
 
@@ -454,46 +566,51 @@ def plot_differential_genes(adata,idx_for_group_A,idx_for_group_B,plot_groups=Tr
                 fig.savefig(f'{figure_path}/dge_analysis_groups.png',dpi=200)
             
         #print("Plot differentially-expressed genes for group A")
-        fig,nrow,ncol = start_subplot_figure(plot_gene_N, row_height=2.5, n_columns=5, fig_width=16, dpi=75)
-        for j in range(plot_gene_N):
-            ax = plt.subplot(nrow, ncol, j+1)
+        if plot_gene_N>0:
+            fig,nrow,ncol = start_subplot_figure(plot_gene_N, row_height=2.5, n_columns=5, fig_width=16, dpi=75)
+            for j in range(plot_gene_N):
+                ax = plt.subplot(nrow, ncol, j+1)
 
-            #pdb.set_trace()
-            gene_name=np.array(diff_gene_A['gene'])[j]
-            plot_one_gene_SW(x_emb,y_emb,adata.obs_vector(gene_name),ax=ax,point_size=point_size)
-            ax.set_title(f'{gene_name}')
-            ax.axis('off')
-        plt.tight_layout()
-        if savefig:
-            fig.savefig(f'{figure_path}/dge_analysis_groups_A_genes.png',dpi=200)
+                #pdb.set_trace()
+                gene_name=np.array(diff_gene_A['gene'])[j]
+                plot_one_gene_SW(x_emb,y_emb,adata.obs_vector(gene_name),ax=ax,point_size=point_size)
+                ax.set_title(f'{gene_name}')
+                ax.axis('off')
+            plt.tight_layout()
+            if savefig:
+                fig.savefig(f'{figure_path}/dge_analysis_groups_A_genes.png',dpi=200)
+            
+            #print("Plot differentially-expressed genes for group B")
+            fig,nrow,ncol = start_subplot_figure(plot_gene_N, row_height=2.5, n_columns=5, fig_width=16, dpi=75)
+            for j in range(plot_gene_N):
+                ax = plt.subplot(nrow, ncol, j+1)
+                gene_name=np.array(diff_gene_B['gene'])[j]
+                plot_one_gene_SW(x_emb,y_emb,adata.obs_vector(gene_name),ax=ax,point_size=point_size)
+                ax.set_title(f'{gene_name}')
+                ax.axis('off')
+            plt.tight_layout()
+            if savefig:
+                fig.savefig(f'{figure_path}/dge_analysis_groups_B_genes.png',dpi=200)
         
-        #print("Plot differentially-expressed genes for group B")
-        fig,nrow,ncol = start_subplot_figure(plot_gene_N, row_height=2.5, n_columns=5, fig_width=16, dpi=75)
-        for j in range(plot_gene_N):
-            ax = plt.subplot(nrow, ncol, j+1)
-            gene_name=np.array(diff_gene_B['gene'])[j]
-            plot_one_gene_SW(x_emb,y_emb,adata.obs_vector(gene_name),ax=ax,point_size=point_size)
-            ax.set_title(f'{gene_name}')
-            ax.axis('off')
-        plt.tight_layout()
-        if savefig:
-            fig.savefig(f'{figure_path}/dge_analysis_groups_B_genes.png',dpi=200)
+            print('--------------Differentially expressed genes for group A --------------')
+            print(diff_gene_A)
+            
+            print('--------------Differentially expressed genes for group B --------------')
+            print(diff_gene_B)
         
-        print('--------------Differentially expressed genes for group A --------------')
-        print(diff_gene_A)
-        
-        print('--------------Differentially expressed genes for group B --------------')
-        print(diff_gene_B)
-        
-        return diff_gene_A,diff_gene_B
+    return diff_gene_A,diff_gene_B
 
 
 
-def plot_differential_genes_for_given_fates(adata,selected_fates=[]):
+def plot_differential_genes_for_given_fates(adata,selected_fates=[],plot_groups=True,gene_N=100,plot_gene_N=5,savefig=False,point_size=1):
     '''
         selected_fates: should be two state clusters
 
     '''
+    diff_gene_A=[]
+    diff_gene_B=[]
+    check_transition_map(adata)
+
     state_annot_0=np.array(adata.obs['state_annotation'])
     if (len(selected_fates)==0) or (len(selected_fates)>2):
         print("Error; there should be only one or two fate clusters")
@@ -526,14 +643,19 @@ def plot_differential_genes_for_given_fates(adata,selected_fates=[]):
         else:
             idx_for_group_B=~idx_for_group_A
 
-        plot_differential_genes(adata,idx_for_group_A,idx_for_group_B)
+ 
+        adata.obs['DGE_cell_group_A']=idx_for_group_A
+        adata.obs['DGE_cell_group_B']=idx_for_group_B
+
+        diff_gene_A,diff_gene_B=plot_differential_genes(adata,idx_for_group_A,idx_for_group_B,plot_groups=plot_groups,gene_N=gene_N,plot_gene_N=plot_gene_N,savefig=savefig,point_size=point_size)
             
+    return diff_gene_A,diff_gene_B
 
 
 
         
         
-def plot_clones(adata,selected_clone_list=[0],point_size=1):
+def plot_clones(adata,selected_clone_list=[0],point_size=1,color_list=['red','blue','purple','green','cyan','black']):
 
     #transition_map=adata.uns['transition_map']
     #demultiplexed_map=adata.uns['demultiplexed_map']
@@ -541,22 +663,37 @@ def plot_clones(adata,selected_clone_list=[0],point_size=1):
     #Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
     #Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
     #time_info=np.array(adata.obs['time_info'])
+
+
     x_emb=adata.obsm['X_umap'][:,0]
     y_emb=adata.obsm['X_umap'][:,1]
     data_des=adata.uns['data_des'][0]
     #data_path=adata.uns['data_path'][0]
     figure_path=adata.uns['figure_path'][0]
     clone_annot=adata.obsm['cell_by_clone_matrix']
+    time_info=np.array(adata.obs['time_info'])
+    time_points=np.sort(list(set(time_info)))
 
         # using all data
     for my_id in selected_clone_list:
-        fig = plt.figure(figsize=(4, 3))
-        ax=plt.subplot(1,1,1)
-        plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),ax=ax,point_size=point_size)
-        idx=clone_annot[:,my_id].A.flatten()>0
-        ax.plot(x_emb[idx],y_emb[idx],'.',color='black',markersize=5*point_size)
+        if my_id < clone_annot.shape[1]:
+            fig = plt.figure(figsize=(4, 3))
+            ax=plt.subplot(1,1,1)
+            plot_one_gene_SW(x_emb,y_emb,np.zeros(len(y_emb)),ax=ax,point_size=point_size)
+            if len(time_points)>len(color_list):
+                idx=clone_annot[:,my_id].A.flatten()>0
+                ax.plot(x_emb[idx],y_emb[idx],'.',color='black',markersize=5*point_size)
+            else:
+                for j, xx in enumerate(time_points):
+                    idx_t=time_info==time_points[j]
+                    idx_clone=clone_annot[:,my_id].A.flatten()>0
+                    idx=idx_t & idx_clone
+                    ax.plot(x_emb[idx],y_emb[idx],'.',color=color_list[j],markersize=12*point_size,markeredgecolor='black',markeredgewidth=1)
 
-        fig.savefig(f'{figure_path}/{data_des}_different_clones_{my_id}.png',dpi=300)
+
+            fig.savefig(f'{figure_path}/{data_des}_different_clones_{my_id}.png',transparent=True,dpi=300)
+        else:
+            print(f"No such clone id: {my_id}")
 
 
 
@@ -580,6 +717,8 @@ def plot_progenitor_states_towards_a_given_fate(adata,selected_fate='',used_map_
 
     #transition_map=adata.uns['transition_map']
     #demultiplexed_map=adata.uns['demultiplexed_map']
+    check_transition_map(adata)
+
     state_annote_0=np.array(adata.obs['state_annotation'])
     if map_backwards:
         cell_id_t1=adata.uns['Tmap_cell_id_t1']
@@ -599,8 +738,8 @@ def plot_progenitor_states_towards_a_given_fate(adata,selected_fate='',used_map_
 #     print(f"selected_fate not valid. It should be among {set(state_annote_0)}")
 
 
-    if used_map_name not in adata.uns.keys():
-        print(f"Error, used_map_name should be among {adata.uns.keys()}, with _transition_map as suffix")
+    if used_map_name not in adata.uns['available_map']:
+        print(f"Error, used_map_name should be among {adata.uns['available_map']}")
 
     else:
         ##### we normalize the map in advance to avoid normalization later in mapout_trajectories
@@ -675,7 +814,7 @@ def plot_progenitor_states_towards_a_given_fate(adata,selected_fate='',used_map_
                         ax1=plt.subplot(row,col,2+k)
                         plot_one_gene_SW(x_emb,y_emb,prob_array[k],ax=ax1,point_size=point_size,title=f"Fate prob: {k+1} back propagte")
 
-                fig.savefig(f'{figure_path}/{data_des}_predicting_fate_trajectory_separate_BW{map_backwards}.png',dpi=300)  
+                fig.savefig(f'{figure_path}/{data_des}_predicting_fate_trajectory_separate_BW{map_backwards}.png',transparent=True,dpi=300)  
             else:
 
                 col=2; row=1
@@ -686,7 +825,7 @@ def plot_progenitor_states_towards_a_given_fate(adata,selected_fate='',used_map_
                 ax1=plt.subplot(row,col,2)
                 plot_one_gene_SW(x_emb,y_emb,cumu_prob,ax=ax1,point_size=point_size,title=f"Fate prob. (all time)")
 
-                fig.savefig(f'{figure_path}/{data_des}_predicting_fate_trajectory_allTime_BW{map_backwards}.png',dpi=300)
+                fig.savefig(f'{figure_path}/{data_des}_predicting_fate_trajectory_allTime_BW{map_backwards}.png',transparent=True,dpi=300)
 
             if 'fate_trajectory' not in adata.uns.keys():
                 adata.uns['fate_trajectory']={}
@@ -719,6 +858,7 @@ def plot_gene_trend_towards_a_given_fate(adata,selected_fate='',gene_name_list=[
     #demultiplexed_map=adata.uns['demultiplexed_map']
     state_annote_0=np.array(adata.obs['state_annotation'])
     time_info=np.array(adata.obs['time_info'])
+
 
     if map_backwards:
         cell_id_t1=adata.uns['Tmap_cell_id_t1']
@@ -807,6 +947,10 @@ def plot_gene_trend_towards_a_given_fate(adata,selected_fate='',gene_name_list=[
             #if np.mean(PseudoTime[convert_fate_id])<0.5: PseudoTime=1-PseudoTime
             PseudoTime=1-PseudoTime
         
+        #pdb.set_trace()
+        if np.sum((PseudoTime>0.25)& (PseudoTime<0.75))==0: # the cell states do not form a contiuum. Plot raw data instead
+            print("The selected cell states do not form a connected graph. Cannot form a continuum of pseudoTime. Only plot the raw data")
+            plot_raw_data=True
 
         ## plot the pseudotime ordering
         fig = plt.figure(figsize=(12,4))
@@ -816,7 +960,7 @@ def plot_gene_trend_towards_a_given_fate(adata,selected_fate='',gene_name_list=[
         plot_one_gene_SW(x_emb[sel_cell_idx],y_emb[sel_cell_idx],PseudoTime,ax=ax1,title='Pseudo Time',point_size=point_size)
         #plot_one_gene_SW(x_emb[final_id],y_emb[final_id],PseudoTime,ax=ax1,title='Pseudo time')
         Clb=fig.colorbar(plt.cm.ScalarMappable(cmap=plt.cm.Reds), ax=ax1,label='Pseudo time')
-        fig.savefig(f'{figure_path}/{data_des}_fate_trajectory_pseudoTime_{fate_name}_{map_backwards}.png',dpi=300)
+        fig.savefig(f'{figure_path}/{data_des}_fate_trajectory_pseudoTime_{fate_name}_{map_backwards}.png',transparent=True,dpi=300)
 
         temp_dict={'PseudoTime':PseudoTime}
         for gene_name in gene_name_list:

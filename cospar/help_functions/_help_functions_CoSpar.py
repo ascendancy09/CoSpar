@@ -367,6 +367,17 @@ def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=Fals
         for k in range(fate_N):
             potential_vector[:,k]=np.sum(input_matrix[:,idx_array[:,k]],1).A.flatten()
 
+        for j in range(N1):
+                ### compute the "fate-entropy" for each state
+            if fate_count:
+                p0=potential_vector[j,:]
+                fate_entropy[j]=np.sum(p0>0)
+            else:
+                p0=potential_vector[j,:]
+                p0=p0/(resol+np.sum(p0))+resol
+                for k in range(fate_N):
+                    fate_entropy[j]=fate_entropy[j]-p0[k]*np.log(p0[k])
+
     ### forward map
     else:
         idx_array=np.zeros((N1,fate_N),dtype=bool)
@@ -379,7 +390,20 @@ def compute_state_potential(input_matrix,state_annote,fate_array,fate_count=Fals
         for k in range(fate_N):
             potential_vector[:,k]=np.sum(input_matrix[idx_array[:,k],:],0).A.flatten()
 
-    return potential_vector
+
+        for j in range(N1):
+                
+                ### compute the "fate-entropy" for each state
+            if fate_count:
+                p0=potential_vector[j,:]
+                fate_entropy[j]=np.sum(p0>0)
+            else:
+                p0=potential_vector[j,:]
+                p0=p0/(resol+np.sum(p0))+resol
+                for k in range(fate_N):
+                    fate_entropy[j]=fate_entropy[j]-p0[k]*np.log(p0[k])
+
+    return potential_vector, fate_entropy
 
 
 
@@ -412,9 +436,9 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
     if used_map_name in adata.uns.keys():
         used_map=adata.uns[used_map_name]
 
-        potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,map_backwards=map_backwards)
+        potential_vector, fate_entropy=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,map_backwards=map_backwards)
 
-        adata.uns['fate_map']={'fate_array':fate_array,'fate_map':potential_vector}
+        adata.uns['fate_map']={'fate_array':fate_array,'fate_map':potential_vector,'fate_entropy':fate_entropy}
 
     else:
         print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
@@ -471,40 +495,6 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
 
     return fate_map,fate_list_descrip,extent_of_bias,expected_bias,fate_list_array
     
-
-# def compute_state_probability_map(adata,fate_array=[],used_map_name='transition_map'):
-#     '''
-#         Probability that a given state cluster progress to each state at the next time point
-        
-#         fate_array: targeted fate clusters. If not provided, use all fates in the annotation list. 
-#         use_transition_map: True, use transitino map; False, use demultiplexed map
-#     '''
-    
-#     transition_map=adata.uns['transition_map']
-#     demultiplexed_map=adata.uns['demultiplexed_map']
-#     state_annote_0=adata.obs['state_annotation']
-#     Tmap_cell_id_t2=adata.uns['Tmap_cell_id_t2']
-#     Tmap_cell_id_t1=adata.uns['Tmap_cell_id_t1']
-#     x_emb=adata.obsm['X_umap'][:,0]
-#     y_emb=adata.obsm['X_umap'][:,1]
-#     data_des=adata.uns['data_des'][0]
-    
-#     if len(fate_array): fate_array=list(set(state_annote_0))
-    
-
-#     state_annote_BW=state_annote_0[Tmap_cell_id_t2]
-    
-
-#     if used_map_name in adata.uns.keys():
-#         used_map=adata.uns[used_map_name]
-
-#         potential_vector=compute_state_potential(used_map,state_annote_BW,fate_array,fate_count=True,backward_map=False)
-
-#         adata.obsm['state_map']=potential_vector
-
-#     else:
-#         print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
-
 
     
 
