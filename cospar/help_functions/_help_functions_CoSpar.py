@@ -10,6 +10,7 @@ from sklearn.neighbors import kneighbors_graph
 #import json
 #from datetime import datetime
 #import matplotlib.pyplot as plt
+import ot.bregman as otb
 import scipy.sparse as ssp
 import scanpy as sc
 import pandas as pd
@@ -447,6 +448,7 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
 def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True):
 
     state_annote=adata.obs['state_annotation']
+    valid_state_annot=list(set(np.array(state_annote)))
     if map_backwards:
         cell_id_t2=adata.uns['Tmap_cell_id_t2']
     else:
@@ -462,14 +464,20 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
             fate_list_array.append(xx)
             des_temp=''
             for zz in xx:
-                fate_array_flat.append(zz)
-                des_temp=des_temp+str(zz)+'_'
+                if zz in valid_state_annot:
+                    fate_array_flat.append(zz)
+                    des_temp=des_temp+str(zz)+'_'
+                else:
+                    print(f'{zz} is not a valid cluster name. Please select from: {valid_state_annot}')
             fate_list_descrip.append(des_temp)
         else:
-            fate_list_array.append([xx])
+            if xx in valid_state_annot:
+                fate_list_array.append([xx])
 
-            fate_array_flat.append(xx)
-            fate_list_descrip.append(str(xx))
+                fate_array_flat.append(xx)
+                fate_list_descrip.append(str(xx))
+            else:
+                print(f'{xx} is not a valid cluster name. Please select from: {valid_state_annot}')
 
     compute_fate_probability_map(adata,fate_array=fate_array_flat,used_map_name=used_map_name,map_backwards=map_backwards)
     fate_map_0=adata.uns['fate_map']['fate_map']
@@ -669,3 +677,49 @@ def add_neighboring_cells_to_a_map(input_map,adata,neighbor_N=5):
 
     return out_map
 
+
+def compute_symmetric_Wasserstein_distance(sp_id_target,sp_id_ref,full_cost_matrix,target_value=[], ref_value=[],OT_epsilon=0.05,OT_stopThr=10**(-8),OT_max_iter=1000):
+    import ot.bregman as otb
+    # normalized distribution
+    if len(target_value)==0:
+        target_value=np.ones(len(sp_id_target))
+    if len(ref_value)==0:
+        ref_value=np.ones(len(sp_id_ref))
+    
+    input_mu=target_value/np.sum(target_value);
+    input_nu=ref_value/np.sum(ref_value);
+
+    full_cost_matrix_1=full_cost_matrix[sp_id_target][:,sp_id_ref]
+    OT_transition_map_1=otb.sinkhorn_stabilized(input_mu,input_nu,full_cost_matrix_1,OT_epsilon,numItermax=OT_max_iter,stopThr=OT_stopThr)
+
+    full_cost_matrix_2=full_cost_matrix[sp_id_ref][:,sp_id_target]
+    OT_transition_map_2=otb.sinkhorn_stabilized(input_nu,input_mu,full_cost_matrix_2,OT_epsilon,numItermax=OT_max_iter,stopThr=OT_stopThr)
+
+    for_Wass_dis=np.sum(OT_transition_map_1*full_cost_matrix_1)
+    back_Wass_dis=np.sum(OT_transition_map_2*full_cost_matrix_2)
+    return [for_Wass_dis, back_Wass_dis, (for_Wass_dis+back_Wass_dis)/2]
+
+
+    
+def get_normalized_covariance(data,method='Caleb'):
+    if method=='Caleb':
+        cc = np.cov(data.T)
+        mm = np.mean(data,axis=0) + .0001
+        X,Y = np.meshgrid(mm,mm)
+        cc = cc / X / Y
+        return cc#/np.max(cc)
+    else:
+        resol=10**(-10)
+        
+        # No normalization performs better.  Not all cell states contribute equally to lineage coupling
+        # Some cell states are in the progenitor regime, most ambiguous. They have a larger probability to remain in the progenitor regime, rather than differentiate.
+        # Normalization would force these cells to make early choices, which could add noise to the result. 
+        # data=core.sparse_rowwise_multiply(data,1/(resol+np.sum(data,1)))
+        
+        X=data.T.dot(data)
+        diag_temp=np.sqrt(np.diag(X))
+        for j in range(len(diag_temp)):
+            for k in range(len(diag_temp)):
+                X[j,k]=X[j,k]/(diag_temp[j]*diag_temp[k])
+        return X#/np.max(X)
+    

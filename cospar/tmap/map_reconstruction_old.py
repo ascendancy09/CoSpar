@@ -643,7 +643,7 @@ def refine_clonal_map_by_integrating_clonal_info(cell_id_array_t1,cell_id_array_
         if row_normalize: 
             if normalization_mode==0: print("Single-cell normalization")
             if normalization_mode==1: print("Clone normalization: N2/N1")
-            if normalization_mode==2: print("Clone normalization: 1")
+            if normalization_mode==2: print("Clone normalization: N2")
 
         else: print("No normalization")
 
@@ -683,8 +683,8 @@ def refine_clonal_map_by_integrating_clonal_info(cell_id_array_t1,cell_id_array_
                     temp_Nt1=np.sum(idx1>0)
                     prob=prob*temp_Nt2/(temp_Nt1*(resol+np.sum(prob))) # clone level normalization, account for proliferation
                 elif normalization_mode==2:
-                    #temp_Nt2=np.sum(idx2>0)
-                    prob=prob/(resol+np.sum(prob)) # clone level normalization, account for proliferation
+                    temp_Nt2=np.sum(idx2>0)
+                    prob=prob*temp_Nt2/(resol+np.sum(prob)) # clone level normalization, account for proliferation
 
 
 
@@ -745,15 +745,13 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime(MultiTime_cell_id_arr
     '''
 
     resol=10**(-10)
-
     clonal_map=hf.matrix_row_or_column_thresholding(clonal_map,noise_threshold,row_threshold=True)
 
     if verbose:
         if row_normalize: 
             if normalization_mode==0: print("Single-cell normalization")
-            if normalization_mode==1: print(f"Clone normalization: N2/N1")
-            if normalization_mode==2: print("Clone normalization: 1")
-
+            if normalization_mode==1: print("Clone normalization: N2/N1")
+            if normalization_mode==2: print("Clone normalization: N2")
         else: print("No normalization")
 
     #verbose=1;
@@ -802,7 +800,8 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime(MultiTime_cell_id_arr
                         temp_Nt1=np.sum(idx1>0)
                         prob=prob*temp_Nt2/(temp_Nt1*(resol+np.sum(prob))) # clone level normalization, account for proliferation
                     elif normalization_mode==2:
-                        prob=prob/(resol+np.sum(prob)) # clone level normalization, account for proliferation
+                        temp_Nt2=np.sum(idx2>0)
+                        prob=prob*temp_Nt2/(resol+np.sum(prob)) # clone level normalization, account for proliferation
 
 
 
@@ -866,7 +865,7 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
     if verbose:
         if normalization_mode==0: print("Single-cell normalization")
         if normalization_mode==1: print("Clone normalization: N2/N1")
-        if normalization_mode==2: print("Clone normalization: 1")
+        if normalization_mode==2: print("Clone normalization: N2")
 
     clonal_map=hf.matrix_row_or_column_thresholding(clonal_map,noise_threshold,row_threshold=True)
     
@@ -919,8 +918,8 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
                     temp_Nt1=np.sum(idx1>0)
                     prob=prob*temp_Nt2/(temp_Nt1*(resol+np.sum(prob))) # clone level normalization, account for proliferation
                 elif normalization_mode==2:
-                    #temp_Nt2=np.sum(idx2>0)
-                    prob=prob/(resol+np.sum(prob)) # clone level normalization, account for proliferation
+                    temp_Nt2=np.sum(idx2>0)
+                    prob=prob*temp_Nt2/(resol+np.sum(prob)) # clone level normalization, account for proliferation
 
 
                 ## local thresholding
@@ -951,7 +950,7 @@ def refine_clonal_map_by_integrating_clonal_info_multiTime_No_SM(MultiTime_cell_
 
 ###############
 
-def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=['1','2'],SM_array=[15,10,5],CoSpar_KNN=20,noise_threshold=0.1,demulti_threshold=0.05,normalization_mode=0,use_all_cells=False,save_subset=True,use_full_kernel=False,verbose=True,trunca_threshold=0.001,compute_new=False):
+def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=['1','2'],SM_array=[15,10,5],CoSpar_KNN=20,noise_threshold=0.1,demulti_threshold=0.05,normalization_mode=0,use_all_cells=False,save_subset=True,use_full_kernel=False,verbose=True,trunca_threshold=0.001,compute_new_Smatrix=False):
     '''
         Purpose: 
             Compute transition map for re-sampled clonal data with both stte and lineage information. We assume that the lineage information spans at least two time points.
@@ -1026,13 +1025,13 @@ def CoSpar_TwoTimeClones(adata_orig,selected_clonal_time_points=['1','2'],SM_arr
         round_of_smooth=np.max(SM_array)
 
         kernel_file_name=f'{data_path}/Similarity_matrix_with_all_cell_states_kNN{CoSpar_KNN}_Truncate{temp_str}_v0_fullkernel{use_full_kernel}'
-        if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new)):
+        if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new_Smatrix)):
             kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
-                        neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new)
+                        neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new_Smatrix)
     if verbose:
         print("-------Step 3: Optimize the transition map recursively---------")
     CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,demulti_threshold=demulti_threshold,normalization_mode=normalization_mode,
-            save_subset=save_subset,use_full_kernel=use_full_kernel,verbose=verbose,trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new)
+            save_subset=save_subset,use_full_kernel=use_full_kernel,verbose=verbose,trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
 
 
     return adata
@@ -1269,7 +1268,7 @@ def CoSpar_TwoTimeClones_demultiplexing(adata,intra_clone_threshold=0,demulti_th
 
 
 def Transition_map_from_highly_variable_genes(adata,min_counts=3,min_cells=3,min_vscore_pctl=85,noise_threshold=0.2,neighbor_N=20,normalization_mode=0,
-    use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,compute_new_Smatrix=True):
+    use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
     '''
         Input:
             adata: assumed to be preprocessed, only has two time points.
@@ -1381,7 +1380,7 @@ def Transition_map_from_highly_variable_genes(adata,min_counts=3,min_cells=3,min
     adata.uns['data_des']=[data_des_1]
 
 
-def Compute_custom_OT_transition_map(adata,OT_epsilon=0.02,OT_max_iter=1000,OT_stopThr=1e-09,OT_dis_KNN=5,verbose=True,compute_new=True):
+def Compute_custom_OT_transition_map(adata,OT_epsilon=0.02,OT_max_iter=1000,OT_stopThr=1e-09,OT_dis_KNN=5,verbose=True):
 
     cell_id_array_t1=adata.uns['Tmap_cell_id_t1']
     cell_id_array_t2=adata.uns['Tmap_cell_id_t2']
@@ -1393,7 +1392,7 @@ def Compute_custom_OT_transition_map(adata,OT_epsilon=0.02,OT_max_iter=1000,OT_s
     # use sklearn KNN graph construction method and select the connectivity option, not related to UMAP
     # use the mode 'distance' to obtain the shortest-path *distance*, rather than 'connectivity'
     SPD_file_name=f'{data_path}/{data_des}_ShortestPathDistanceMatrix_t0t1_KNN{OT_dis_KNN}.npy'
-    if os.path.exists(SPD_file_name) and (not compute_new):
+    if os.path.exists(SPD_file_name):
         if verbose:
             print("Load pre-computed shortest path distance matrix")
         ShortPath_dis_t0t1=np.load(SPD_file_name)
@@ -1424,7 +1423,7 @@ def Compute_custom_OT_transition_map(adata,OT_epsilon=0.02,OT_max_iter=1000,OT_s
 
     ######## apply optimal transport
     CustomOT_file_name=f'{data_path}/{data_des}_CustomOT_map_epsilon{OT_epsilon}_IterN{OT_max_iter}_stopThre{OT_stopThr}_KNN{OT_dis_KNN}.npy'
-    if os.path.exists(CustomOT_file_name) and (not compute_new):
+    if os.path.exists(CustomOT_file_name):
         if verbose:
             print("Load pre-computed custon OT matrix")
         OT_transition_map=np.load(CustomOT_file_name)
@@ -1467,7 +1466,8 @@ def label_early_cells_per_clone( current_clone_id,clonal_cell_id_t2_subspace,ava
     '''
 
     # add cell states on t2 for this clone
-    clone_annot_new[cell_id_array_t2[clonal_cell_id_t2_subspace],current_clone_id]=True
+    temp_idx=np.ones(len(cell_id_array_t2),dtype=bool)
+    clone_annot_new[cell_id_array_t2,current_clone_id]=temp_idx
     
     # infer the earlier clonal states for each clone
     ### select the early states using the grouped distribution of a clone
@@ -1498,18 +1498,12 @@ def round_number_probabilistically(x):
 
 
 def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_update_iter_N=1,normalization_mode=0,
-    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,compute_new=True,use_fixed_clonesize_t1=False,sort_clone=0):
+    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
     '''
-
-        sort_clone=0 #0,not sort; 1 sort from small to large; -1 sort from large to small
-        If use sort_clone=0 and use_fixed_clonesize_t1=True, it goes back to our previous methods
-
-        I found the error: 1) we should use clonally related cell number at t2 as a factor to determine the clonally cell number at t1
-                           2) update the whole t2 clonal info at once
+        the adata structure must be prepared by preprocessing steps
 
     '''
-    if verbose:
-        print("Joint optimization that consider possibility of clonal overlap: v1")
+    print("Consider possibility of clonal overlap")
 
     cell_id_array_t1=adata.uns['Tmap_cell_id_t1']
     cell_id_array_t2=adata.uns['Tmap_cell_id_t2']
@@ -1527,53 +1521,19 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
     else:
         map_temp=initialized_map
 
+    clone_annot_temp=clone_annot.copy()
+    clone_N1=clone_annot.shape[1]
 
-
-    valid_clone_id=np.nonzero(clone_annot[cell_id_array_t2].sum(0).A.flatten()>0)[0]
-    clone_annot_temp=clone_annot[:,valid_clone_id]
-    clone_N1=clone_annot_temp.shape[1]
-    clonal_cells_t2=np.sum(clone_annot_temp[cell_id_array_t2].sum(1).flatten())
-    if verbose:
-        print(f"original clone shape: {clone_annot.shape}")
-        print(f"After excluding zero-sized clones: {clone_annot_temp.shape}")
-
-
-    flag=True # to check whether overlapping clones are found or not
-    if use_fixed_clonesize_t1 and verbose:
-        print("Use fixed clone size at t1")
-
-    ave_clone_size_t1=int(np.ceil(len(cell_id_array_t1)/clone_N1));
 
     ### select the early states using the grouped distribution of a clone
     ### clones are not overlapping, and all early states should be attached to clones at the end
 
     # we sort clones according to their sizes. The order of cells are not affected. So, it should not affect downstream analysis
     # small clones tend to be the ones that are barcoded/mutated later, while large clones tend to be early mutations...
-    clone_size_t2_temp=clone_annot_temp[cell_id_array_t2].sum(0).A.flatten()
-
-    if sort_clone==1:
-        if verbose:
-            print("Sort clones by size (small to large)")
-            
-        sort_clone_id=np.argsort(clone_size_t2_temp)
-        clone_size_t2=clone_size_t2_temp[sort_clone_id]
-        clone_annot_sort=clone_annot_temp[:,sort_clone_id]
-        
-    elif sort_clone==-1:
-        if verbose:
-            print("Sort clones by size (large to small)")
-            
-        sort_clone_id=np.argsort(clone_size_t2_temp)[::-1]
-        clone_size_t2=clone_size_t2_temp[sort_clone_id]
-        clone_annot_sort=clone_annot_temp[:,sort_clone_id]
-        
-    else:
-        if verbose:
-            print("Do not order clones by size ")
-        clone_size_t2=clone_size_t2_temp
-        clone_annot_sort=clone_annot_temp
-        
-
+    clone_size_t2_temp=clone_annot_temp.sum(0).A.flatten()
+    sort_clone_id=np.argsort(clone_size_t2_temp)
+    clone_size_t2=clone_size_t2_temp[sort_clone_id]
+    clone_annot_sort=clone_annot_temp[:,sort_clone_id]
 
     for x0 in range(Clone_update_iter_N):
 
@@ -1581,9 +1541,7 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
         remaining_ids_t1=list(np.arange(len(cell_id_array_t1),dtype=int))
 
         clone_annot_new=np.zeros(clone_annot_sort.shape,dtype=bool)
-        clone_annot_new[cell_id_array_t2]=clone_annot_sort[cell_id_array_t2].A.astype(bool)
         for j in range(clone_N1):
-        #for j in range(1):
             if (j%50==0) and verbose:
                 #pdb.set_trace()
                 print(f"Inferring early clonal states: current clone id {j}")
@@ -1592,50 +1550,34 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
             # identify overlapped clones at t2
             overlap_cell_N_per_clone=(clone_annot_sort[cell_id_array_t2,j].T*clone_annot_sort[cell_id_array_t2,:j]).A.flatten()
             overlap_id=np.nonzero(overlap_cell_N_per_clone>0)[0]
-
-            available_t2_idx=np.ones(len(cell_id_array_t2),dtype=bool)
             if len(overlap_id)>0:
-                if flag:
-                    print("Use overlapping information")
-                    flag=False
-
                 for current_clone_id in overlap_id:
                     available_cell_id_t1_subspace=np.nonzero(clone_annot_new[cell_id_array_t1,current_clone_id].flatten()>0)[0]
                     #available_cell_idx_t1_subspace=cell_id_array_t1[temp_idx]
                     overlapped_idx_t2_subspace=(clone_annot_sort[cell_id_array_t2,current_clone_id].A.flatten()>0) & (clone_annot_sort[cell_id_array_t2,j].A.flatten()>0)
-                    overlapped_cell_id_t2_subspace=np.nonzero(overlapped_idx_t2_subspace)[0]
-                    cell_N_to_extract_0=len(overlapped_cell_id_t2_subspace)*len(cell_id_array_t1)/clonal_cells_t2
+                    overlapped_id_t2_subspace=np.nonzero(overlapped_idx_t2_subspace)[0]
+                    cell_N_to_extract_0=len(overlapped_cell_id_t2_subspace)*len(cell_id_array_t1)/len(cell_id_array_t2)
                     cell_N_to_extract=round_number_probabilistically(cell_N_to_extract_0)
 
-                    clone_annot_new,sel_cell_id_t1=label_early_cells_per_clone(current_clone_id,overlapped_cell_id_t2_subspace,available_cell_id_t1_subspace,cell_N_to_extract,cell_id_array_t1,cell_id_array_t2,clone_annot_new,map_temp)
-
-                    available_t2_idx[overlapped_cell_id_t2_subspace]=False # These states have been used
-
-            # Compute for cells that are unique to this clone
-            current_clone_id=j
-
-            overlapped_idx_t2_subspace= available_t2_idx & (clone_annot_sort[cell_id_array_t2,j].A.flatten()>0)
-            overlapped_cell_id_t2_subspace=np.nonzero(overlapped_idx_t2_subspace)[0]
-            available_t2_idx[overlapped_cell_id_t2_subspace]=False # These states have been used
-
-            #overlapped_cell_id_t2=cell_id_array_t2[overlapped_idx_t2]
-            cell_N_to_extract_0=len(overlapped_cell_id_t2_subspace)*len(cell_id_array_t1)/clonal_cells_t2
-            if use_fixed_clonesize_t1:
-                cell_N_to_extract=ave_clone_size_t1
-            else:
+                    clone_annot_new,sel_cell_id_t1=label_early_cells_per_clone(current_clone_id,overlapped_id_t2_subspace,available_cell_id_t1_subspace,cell_N_to_extract,cell_id_array_t1,cell_id_array_t2,clone_annot_new,map_temp)
+            
+            else: # if there is no overlap 
+                current_clone_id=j
+                overlapped_cell_id_t2_subspace=np.nonzero(clone_annot_sort[cell_id_array_t2][:,j].A.flatten()>0)[0]
+                #overlapped_cell_id_t2=cell_id_array_t2[overlapped_idx_t2]
+                cell_N_to_extract_0=len(overlapped_cell_id_t2_subspace)*len(cell_id_array_t1)/len(cell_id_array_t2)
                 cell_N_to_extract=round_number_probabilistically(cell_N_to_extract_0)
+                available_cell_id_t1_subspace=np.array(remaining_ids_t1)
+                clone_annot_new,sel_cell_id_t1=label_early_cells_per_clone(current_clone_id,overlapped_cell_id_t2_subspace,available_cell_id_t1_subspace,cell_N_to_extract,cell_id_array_t1,cell_id_array_t2,clone_annot_new,map_temp)
 
-            available_cell_id_t1_subspace=np.array(remaining_ids_t1)
-            clone_annot_new,sel_cell_id_t1=label_early_cells_per_clone(current_clone_id,overlapped_cell_id_t2_subspace,available_cell_id_t1_subspace,cell_N_to_extract,cell_id_array_t1,cell_id_array_t2,clone_annot_new,map_temp)
+                # remove selected id from the list
+                for kk in sel_cell_id_t1:
+                    remaining_ids_t1.remove(kk)
 
-            # remove selected id from the list
-            for kk in sel_cell_id_t1:
-                remaining_ids_t1.remove(kk)
-
+            
             if len(remaining_ids_t1)==0: 
-                print(f'Warning: early break. Final clone id: {j+1}')
+                print('Warning: early break (OK if initial cell number less than clone number)')
                 break
-                
         ########### end: update clones
 
         cell_id_array_t1_new=np.nonzero((clone_annot_new.sum(1)>0) & (time_index_t1))[0]
@@ -1656,7 +1598,7 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
         #pdb.set_trace()
         CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,
             normalization_mode=normalization_mode,save_subset=True,use_full_kernel=use_full_kernel,verbose=verbose,
-            trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new)
+            trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
 
         ## update, for the next iteration
         map_temp=adata.uns['transition_map']
@@ -1664,13 +1606,14 @@ def CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_up
 
 
 
+
+
 def CoSpar_OneTimeClone_JointOptimization_Private_v0(adata,initialized_map,Clone_update_iter_N=1,normalization_mode=0,
-    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,compute_new=True):
+    noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
     '''
         the adata structure must be prepared by preprocessing steps
 
     '''
-    print("This is version v0 for joint optimization")
 
     cell_id_array_t1=adata.uns['Tmap_cell_id_t1']
     cell_id_array_t2=adata.uns['Tmap_cell_id_t2']
@@ -1705,7 +1648,6 @@ def CoSpar_OneTimeClone_JointOptimization_Private_v0(adata,initialized_map,Clone
         remaining_ids_t1=list(np.arange(len(cell_id_array_t1),dtype=int))
 
         clone_annot_new=np.zeros(clone_annot_temp.shape,dtype=bool)
-        clone_annot_new[cell_id_array_t2]=clone_annot_temp[cell_id_array_t2].A.astype(bool)
         for j in range(clone_N1):
             if (j%50==0) and verbose:
                 #pdb.set_trace()
@@ -1728,7 +1670,7 @@ def CoSpar_OneTimeClone_JointOptimization_Private_v0(adata,initialized_map,Clone
                 remaining_ids_t1.remove(kk)
             
             if len(remaining_ids_t1)==0: 
-                print('Warning: early break')
+                print('Warning: early break (OK if initial cell number less than clone number)')
                 break
         ########### end: update clones
 
@@ -1746,16 +1688,15 @@ def CoSpar_OneTimeClone_JointOptimization_Private_v0(adata,initialized_map,Clone
 
         CoSpar_TwoTimeClones_private(adata,SM_array=SM_array,neighbor_N=CoSpar_KNN,noise_threshold=noise_threshold,
             normalization_mode=normalization_mode,save_subset=True,use_full_kernel=use_full_kernel,verbose=verbose,
-            trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new)
+            trunca_threshold=trunca_threshold,compute_new_Smatrix=compute_new_Smatrix)
 
         ## update, for the next iteration
         map_temp=adata.uns['transition_map']
         clone_annot_temp=clone_annot_new.copy()
 
-
 def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point='2',initialize_method='OT',OT_epsilon=0.02,OT_dis_KNN=5,OT_max_iter=1000,OT_stopThr=1e-09,HighVar_gene_pctl=85,
     Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],
-    verbose=True,trunca_threshold=0.001,compute_new=False,use_fixed_clonesize_t1=False,sort_clone=0):
+    verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=False):
 
 
     '''
@@ -1812,6 +1753,9 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
                 use_full_kernel: True, we use all available cell states to generate the similarity matrix. We then sub-sample cell states that are relevant for downstream analysis from this full matrix. This tends to be more accurate.
                                  False, we only use cell states for the selected time points to generate the similarity matrix. This is faster, yet could be less accurate.
 
+                use_all_cells: True, infer the transition map among all cell states in the selected time points (t1+t2)-(t1+t2) matrix.  This can be very slow for large datasets. 
+                               False, infer the transition map for cell states that are clonally labeled (except that you only select two time points.)
+
                 
                 verbose: True, print information of the analysis; False, do not print.
                 
@@ -1827,7 +1771,7 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
             This adata is different from the original one: adata_orig.
 
         Summary:
-            Parameters relevant for cell state selection:  initial_time_points, clonal_time_point, use_full_kernel
+            Parameters relevant for cell state selection:  initial_time_points, clonal_time_point, use_full_kernel, use_all_cells, 
 
             Choose the initialization method, and set the corresponding parameters. 
             
@@ -1905,7 +1849,7 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
         adata_temp=CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=[yy,clonal_time_point],initialize_method=initialize_method,OT_epsilon=OT_epsilon,OT_dis_KNN=OT_dis_KNN,
             OT_max_iter=OT_max_iter,OT_stopThr=OT_stopThr,HighVar_gene_pctl=HighVar_gene_pctl,Clone_update_iter_N=Clone_update_iter_N,normalization_mode=normalization_mode,
             noise_threshold=noise_threshold,CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,
-            verbose=verbose,trunca_threshold=trunca_threshold,compute_new=compute_new,use_fixed_clonesize_t1=use_fixed_clonesize_t1,sort_clone=sort_clone)
+            verbose=verbose,trunca_threshold=trunca_threshold,use_all_cells=use_all_cells,compute_new_Smatrix=compute_new_Smatrix)
 
         temp_id_t1=np.nonzero(time_info==yy)[0]
         sp_id_t1=hf.converting_id_from_fullSpace_to_subSpace(temp_id_t1,Tmap_cell_id_t1)[0]
@@ -1933,223 +1877,10 @@ def CoSpar_OneTimeClones(adata_orig,initial_time_points=['1'],clonal_time_point=
     return adata
 
 
-# This version is not working, updated the way in which adata_temp is integrated into adata
-def CoSpar_OneTimeClones_v1(adata_orig,initial_time_points=['1'],clonal_time_point='2',initialize_method='OT',OT_epsilon=0.02,OT_dis_KNN=5,OT_max_iter=1000,OT_stopThr=1e-09,HighVar_gene_pctl=85,
-    Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],
-    verbose=True,trunca_threshold=0.001,compute_new=False,use_fixed_clonesize_t1=False,sort_clone=0):
-
-
-    '''
-        Purpose:
-            Infer transition map from scRNAseq data where cells at one time point are clonally labeled. After initializing the map by either OT method or HighVar method, We jointly infer the likely clonal ancestors and the transition map between cell states in these two time points. 
-
-        Input:
-            selected_two_time_points: the time point to be included for analysis. Only two. The second time point should be the states with clonal information.
-
-            The adata object should encode the following information
-                
-                cell_by_clone_matrix: clone-by-cell matrix at adata.obsm['cell_by_clone_matrix']
-                
-                Day: a time information at adata_orig.obs['time_info']
-                
-                X_pca: for knn graph construction, at adata_orig.obsm['X_pca']
-                
-                state_annotation: state annotation (e.g., in terms of clusters), at adata_orig.obs['state_annotation'], as categorical variables
-                
-                X_umap: an embedding, does not have to be from UMAP. But the embedding should be saved to this place by adata_rig.obsm['X_umap']=XXX
-                
-                data_des: a description of the data, for saving downstream results, at adata_orig.uns['data_des'][0], i.e., it should be a list, or adata_orig.uns['data_des']=[XXX]. This is a compromise because once we save adata object, it becomes a np.array. 
-                
-                data_path: a path string for saving data, accessed as adata_orig.uns['data_path'][0], i.e., it should be a list
-                
-                figure_path: a path string for saving figures, adata_orig.uns['figure_path'][0]
-
-
-            Initialization related:
-                initialize_method: 'OT' for the optimal transport method, or 'HighVar' that relies on converting highly variable genes into artificial clones.
-                'OT' related:
-                    
-                    OT_epsilon: regulation parameter, related to the entropy or smoothness of the map. A larger epsilon means better smoothness, but less informative
-                    
-                    OT_dis_KNN: number of nearest neighbor for the KNN graph construction 
-                    
-                    OT_max_iter: maximum number of iteration for running optimal transport algorithm
-                    
-                    OT_stopThr: the convergence threshold for running optimal transport. A small value means the ieration has a small difference from previous run, thus convergent.
-                'HighVar' related:
-                    
-                    HighVar_gene_pctl: percentile of the most highly variable genes to be used for constructing the pseudo-clone
-
-            CoSpar related:
-                normalization_mode: 0, the default, treat T as the transition probability matrix, row normalized;
-                                    1, add modulation to the transition probability according to proliferation.
-                
-                noise_threshold: we set to zero entries of the computed transition map below this threshold, to promote sparsity of the map
-                
-                SM_array: the length of this list determines the total number of iteration in CoSpar, and the corresponding entry determines the rounds of graph diffusion in generating the corresponding similarity matrix used for that iteration
-                
-                CoSpar_KNN: the number of neighbors for KNN graph used for computing the similarity matrix
-                
-                use_full_kernel: True, we use all available cell states to generate the similarity matrix. We then sub-sample cell states that are relevant for downstream analysis from this full matrix. This tends to be more accurate.
-                                 False, we only use cell states for the selected time points to generate the similarity matrix. This is faster, yet could be less accurate.
-                
-                verbose: True, print information of the analysis; False, do not print.
-                
-                trunca_threshold: this value is only for reducing the computed matrix size for saving. We set entries to zero in the similarity matrix that are smaller than this threshold. This threshld should be small, but not too small. 
-                
-                save_subset: True, save only similarity matrix corresponds to 5*n rounds of graph diffusion, where n is an integer; 
-                              False, save all similarity matrix with any rounds generated in the process
-
-
-        return:
-            adata object that includes the transition map at adata.uns['transition_map']. 
-            Depending the initialization method, the initialized map is stored at either adata.uns['HighVar_transition_map'] or adata.uns['OT_transition_map']
-            This adata is different from the original one: adata_orig.
-
-        Summary:
-            Parameters relevant for cell state selection:  initial_time_points, clonal_time_point, use_full_kernel
-
-            Choose the initialization method, and set the corresponding parameters. 
-            
-            1) 'HighVar':  is faster and robust to batch effect
-                  related parameters: HighVar_gene_pctl
-            
-            2) 'OT': tend to be more accurate, but very slow and not reliable under batch effect
-                  related parameters: OT_epsilon, OT_dis_KNN, ,OT_max_iter
-
-            Parameters relevant for CoSpar itself:   SM_array,normalization_mode,CoSpar_KNN,noise_threshold, Clone_update_iter_N
-    '''
-
-
-    for xx in initial_time_points:
-        if xx not in list(set(adata_orig.obs['time_info'])):
-            print(f"Error! the 'initial_time_points' are not valid. Please select from {list(set(adata_orig.obs['time_info']))}")
-            return adata_orig
-
-    with_clonal_info=(clonal_time_point in adata_orig.uns['clonal_time_points'])
-    if not with_clonal_info:
-        print(f"'clonal_time_point' do not contain clonal information. Please set clonal_time_point to be one of {adata_orig.uns['clonal_time_points']}")
-        #print("Consider run ----cs.tmap.CoSpar_NoClonalInfo------")
-        print("Keep running but without clonal information")
-        #return adata_orig
-
-    sp_idx=np.zeros(adata_orig.shape[0],dtype=bool)
-    time_info_orig=np.array(adata_orig.obs['time_info'])
-    all_time_points=initial_time_points+[clonal_time_point]
-    label='t'
-    for xx in all_time_points:
-        id_array=np.nonzero(time_info_orig==xx)[0]
-        sp_idx[id_array]=True
-        label=label+'*'+str(xx)
-
-    adata=sc.AnnData(adata_orig.X[sp_idx]);
-    adata.var_names=adata_orig.var_names
-    adata.obsm['X_pca']=adata_orig.obsm['X_pca'][sp_idx]
-    adata.obsm['X_umap']=adata_orig.obsm['X_umap'][sp_idx]
-    adata.obs['state_annotation']=pd.Categorical(adata_orig.obs['state_annotation'][sp_idx])
-    adata.obs['time_info']=pd.Categorical(adata_orig.obs['time_info'][sp_idx])
-    adata.uns['data_path']=adata_orig.uns['data_path']
-    data_des_0=adata_orig.uns['data_des'][0]
-    data_des=data_des_0+f'_OneTimeClone_{label}'
-    adata.uns['data_des']=[data_des]
-    adata.uns['figure_path']=adata_orig.uns['figure_path']
-
-
-    clone_annot_orig=adata_orig.obsm['cell_by_clone_matrix']        
-    clone_annot=clone_annot_orig[sp_idx]
-    adata.obsm['cell_by_clone_matrix']=clone_annot
-
-    time_info=np.array(adata.obs['time_info'])
-    time_index_t2=time_info==clonal_time_point
-    time_index_t1=~time_index_t2
-
-    #### used for kernel matrix generation
-    Tmap_cell_id_t1=[]
-    Tmap_cell_id_t2=[]
-    clonal_cell_id_t1=[]
-    clonal_cell_id_t2=[]
-
-
-    # Tmap_cell_id_t1=np.nonzero(time_index_t1)[0]
-    # Tmap_cell_id_t2=np.nonzero(time_index_t2)[0]
-    # adata.uns['Tmap_cell_id_t1']=Tmap_cell_id_t1
-    # adata.uns['Tmap_cell_id_t2']=Tmap_cell_id_t2
-    # adata.uns['clonal_cell_id_t1']=Tmap_cell_id_t1
-    # adata.uns['clonal_cell_id_t2']=Tmap_cell_id_t2
-    adata.uns['sp_idx']=sp_idx
-    data_path=adata_orig.uns['data_path'][0]
-
-    transition_map_list=[]
-    ini_transition_map_list=[]
-
-
-
-    for yy in initial_time_points:
-        if verbose:
-            print("-------------------------------New Start--------------------------------------------------")
-            print(f"Current time point: {yy}")
-
-        adata_temp=CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=[yy,clonal_time_point],initialize_method=initialize_method,OT_epsilon=OT_epsilon,OT_dis_KNN=OT_dis_KNN,
-            OT_max_iter=OT_max_iter,OT_stopThr=OT_stopThr,HighVar_gene_pctl=HighVar_gene_pctl,Clone_update_iter_N=Clone_update_iter_N,normalization_mode=normalization_mode,
-            noise_threshold=noise_threshold,CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,
-            verbose=verbose,trunca_threshold=trunca_threshold,compute_new=compute_new,use_fixed_clonesize_t1=use_fixed_clonesize_t1,sort_clone=sort_clone)
-
-        Tmap_cell_id_t1_temp=adata_temp.uns['Tmap_cell_id_t1']
-        Tmap_cell_id_t2_temp=adata_temp.uns['Tmap_cell_id_t2']
-        clonal_cell_id_t1_temp=adata_temp.uns['clonal_cell_id_t1']
-        clonal_cell_id_t2_temp=adata_temp.uns['clonal_cell_id_t2']
-        sp_id_temp=np.nonzero(adata_temp.uns['sp_idx'])[0]
-        Tmap_cell_id_t1=Tmap_cell_id_t1+list(sp_id_temp[Tmap_cell_id_t1_temp])
-        Tmap_cell_id_t2=Tmap_cell_id_t2+list(sp_id_temp[Tmap_cell_id_t2_temp])
-        clonal_cell_id_t1=clonal_cell_id_t1+list(sp_id_temp[clonal_cell_id_t1_temp])
-        clonal_cell_id_t2=clonal_cell_id_t2+list(sp_id_temp[clonal_cell_id_t2_temp])
-
-        if with_clonal_info:
-            transition_map_list.append(adata_temp.uns['transition_map'].A)
-
-        if initialize_method=='OT':
-            ini_transition_map_list.append(adata_temp.uns['OT_transition_map'].A)
-        else:
-            ini_transition_map_list.append(adata_temp.uns['HighVar_transition_map'].A)
-
-    ###### Update the new adata object
-    adata.uns['Tmap_cell_id_t1']=np.array(Tmap_cell_id_t1)
-    adata.uns['Tmap_cell_id_t2']=np.array(Tmap_cell_id_t2)
-    adata.uns['clonal_cell_id_t1']=np.array(Tmap_cell_id_t1)
-    adata.uns['clonal_cell_id_t2']=np.array(Tmap_cell_id_t2)
-
-    transition_map=np.zeros((len(Tmap_cell_id_t1),len(Tmap_cell_id_t2)))
-    ini_transition_map=np.zeros((len(Tmap_cell_id_t1),len(Tmap_cell_id_t2)))
-
-    n0=0
-    for j2 in range(len(ini_transition_map_list)):
-        temp_map=ini_transition_map_list[j2] 
-        n1=n0+temp_map.shape[0]
-
-        ini_transition_map[n0:n1,:]=temp_map
-
-        if with_clonal_info:
-            transition_map[n0:n1,:]=transition_map_list[j2]     
-
-        n0=n1
-
-    if with_clonal_info:
-        adata.uns['transition_map']=ssp.csr_matrix(transition_map)
-    
-    if initialize_method=='OT':
-        adata.uns['OT_transition_map']=ssp.csr_matrix(ini_transition_map)
-    else:
-        adata.uns['HighVar_transition_map']=ssp.csr_matrix(ini_transition_map)
-
-    print("Update-oneTime")
-
-    return adata
-
-
 
 def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1','2'],initialize_method='OT',OT_epsilon=0.02,OT_dis_KNN=5,OT_max_iter=1000,OT_stopThr=1e-09,HighVar_gene_pctl=80,
     Clone_update_iter_N=1,normalization_mode=0,noise_threshold=0.2,CoSpar_KNN=20,use_full_kernel=False,SM_array=[15,10,5],
-    verbose=True,trunca_threshold=0.001,compute_new=True,use_fixed_clonesize_t1=False,sort_clone=0):
+    verbose=True,trunca_threshold=0.001,use_all_cells=False,compute_new_Smatrix=True):
 
     '''
         Purpose:
@@ -2187,6 +1918,9 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
                 neighbor_N: the number of neighbors for KNN graph used for computing the similarity matrix
                 use_full_kernel: True, we use all available cell states to generate the similarity matrix. We then sub-sample cell states that are relevant for downstream analysis from this full matrix. This tends to be more accurate.
                                  False, we only use cell states for the selected time points to generate the similarity matrix. This is faster, yet could be less accurate.
+
+                use_all_cells: True, infer the transition map among all cell states in the selected time points (t1+t2)-(t1+t2) matrix.  This can be very slow for large datasets. 
+                               False, infer the transition map for cell states that are clonally labeled (except that you only select two time points.)
 
                 verbose: True, print information of the analysis; False, do not print.
                 trunca_threshold: this value is only for reducing the computed matrix size for saving. We set entries to zero in the similarity matrix that are smaller than this threshold. This threshld should be small, but not too small. 
@@ -2258,9 +1992,9 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
             round_of_smooth=np.max(SM_array)
 
             kernel_file_name=f'{data_path}/Similarity_matrix_with_all_cell_states_kNN{CoSpar_KNN}_Truncate{temp_str}_v0_fullkernel{use_full_kernel}'
-            if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new)):
+            if not (os.path.exists(kernel_file_name+f'_SM{round_of_smooth}.npz') and (not compute_new_Smatrix)):
                 kernel_matrix_full=generate_full_kernel_matrix_single_v0(adata_orig,kernel_file_name,round_of_smooth=round_of_smooth,
-                            neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new)
+                            neighbor_N=CoSpar_KNN,truncation_threshold=trunca_threshold,save_subset=True,verbose=verbose,compute_new_Smatrix=compute_new_Smatrix)
 
         
 
@@ -2269,7 +2003,7 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
                 print("----------------")
                 print("Step 1: Use OT method for initialization")
 
-            Compute_custom_OT_transition_map(adata,OT_epsilon=OT_epsilon,OT_max_iter=OT_max_iter,OT_stopThr=OT_stopThr,OT_dis_KNN=OT_dis_KNN,verbose=verbose,compute_new=compute_new)
+            Compute_custom_OT_transition_map(adata,OT_epsilon=OT_epsilon,OT_max_iter=OT_max_iter,OT_stopThr=OT_stopThr,OT_dis_KNN=OT_dis_KNN,verbose=verbose)
             OT_transition_map=adata.uns['OT_transition_map']
             initialized_map=OT_transition_map
 
@@ -2281,8 +2015,8 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
 
             t=time.time()
             Transition_map_from_highly_variable_genes(adata,min_counts=3,min_cells=3,min_vscore_pctl=HighVar_gene_pctl,noise_threshold=noise_threshold,neighbor_N=CoSpar_KNN,
-                normalization_mode=normalization_mode,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,
-                compute_new_Smatrix=compute_new)
+                normalization_mode=normalization_mode,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,use_all_cells=use_all_cells,
+                compute_new_Smatrix=compute_new_Smatrix)
 
             HighVar_transition_map=adata.uns['HighVar_transition_map']
             initialized_map=HighVar_transition_map
@@ -2299,8 +2033,8 @@ def CoSpar_OneTimeClones_TwoTimePoints(adata_orig,selected_two_time_points=['1',
 
             t=time.time()
             CoSpar_OneTimeClone_JointOptimization_Private(adata,initialized_map,Clone_update_iter_N=Clone_update_iter_N,normalization_mode=normalization_mode,noise_threshold=noise_threshold,
-                CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,
-                compute_new=compute_new,use_fixed_clonesize_t1=use_fixed_clonesize_t1,sort_clone=sort_clone)
+                CoSpar_KNN=CoSpar_KNN,use_full_kernel=use_full_kernel,SM_array=SM_array,verbose=verbose,trunca_threshold=trunca_threshold,use_all_cells=use_all_cells,
+                compute_new_Smatrix=compute_new_Smatrix)
 
             if verbose:
                 print(f"Finishing computing transport map from CoSpar using inferred clonal data, used time {time.time()-t}")
