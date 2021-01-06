@@ -993,14 +993,14 @@ def plot_clonal_fate_bias(adata,select_fate_cluster='',clone_size_thresh=3,N_res
 
 
     fig=plt.figure(figsize=(4,3.5));ax=plt.subplot(1,1,1)
-    ax.plot(np.arange(len(fate_bias))[~idx],fate_bias[~idx],'.',color='blue',markersize=5,label=f'Size $<${int(clone_size_thresh)}')#,markeredgecolor='black',markeredgewidth=0.2)
-    ax.plot(np.arange(len(fate_bias))[idx],fate_bias[idx],'.',color='red',markersize=5,label=f'Size $\ge${int(clone_size_thresh)}')#,markeredgecolor='black',markeredgewidth=0.2)
+    ax.plot(np.arange(len(fate_bias))[~idx],fate_bias[~idx],'.',color='blue',markersize=5,label=f'Size <{int(clone_size_thresh)}')#,markeredgecolor='black',markeredgewidth=0.2)
+    ax.plot(np.arange(len(fate_bias))[idx],fate_bias[idx],'.',color='red',markersize=5,label=f'Size >={int(clone_size_thresh)}')#,markeredgecolor='black',markeredgewidth=0.2)
     ax.plot(np.arange(len(fate_bias_rsp)),fate_bias_rsp,'.',color='grey',markersize=5,label='Randomized')#,markeredgecolor='black',markeredgewidth=0.2)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.set_xlabel('Clone rank')
-    plt.rc('text', usetex=True)
+    #plt.rc('text', usetex=True)
     #ax.set_ylabel('Fate bias ($-\\log_{10}P_{value}$)')
     ax.set_ylabel('Clonal fate bias')
     ax.legend()
@@ -1019,7 +1019,7 @@ def plot_clonal_fate_bias(adata,select_fate_cluster='',clone_size_thresh=3,N_res
     ax.set_title(f'Average: {int(np.mean(target_fraction_array)*100)/100};   Expect: {int(np.mean(hit_target)*100)/100}',fontsize=16)
     fig.savefig(f'{figure_path}/{data_des}_observed_clonal_fraction.png',transparent=True,dpi=300)
 
-
+    return fate_bias,sort_idx
 
 def plot_progenitor_states_towards_a_given_fate(adata,selected_fate='',used_map_name='transition_map',map_backwards=True,map_threshold=0.1,plot_separately=False,apply_time_constaint=False,point_size=2):
     '''
