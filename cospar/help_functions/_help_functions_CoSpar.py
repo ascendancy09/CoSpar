@@ -724,3 +724,7 @@ def get_normalized_covariance(data,method='Caleb'):
                 X[j,k]=X[j,k]/(diag_temp[j]*diag_temp[k])
         return X#/np.max(X)
     
+
+
+def above_the_line(x_array,x1,x2):
+    return (x_array[:,1]-x1[1])>((x2[1]-x1[1])/(x2[0]-x1[0]))*(x_array[:,0]-x1[0])
