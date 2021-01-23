@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cospar.pl.gene_trend_along_dynamic_trajectory &mdash; CoSpar 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cospar.pl.fate_coupling_from_Tmap" href="cospar.pl.fate_coupling_from_Tmap.html" />
+    <link rel="prev" title="cospar.pl.dynamic_trajectory" href="cospar.pl.dynamic_trajectory.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="api.html">API</a> &raquo;</li>
+        
+      <li>cospar.pl.gene_trend_along_dynamic_trajectory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L1554-L1754" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="cospar-pl-gene-trend-along-dynamic-trajectory">
+<h1>cospar.pl.gene_trend_along_dynamic_trajectory<a class="headerlink" href="#cospar-pl-gene-trend-along-dynamic-trajectory" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="cospar.pl.gene_trend_along_dynamic_trajectory">
+<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">gene_trend_along_dynamic_trajectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">selected_fate</span></em>, <em class="sig-param"><span class="n">gene_name_list</span></em>, <em class="sig-param"><span class="n">traj_threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">map_backwards</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert_PseudoTime</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_target_states</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fig_width</span><span class="o">=</span><span class="default_value">3.5</span></em>, <em class="sig-param"><span class="n">gene_exp_percentile</span><span class="o">=</span><span class="default_value">99</span></em>, <em class="sig-param"><span class="n">n_neighbors</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">plot_raw_data</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">point_size</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">stat_smooth_method</span><span class="o">=</span><span class="default_value">'loess'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.gene_trend_along_dynamic_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot gene trend along inferred dynamic trajectory</p>
+<p>We assume that the dynamic trajecotry at given specification is already
+computed via <a class="reference internal" href="cospar.pl.dynamic_trajectory.html#cospar.pl.dynamic_trajectory" title="cospar.pl.dynamic_trajectory"><code class="xref py py-func docutils literal notranslate"><span class="pre">dynamic_trajectory()</span></code></a>. Using the states belong to the
+trajectory, it computes the pseudotime for these states, plot gene trend
+along the pseudo time. This needs to be updated from existing packages.</p>
+<p>Given the states, we first construct KNN graph, compute spectral embedding,
+take the first component as the pseudotime. For the gene trend, we provide
+gene expression value of each cell, re-weighted by its probability belonging
+to this trajectory, and also rescaled by the global background. Finally, we
+fit a curve to the data points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assume to contain transition maps at adata.uns.</p>
+</dd>
+<dt><strong>selected_fate</strong> : <cite>str</cite>, or <cite>list</cite></dt><dd><p>targeted cluster of the trajectory, as consistent with adata.obs[‘state_info’]
+When it is a list, the listed clusters are combined into a single fate cluster.</p>
+</dd>
+<dt><strong>gene_name_list</strong> : <cite>list</cite></dt><dd><p>List of genes to plot on the dynamic trajectory.</p>
+</dd>
+<dt><strong>traj_threshold</strong> : <cite>float</cite>, optional (default: 0.1), range: (0,1)</dt><dd><p>Relative threshold, used to thresholding the inferred dynamic trajecotry to select states.</p>
+</dd>
+<dt><strong>map_backwards</strong> : <cite>bool</cite>, optional (default: True)</dt><dd><p>If <cite>map_backwards=True</cite>, plot initial cell states (rows of Tmap, at t1);
+else, plot later cell states (columns of Tmap, at t2)</p>
+</dd>
+<dt><strong>invert_PseudoTime</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>If true, invert the pseudotime: 1-pseuotime. This is useful when the direction
+of pseudo time does not agree with intuition.</p>
+</dd>
+<dt><strong>include_target_states</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>If true, include the target states to the dynamic trajectory.</p>
+</dd>
+<dt><strong>compute_new</strong> : <cite>bool</cite>, optional (default: True)</dt><dd><p>If true, compute everyting from stratch (as we save computed pseudotime)</p>
+</dd>
+<dt><strong>fig_width</strong> : <cite>float</cite>, optional (default: 3.5)</dt><dd><p>Figure width.</p>
+</dd>
+<dt><strong>gene_exp_percentile</strong> : <cite>int</cite>, optional (default: 99)</dt><dd><p>Plot gene expression below this percentile.</p>
+</dd>
+<dt><strong>n_neighbors</strong> : <cite>int</cite>, optional (default: 8)</dt><dd><p>Number of nearest neighbors for constructing KNN graph.</p>
+</dd>
+<dt><strong>plot_raw_data</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>Plot the raw gene expression values of each cell along the pseudotime.</p>
+</dd>
+<dt><strong>point_size</strong> : <cite>int</cite>, optional (default: 2)</dt><dd><p>Size of the data point.</p>
+</dd>
+<dt><strong>stat_smooth_method</strong> : <cite>str</cite>, optional (default: ‘loess’)</dt><dd><p>Smooth method used in the ggplot. Current availabel choices are:
+‘auto’ (Use loess if (n&lt;1000), glm otherwise),
+‘lm’ (Linear Model),
+‘wls’ (Linear Model),
+‘rlm’ (Robust Linear Model),
+‘glm’ (Generalized linear Model),
+‘gls’ (Generalized Least Squares),
+‘lowess’ (Locally Weighted Regression (simple)),
+‘loess’ (Locally Weighted Regression)
+‘mavg’ (Moving Average)
+‘gpr’ (Gaussian Process Regressor)}</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>An adata object with only selected cell states. It can be used for dynamic inference with other packages.</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cospar.pl.fate_coupling_from_Tmap.html" class="btn btn-neutral float-right" title="cospar.pl.fate_coupling_from_Tmap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.pl.dynamic_trajectory.html" class="btn btn-neutral float-left" title="cospar.pl.dynamic_trajectory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

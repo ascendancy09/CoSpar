@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>About scVelo &mdash; CoSpar 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CoSpar basics with synthetic data" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html" />
+    <link rel="prev" title="cospar.hf.compute_shortest_path_distance_from_raw_matrix" href="cospar.hf.compute_shortest_path_distance_from_raw_matrix.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About scVelo</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>About scVelo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/theislab/cospar/blob/master/docs/source/about.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="about-scvelo">
+<h1>About scVelo<a class="headerlink" href="#about-scvelo" title="Permalink to this headline">¶</a></h1>
+<p>Measuring gene activity in individual cells requires destroying these cells to read out their content, making it
+challenging to study dynamic processes and to learn about cellular decision making. The introduction of RNA velocity by
+<a class="reference external" href="https://doi.org/10.1038/s41586-018-0414-6">La Manno et al. (Nature, 2018)</a> has
+enabled the recovery of directed dynamic information by leveraging the fact that newly
+transcribed, unspliced pre-mRNAs and mature, spliced mRNAs can be distinguished in common single-cell RNA-seq protocols,
+the former detectable by the presence of introns.
+This concept of measuring not only gene activity, but also their changes in individual cells (RNA velocity),
+has opened up new ways of studying cellular differentiation. The originally proposed framework obtains velocities as the deviation of the observed ratio of spliced and unspliced
+mRNA from an inferred steady state. Errors in velocity estimates arise if the central assumptions of a common splicing
+rate and the observation of the full splicing dynamics with steady-state mRNA levels are violated.</p>
+<p>With scVelo, developed by <a class="reference external" href="https://doi.org/10.1038/s41587-020-0591-3">Bergen et al. (Nature Biotechnology, 2020)</a>,
+these restrictions are addressed by solving the full transcriptional dynamics of splicing kinetics using
+a likelihood-based dynamical model. This generalizes RNA velocity to a wide variety of systems comprising transient
+cell states, which are common in development and in response to perturbations.
+Further, scVelo infers gene-specific rates of transcription, splicing and degradation, and recovers the latent time of the underlying
+cellular processes. This latent time represents the cell’s internal clock and approximates the real time experienced by
+cells as they differentiate, based only on its transcriptional dynamics.
+Moreover, scVelo identifies regimes of regulatory changes such as stages of cell fate commitment and, therein,
+systematically detects putative driver genes.</p>
+<div class="section" id="rna-velocity-models">
+<h2>RNA velocity models<a class="headerlink" href="#rna-velocity-models" title="Permalink to this headline">¶</a></h2>
+<p>With RNA velocity, inference of directional trajectories is explored by connecting measurements to the underlying mRNA splicing kinetics:
+Transcriptional induction for a particular gene results in an increase of (newly transcribed) precursor unspliced mRNAs
+while, conversely, repression or absence of transcription results in a decrease of unspliced mRNAs.
+Hence, by distinguishing unspliced from spliced mRNA, the change of mRNA abundance (RNA velocity) can be approximated.
+The combination of velocities across mRNAs can then be used to estimate the future state of an individual cell.</p>
+<p>RNA velocity estimation can currently be tackled with three existing approaches:</p>
+<ul class="simple">
+<li><p>steady-state / deterministic model (using steady-state residuals)</p></li>
+<li><p>stochastic model (using second-order moments),</p></li>
+<li><p>dynamical model (using a likelihood-based framework).</p></li>
+</ul>
+<p>The <strong>steady-state / deterministic model</strong>, as being used in velocyto, estimates velocities as follows: Under the assumption
+that transcriptional phases (induction and repression) last sufficiently long to reach a steady-state equilibrium
+(active and inactive), velocities are quantified as the deviation of the observed ratio from its steady-state ratio.
+The equilibrium mRNA levels are approximated with a linear regression on the presumed steady states in the lower and upper quantiles.
+This simplification makes two fundamental assumptions: a common splicing rate across genes and steady-state mRNA levels to be
+reflected in the data. It can lead to errors in velocity estimates and cellular states as the assumptions are often
+violated, in particular when a population comprises multiple heterogeneous subpopulation dynamics.</p>
+<p>The <strong>stochastic model</strong> aims to better capture the steady states. By treating transcription, splicing and degradation
+as probabilistic events, the resulting Markov process is approximated by moment equations.
+By including second-order moments, it exploits not only the balance of unspliced to spliced
+mRNA levels but also their covariation. It has been demonstrated on the endocrine pancreas that
+stochasticity adds valuable information, overall yielding higher consistency than the deterministic
+model, while remaining as efficient in computation time.</p>
+<p>The <strong>dynamical model</strong> (most powerful while computationally most expensive) solves the full dynamics of splicing kinetics
+for each gene. It thereby adapts RNA velocity to widely varying specifications such as non-stationary populations,
+as does not rely on the restrictions of a common splicing rate or steady states to be sampled. <span class="math notranslate nohighlight">\(\frac{s}{\sqrt{N}}\)</span></p>
+<p><span class="math notranslate nohighlight">\(\frac{s}{\sqrt{N}}\)</span></p>
+<p>The splicing dynamics</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{du(t)}{dt}=&amp;~ \alpha_k(t) - \beta u(t),\\
+\frac{ds(t)}{dt}=&amp;~ \beta u(t) - \gamma s(t),
+\end{align}\end{split}\]</div>
+<p>is solved in a likelihood-based expectation-maximization framework, by iteratively estimating the
+parameters of reaction rates and latent cell-specific variables, i.e. transcriptional state <em>k</em> and cell-internal latent time <em>t</em>.</p>
+<p>It thereby aims to learn the unspliced/spliced phase trajectory.
+Four transcriptional states are modeled to account for all possible configurations of gene activity:
+two dynamic transient states (induction and repression) and two steady states (active and inactive)
+potentially reached after each dynamic transition.</p>
+<p>In the expectation step, for a given model estimate of the unspliced/spliced phase trajectory,
+a latent time is assigned to an observed mRNA value by minimizing its distance to the phase trajectory.
+The transcriptional states are then assigned by associating a likelihood to the respective segments on the phase trajectory
+(induction, repression, active and inactive steady states).
+In the maximization step, the overall likelihood is then optimized by updating the parameters of reaction rates.</p>
+<p>The model yields more consistent velocity estimates and better identification of transcriptional states.
+It further enables the systematic identification of dynamics-driving genes in a likelihood-based way,
+thereby finding the key drivers that govern cell fate transitions. Moreover, the dynamical model infers a universal
+cell-internal latent time shared across genes that enables relating genes and identifying regimes of transcriptional changes.</p>
+<p>For best results and above-described additional insights, we recommend using the dynamical model.
+If runtime is of importance, the stochastic model is advised to be used as it very efficiently approximates the dynamical model,
+taking few minutes on 30k cells. The dynamical yet can take up to one hour, however, enhancing efficiency is in progress.</p>
+<p>See <a class="reference external" href="https://doi.org/10.1038/s41587-020-0591-3">Bergen et al. (2020)</a> for a detailed exposition of the methods.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html" class="btn btn-neutral float-right" title="CoSpar basics with synthetic data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.hf.compute_shortest_path_distance_from_raw_matrix.html" class="btn btn-neutral float-left" title="cospar.hf.compute_shortest_path_distance_from_raw_matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -29,23 +29,6 @@ import cospar
 logger = logging.getLogger(__name__)
 
 
-# -- Retrieve notebooks ------------------------------------------------
-
-from urllib.request import urlretrieve
-
-notebooks_url = "https://github.com/theislab/cospar_notebooks/raw/master/"
-notebooks = [
-    "VelocityBasics.ipynb",
-    "DynamicalModeling.ipynb",
-    "DifferentialKinetics.ipynb",
-    "Pancreas.ipynb",
-    "DentateGyrus.ipynb",
-]
-for nb in notebooks:
-    try:
-        urlretrieve(notebooks_url + nb, nb)
-    except:
-        pass
 
 
 # -- General configuration ------------------------------------------------

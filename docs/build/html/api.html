@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>API &mdash; CoSpar 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cospar.pp.initialize_adata_object" href="cospar.pp.initialize_adata_object.html" />
+    <link rel="prev" title="CoSpar - dynamic inference by integrating transcriptome and lineage information" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/theislab/cospar/blob/master/docs/source/api.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<span class="target" id="module-cospar"></span><p>CoSpar - dynamic inference by integrating transcriptome and lineage information</p>
+<div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>Import CoSpar as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cospar</span> <span class="k">as</span> <span class="nn">cs</span>
+</pre></div>
+</div>
+<p>CoSpar is built around the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object (usually called <cite>adata</cite>).
+The structure is defined in <a class="reference internal" href="cospar.pp.initialize_adata_object.html#cospar.pp.initialize_adata_object" title="cospar.pp.initialize_adata_object"><code class="xref py py-func docutils literal notranslate"><span class="pre">pp.initialize_adata_object()</span></code></a>. For each cell,
+we store its time information at <cite>adata.obs[‘time_info’]</cite>, state information
+at <cite>adata.obs[‘state_info’]</cite>,  clonal information at <cite>adata.obsm[‘X_clone’]</cite>,
+and 2-d embedding at <cite>adata.obsm[‘X_umap’]</cite>.</p>
+<p>Once the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object is initiated via <code class="xref py py-func docutils literal notranslate"><span class="pre">cs.pp.initialize_adata_object()</span></code>, the typical flow of analysis is</p>
+<ul>
+<li><p>Perform preprocessing and dimension reduction (<code class="docutils literal notranslate"><span class="pre">cs.pp.*</span></code>). This is optional if the data is preprocessed and a good dimension reduction is performed before <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> initialization. We recommend that this step is performed by external packages like <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/index.html#module-scanpy" title="(in Scanpy v1.7.0rc2.dev4+g92da7735)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scanpy</span></code></a>, which is also built around the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object.</p></li>
+<li><p>Perform raw clonal data analysis (<code class="docutils literal notranslate"><span class="pre">cs.pl.*</span></code>). It allows to visualize clonal dynamics or structure on state manifold, identify the fraction of fate-biased clones, assess the differentiation coupling between different fate clusters based on counting clones alone, and compute a transition map based on clonal information.</p></li>
+<li><p>Infer transition map by integrating state and clonal information with coherent sparsity optimization. The user is required to choose one of the following methods to run:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cs.tmap.infer_Tmap_from_multitime_clones()</span></code>. This requires that the clones have multiple time points. The results are stored at <cite>adata.uns[‘transition_map’]</cite> and <cite>adata.uns[‘intraclone_transition_map’]</cite>.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cs.tmap.infer_Tmap_from_one_time_clones()</span></code>. This requires that the clones have at least one time point, and that the state information has at least two time points.  This method requires initializing the map based on state information alone by using either the <cite>OT</cite> or <cite>HighVar</cite> method, with the initialized map stored at <cite>adata.uns[‘OT_transition_map’]</cite> and  <cite>adata.uns[‘HighVar_transition_map’]</cite>, respectively.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Analyze any of the pre-computed transition maps using the plotting tools provided in <code class="docutils literal notranslate"><span class="pre">cs.pl.*</span></code> by specifying which map you want to use. We also provide some help functions to assist with analysis (<code class="docutils literal notranslate"><span class="pre">cs.hf.*</span></code>).</p></li>
+</ul>
+<div class="section" id="initialization-and-preprocessing">
+<h2>Initialization and preprocessing<a class="headerlink" href="#initialization-and-preprocessing" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pp.initialize_adata_object.html#cospar.pp.initialize_adata_object" title="cospar.pp.initialize_adata_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.initialize_adata_object</span></code></a>(…[, X_clone, …])</p></td>
+<td><p>Initialized the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pp.update_X_pca.html#cospar.pp.update_X_pca" title="cospar.pp.update_X_pca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.update_X_pca</span></code></a>(adata[, …])</p></td>
+<td><p>Update X_pca</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pp.update_X_umap.html#cospar.pp.update_X_umap" title="cospar.pp.update_X_umap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.update_X_umap</span></code></a>(adata[, n_neighbors, …])</p></td>
+<td><p>Update X_umap using <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/scanpy.tl.umap.html#scanpy.tl.umap" title="(in Scanpy v1.7.0rc2.dev4+g92da7735)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scanpy.tl.umap()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pp.update_state_info.html#cospar.pp.update_state_info" title="cospar.pp.update_state_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.update_state_info</span></code></a>(adata[, leiden_resolution])</p></td>
+<td><p>Update <cite>state_info</cite> using <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/scanpy.tl.leiden.html#scanpy.tl.leiden" title="(in Scanpy v1.7.0rc2.dev4+g92da7735)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scanpy.tl.leiden()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pp.refine_state_info_by_marker_genes.html#cospar.pp.refine_state_info_by_marker_genes" title="cospar.pp.refine_state_info_by_marker_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.refine_state_info_by_marker_genes</span></code></a>(adata, …)</p></td>
+<td><p>Refine state info according to marker gene expression.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pp.refine_state_info_by_leiden_clustering.html#cospar.pp.refine_state_info_by_leiden_clustering" title="cospar.pp.refine_state_info_by_leiden_clustering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp.refine_state_info_by_leiden_clustering</span></code></a>(adata)</p></td>
+<td><p>Refine state info by clustering on states at given time points.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="transition-map-inference">
+<h2>Transition map inference<a class="headerlink" href="#transition-map-inference" title="Permalink to this headline">¶</a></h2>
+<p><strong>External functions</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.infer_Tmap_from_multitime_clones.html#cospar.tmap.infer_Tmap_from_multitime_clones" title="cospar.tmap.infer_Tmap_from_multitime_clones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_Tmap_from_multitime_clones</span></code></a>(…[, …])</p></td>
+<td><p>Infer Tmap for clonal data with multiple time points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.infer_intraclone_Tmap.html#cospar.tmap.infer_intraclone_Tmap" title="cospar.tmap.infer_intraclone_Tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_intraclone_Tmap</span></code></a>(adata[, …])</p></td>
+<td><p>Infer intra-clone transition map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.infer_Tmap_from_one_time_clones.html#cospar.tmap.infer_Tmap_from_one_time_clones" title="cospar.tmap.infer_Tmap_from_one_time_clones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_Tmap_from_one_time_clones</span></code></a>(…[, …])</p></td>
+<td><p>Infer transition map from clones with a single time point</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.infer_weinreb_Tmap.html#cospar.tmap.infer_weinreb_Tmap" title="cospar.tmap.infer_weinreb_Tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_weinreb_Tmap</span></code></a>(adata)</p></td>
+<td><p>Compute transition map using only the lineage information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.infer_naive_Tmap.html#cospar.tmap.infer_naive_Tmap" title="cospar.tmap.infer_naive_Tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_naive_Tmap</span></code></a>(adata)</p></td>
+<td><p>Compute transition map using only the lineage information</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Internal functions</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.generate_similarity_matrix.html#cospar.tmap.generate_similarity_matrix" title="cospar.tmap.generate_similarity_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.generate_similarity_matrix</span></code></a>(adata, file_name)</p></td>
+<td><p>Generate similarity matrix (Smatrix) through graph diffusion</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.generate_initial_similarity.html#cospar.tmap.generate_initial_similarity" title="cospar.tmap.generate_initial_similarity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.generate_initial_similarity</span></code></a>(…[, verbose])</p></td>
+<td><p>Extract Smatrix at t1 from the full Smatrix</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.generate_final_similarity.html#cospar.tmap.generate_final_similarity" title="cospar.tmap.generate_final_similarity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.generate_final_similarity</span></code></a>(…[, verbose])</p></td>
+<td><p>Extract Smatrix at t2 from the full Smatrix</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.select_time_points.html#cospar.tmap.select_time_points" title="cospar.tmap.select_time_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.select_time_points</span></code></a>(adata_orig[, …])</p></td>
+<td><p>Select barcoded cells at given time points for Tmap inference</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.infer_Tmap_from_multitime_clones_private.html#cospar.tmap.infer_Tmap_from_multitime_clones_private" title="cospar.tmap.infer_Tmap_from_multitime_clones_private"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_Tmap_from_multitime_clones_private</span></code></a>(adata)</p></td>
+<td><p>Internal function for Tmap inference from multiTime clonal data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.refine_Tmap_through_cospar_noSmooth.html#cospar.tmap.refine_Tmap_through_cospar_noSmooth" title="cospar.tmap.refine_Tmap_through_cospar_noSmooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.refine_Tmap_through_cospar_noSmooth</span></code></a>(…)</p></td>
+<td><p>This performs one iteration of coherent sparsity optimization</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.refine_Tmap_through_cospar.html#cospar.tmap.refine_Tmap_through_cospar" title="cospar.tmap.refine_Tmap_through_cospar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.refine_Tmap_through_cospar</span></code></a>(…[, …])</p></td>
+<td><p>This performs one iteration of coherent sparsity optimization</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.compute_custom_OT_transition_map.html#cospar.tmap.compute_custom_OT_transition_map" title="cospar.tmap.compute_custom_OT_transition_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.compute_custom_OT_transition_map</span></code></a>(adata)</p></td>
+<td><p>Compute Tmap from state info using optimal transport (OT).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.Tmap_from_highly_variable_genes.html#cospar.tmap.Tmap_from_highly_variable_genes" title="cospar.tmap.Tmap_from_highly_variable_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.Tmap_from_highly_variable_genes</span></code></a>(adata)</p></td>
+<td><p>Generate Tmap based on state info using HighVar.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.infer_initial_states_of_a_clone.html#cospar.tmap.infer_initial_states_of_a_clone" title="cospar.tmap.infer_initial_states_of_a_clone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_initial_states_of_a_clone</span></code></a>(…)</p></td>
+<td><p>Infer initial states of a clone from given transition map</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.tmap.infer_Tmap_from_one_time_clones_private.html#cospar.tmap.infer_Tmap_from_one_time_clones_private" title="cospar.tmap.infer_Tmap_from_one_time_clones_private"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_Tmap_from_one_time_clones_private</span></code></a>(…)</p></td>
+<td><p>Infer Tmap from clones with a single time point</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.tmap.infer_Tmap_from_one_time_clones_twoTime.html#cospar.tmap.infer_Tmap_from_one_time_clones_twoTime" title="cospar.tmap.infer_Tmap_from_one_time_clones_twoTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmap.infer_Tmap_from_one_time_clones_twoTime</span></code></a>(…)</p></td>
+<td><p>Infer transition map from clones with a single time point</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h2>
+<p><strong>General</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.set_up_plotting.html#cospar.pl.set_up_plotting" title="cospar.pl.set_up_plotting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.set_up_plotting</span></code></a>()</p></td>
+<td><p>Change matplotlib setting for beautiful plots.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.scatter_plot_on_embedding.html#cospar.pl.scatter_plot_on_embedding" title="cospar.pl.scatter_plot_on_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.scatter_plot_on_embedding</span></code></a>(x, y, vector[, …])</p></td>
+<td><p>Plot a vector on an embedding</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Clone analysis</strong> (clone visualization, clustering etc.)</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.clones_on_manifold.html#cospar.pl.clones_on_manifold" title="cospar.pl.clones_on_manifold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.clones_on_manifold</span></code></a>(adata[, …])</p></td>
+<td><p>Plot clones on top of state embedding.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.barcode_heatmap.html#cospar.pl.barcode_heatmap" title="cospar.pl.barcode_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.barcode_heatmap</span></code></a>(adata, plot_time_point[, …])</p></td>
+<td><p>Plot barcode heatmap among different fate clusters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.fate_coupling_from_clones.html#cospar.pl.fate_coupling_from_clones" title="cospar.pl.fate_coupling_from_clones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.fate_coupling_from_clones</span></code></a>(adata, …[, …])</p></td>
+<td><p>Plot fate coupling determined by just clones.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.clonal_fate_bias.html#cospar.pl.clonal_fate_bias" title="cospar.pl.clonal_fate_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.clonal_fate_bias</span></code></a>(adata[, selected_fate, …])</p></td>
+<td><p>Plot clonal fate bias towards a cluster.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transition map analysis</strong> (fate bias etc.)</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.fate_map.html#cospar.pl.fate_map" title="cospar.pl.fate_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.fate_map</span></code></a>(adata[, selected_fates, …])</p></td>
+<td><p>Plot transition probability to given fate/ancestor clusters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.single_cell_transition_probability.html#cospar.pl.single_cell_transition_probability" title="cospar.pl.single_cell_transition_probability"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.single_cell_transition_probability</span></code></a>(adata, …)</p></td>
+<td><p>Plot transition probability from given initial cell states</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.binary_fate_choice.html#cospar.pl.binary_fate_choice" title="cospar.pl.binary_fate_choice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.binary_fate_choice</span></code></a>(adata[, …])</p></td>
+<td><p>Plot fate bias to given two fate/ancestor clusters (A, B).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.dynamic_trajectory.html#cospar.pl.dynamic_trajectory" title="cospar.pl.dynamic_trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.dynamic_trajectory</span></code></a>(adata, selected_fate)</p></td>
+<td><p>Infer trajectory towards/from a cluster</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.gene_trend_along_dynamic_trajectory.html#cospar.pl.gene_trend_along_dynamic_trajectory" title="cospar.pl.gene_trend_along_dynamic_trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.gene_trend_along_dynamic_trajectory</span></code></a>(…)</p></td>
+<td><p>Plot gene trend along inferred dynamic trajectory</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.fate_coupling_from_Tmap.html#cospar.pl.fate_coupling_from_Tmap" title="cospar.pl.fate_coupling_from_Tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.fate_coupling_from_Tmap</span></code></a>(adata[, …])</p></td>
+<td><p>Plot fate coupling determined by Tmap.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Differential gene expression analysis</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.gene_expression_on_manifold.html#cospar.pl.gene_expression_on_manifold" title="cospar.pl.gene_expression_on_manifold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.gene_expression_on_manifold</span></code></a>(adata, …[, …])</p></td>
+<td><p>Plot gene expression on the state manifold</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.driver_genes_from_intrinsic_bias.html#cospar.pl.driver_genes_from_intrinsic_bias" title="cospar.pl.driver_genes_from_intrinsic_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.driver_genes_from_intrinsic_bias</span></code></a>(adata[, …])</p></td>
+<td><p>Plot genes that correlate with fate bias towards/from given clusters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.driver_genes_from_competition_bias.html#cospar.pl.driver_genes_from_competition_bias" title="cospar.pl.driver_genes_from_competition_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.driver_genes_from_competition_bias</span></code></a>(adata)</p></td>
+<td><p>Plot genes that correlate with fate bias towards/from given clusters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.pl.differential_genes.html#cospar.pl.differential_genes" title="cospar.pl.differential_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.differential_genes</span></code></a>(adata, …[, …])</p></td>
+<td><p>Perform differential gene expression analysis and plot top DGE genes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.pl.differential_genes_for_given_fates.html#cospar.pl.differential_genes_for_given_fates" title="cospar.pl.differential_genes_for_given_fates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pl.differential_genes_for_given_fates</span></code></a>(adata)</p></td>
+<td><p>Find and plot DGE genes between different clusters</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="help-functions">
+<h2>Help functions<a class="headerlink" href="#help-functions" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.get_dge_SW.html#cospar.hf.get_dge_SW" title="cospar.hf.get_dge_SW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.get_dge_SW</span></code></a>(ad, mask1, mask2[, …])</p></td>
+<td><p>Perform differential gene expression analysis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.compute_fate_probability_map.html#cospar.hf.compute_fate_probability_map" title="cospar.hf.compute_fate_probability_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.compute_fate_probability_map</span></code></a>(adata[, …])</p></td>
+<td><p>Compute fate map from the adata object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.compute_state_potential.html#cospar.hf.compute_state_potential" title="cospar.hf.compute_state_potential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.compute_state_potential</span></code></a>(transition_map, …)</p></td>
+<td><p>Compute state probability towards/from given clusters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.remove_corr_genes.html#cospar.hf.remove_corr_genes" title="cospar.hf.remove_corr_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.remove_corr_genes</span></code></a>(E, gene_list, …[, …])</p></td>
+<td><p>Remove signature-correlated genes from a list of test genes</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.filter_genes.html#cospar.hf.filter_genes" title="cospar.hf.filter_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.filter_genes</span></code></a>(E[, base_ix, …])</p></td>
+<td><p>Filter genes by expression level and variability</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.get_pca.html#cospar.hf.get_pca" title="cospar.hf.get_pca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.get_pca</span></code></a>(E[, base_ix, numpc, keep_sparse, …])</p></td>
+<td><p>Run PCA on the counts matrix E, gene-level normalizing if desired.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.compute_fate_map_and_bias.html#cospar.hf.compute_fate_map_and_bias" title="cospar.hf.compute_fate_map_and_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.compute_fate_map_and_bias</span></code></a>(adata[, …])</p></td>
+<td><p>Compute fate map and the relative bias compared to expectation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.mapout_trajectories.html#cospar.hf.mapout_trajectories" title="cospar.hf.mapout_trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.mapout_trajectories</span></code></a>(transition_map, …)</p></td>
+<td><p>map out the ancestor probability for a given later state distribution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.save_map.html#cospar.hf.save_map" title="cospar.hf.save_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.save_map</span></code></a>(adata)</p></td>
+<td><p>Save the adata</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.get_normalized_covariance.html#cospar.hf.get_normalized_covariance" title="cospar.hf.get_normalized_covariance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.get_normalized_covariance</span></code></a>(data[, method])</p></td>
+<td><p>Compute the normalized correlation of the data matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.compute_symmetric_Wasserstein_distance.html#cospar.hf.compute_symmetric_Wasserstein_distance" title="cospar.hf.compute_symmetric_Wasserstein_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.compute_symmetric_Wasserstein_distance</span></code></a>(…)</p></td>
+<td><p>Compute symmetric Wasserstein distance between two distributions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cospar.hf.add_neighboring_cells_to_a_map.html#cospar.hf.add_neighboring_cells_to_a_map" title="cospar.hf.add_neighboring_cells_to_a_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.add_neighboring_cells_to_a_map</span></code></a>(…[, …])</p></td>
+<td><p>Add neighboring cells to an initially selected population</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cospar.hf.compute_shortest_path_distance_from_raw_matrix.html#cospar.hf.compute_shortest_path_distance_from_raw_matrix" title="cospar.hf.compute_shortest_path_distance_from_raw_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf.compute_shortest_path_distance_from_raw_matrix</span></code></a>(…)</p></td>
+<td><p>Compute shortest path distance from raw data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cospar.pp.initialize_adata_object.html" class="btn btn-neutral float-right" title="cospar.pp.initialize_adata_object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="CoSpar - dynamic inference by integrating transcriptome and lineage information" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
