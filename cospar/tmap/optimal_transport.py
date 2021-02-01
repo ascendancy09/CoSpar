@@ -4,37 +4,37 @@ This module is borrowed from Waddington-OT
 https://github.com/broadinstitute/wot/blob/master/wot/ot/optimal_transport.py
 """
 
-import logging # this is a buildin package from Python
+#import logging # this is a buildin package from Python
 
 import numpy as np
 
-logger = logging.getLogger('wot')
+#logger = logging.getLogger('wot')
 
 
-def compute_transport_matrix(solver, **params):
-    """
-    Compute the optimal transport with stabilized numerics.
-    Args:
-    G: Growth (absolute)
-    solver: transport_stablev2 or optimal_transport_duality_gap
-    growth_iters:
-  """
+# def compute_transport_matrix(solver, **params):
+#     """
+#     Compute the optimal transport with stabilized numerics.
+#     Args:
+#     G: Growth (absolute)
+#     solver: transport_stablev2 or optimal_transport_duality_gap
+#     growth_iters:
+#   """
 
-    import gc
-    G = params['G']
-    growth_iters = params['growth_iters']
-    learned_growth = []
-    for i in range(growth_iters):
-        if i == 0:
-            row_sums = G
-        else:
-            row_sums = tmap.sum(axis=1)  # / tmap.shape[1]
-        params['G'] = row_sums
-        learned_growth.append(row_sums)
-        tmap = solver(**params)
-        gc.collect()
+#     import gc
+#     G = params['G']
+#     growth_iters = params['growth_iters']
+#     learned_growth = []
+#     for i in range(growth_iters):
+#         if i == 0:
+#             row_sums = G
+#         else:
+#             row_sums = tmap.sum(axis=1)  # / tmap.shape[1]
+#         params['G'] = row_sums
+#         learned_growth.append(row_sums)
+#         tmap = solver(**params)
+#         gc.collect()
 
-    return tmap, learned_growth
+#     return tmap, learned_growth
 
 
 # @ Lénaïc Chizat 2015 - optimal transport

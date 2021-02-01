@@ -7,14 +7,17 @@ import pandas as pd
 import time
 import scanpy as sc
 import scipy.sparse as ssp 
+from pathlib import Path, PurePath
+from matplotlib import pyplot as plt
 
-import cospar.help_functions as hf
-import cospar.plotting as CSpl
+from .. import help_functions as hf
+from .. import plotting as CSpl
+from .. import settings
+from .. import logging as logg
 
 
-def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
-    X_clone=[],X_pca=[],X_emb=[],state_info=[],
-    data_path='data',figure_path='figure',data_des='cospar'):
+def initialize_adata_object(cell_by_gene_matrix,gene_names,time_info,
+    X_clone=[],X_pca=[],X_emb=[],state_info=[],data_des='cospar'):
     """
     Initialized the :class:`~anndata.AnnData` object
 
@@ -25,7 +28,7 @@ def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
 
     Parameters
     ---------- 
-    cell_by_feature_matrix: `np.ndarray`, `sp.spmatrix`
+    cell_by_gene_matrix: `np.ndarray`, `sp.spmatrix`
         The (annotated) data matrix. Rows correspond to cells and columns to genes. 
 
     gene_names: `np.ndarray`
@@ -51,16 +54,6 @@ def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
         The classification and annotation for each cell state. 
         Create with leiden clustering if not set. 
         This will be used only after the map is created. Can be adjusted later
-        
-    data_path: `str`, optional (default:'data')
-        A relative path to save data. The data_path name should be 
-        unique to this dataset for saving all relevant results. 
-        If the data folder does not existed before, create a new one.
-    
-    figure_path: `str`, optional (default:'figure')
-        A relative path to save figures. The figure_path name should be 
-        unique to this dataset for saving all relevant results. 
-        If the figure folder does not existed before, create a new one.
 
     data_des: `str`, optional (default:'cospar')
         This is just a name to label/distinguish this data. 
@@ -71,27 +64,29 @@ def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
     -------
     Generate an :class:`~anndata.AnnData` object with the following entries 
     obs: 'time_info', 'state_info'
-    uns: 'data_des', 'data_path', 'figure_path', 'clonal_time_points'
-    obsm: 'X_clone', 'X_pca', 'X_umap'
+    uns: 'data_des', 'clonal_time_points'
+    obsm: 'X_clone', 'X_pca', 'X_emb'
     """
    
 
+    data_path=settings.data_path
+    figure_path=settings.figure_path
 
 
     ### making folders
-    try:
-        os.mkdir(data_path)
-    except OSError as error:
-        print(error)
-    try:
-        os.mkdir(figure_path)
-    except OSError as error:
-        print(error)
+    if not Path(data_path).is_dir():
+        logg.info(f'creating directory {data_path}/ for saving data')
+        Path(data_path).mkdir(parents=True)
+
+    if not Path(figure_path).is_dir():
+        logg.info(f'creating directory {figure_path}/ for saving figures')
+        Path(figure_path).mkdir(parents=True)
+
 
     time_info=time_info.astype(str)
 
     #!mkdir -p $data_path
-    adata=sc.AnnData(ssp.csr_matrix(cell_by_feature_matrix))
+    adata=sc.AnnData(ssp.csr_matrix(cell_by_gene_matrix))
     adata.var_names=list(gene_names)
 
     if X_clone.shape[0]==0:
@@ -104,8 +99,8 @@ def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
     adata.obsm['X_clone']=ssp.csr_matrix(X_clone)
     adata.obs['time_info']=pd.Categorical(time_info)
     adata.uns['data_des']=[data_des]
-    adata.uns['data_path']=[data_path]
-    adata.uns['figure_path']=[figure_path]
+    # adata.uns['data_path']=[data_path]
+    # adata.uns['figure_path']=[figure_path]
 
     # record time points with clonal information
     if ssp.issparse(X_clone):
@@ -128,22 +123,22 @@ def initialize_adata_object(cell_by_feature_matrix,gene_names,time_info,
         adata.obs['state_info']=pd.Categorical(state_info)
 
     if len(X_emb)==adata.shape[0]:
-        adata.obsm['X_umap']=X_emb
+        adata.obsm['X_emb']=X_emb
 
-    print(f"All time points: {set(adata.obs['time_info'])}")
-    print(f"Time points with clonal info: {set(adata.uns['clonal_time_points'])}")
+    logg.info(f"All time points: {set(adata.obs['time_info'])}")
+    logg.info(f"Time points with clonal info: {set(adata.uns['clonal_time_points'])}")
             
     return adata
 
 
-def update_X_pca(adata,normalized_counts_per_cell=10000,min_counts=3, 
-    min_cells=3, min_gene_vscore_pctl=85,n_pca_comp=40):
+def get_highly_variable_genes(adata,normalized_counts_per_cell=10000,min_counts=3, 
+    min_cells=3, min_gene_vscore_pctl=85):
     """
-    Update X_pca
+    Get highly variable genes.
 
     We assume that data preprocessing are already done (e.g., via scanpy.pp), including
     removing low quality cells, regress out cell cycle effect, removing doublets etc. 
-    It first perform count normalization, variable gene selection, and then compute PCA. 
+    It first perform count normalization, then variable gene selection. 
 
     Parameters
     ----------
@@ -157,6 +152,111 @@ def update_X_pca(adata,normalized_counts_per_cell=10000,min_counts=3,
     min_gene_vscore_pctl: int, optional (default: 85)
         Genes wht a variability percentile higher than this threshold are marked as 
         highly variable genes for dimension reduction. Range: [0,100]
+
+    Returns
+    -------
+    None, but the adata.var['highly_variable'] is modified. 
+    """
+
+    sc.pp.normalize_per_cell(adata, counts_per_cell_after=normalized_counts_per_cell)
+
+    verbose=logg._settings_verbosity_greater_or_equal_than(2) # the highest level is 3
+
+    logg.info('Finding highly variable genes...')
+    gene_list=adata.var_names
+    highvar_genes = gene_list[hf.filter_genes(
+        adata.X, 
+        min_counts=min_counts, 
+        min_cells=min_cells, 
+        min_vscore_pctl=min_gene_vscore_pctl, 
+        show_vscore_plot=verbose)]
+
+    adata.var['highly_variable'] = False
+    adata.var.loc[highvar_genes, 'highly_variable'] = True
+    logg.info(f'Keeping {len(highvar_genes)} genes')
+    
+
+
+def remove_cell_cycle_correlated_genes(adata,cycling_gene_list=['Ube2c','Hmgb2', 'Hmgn2', 'Tuba1b', 'Ccnb1', 'Tubb5', 'Top2a','Tubb4b'],corr_threshold=0.1,confirm_change=False):
+    """
+    Remove cell-cycle correlated genes.
+
+    Take pre-selected highly variable genes, compute their correlation with 
+    the set of cell cycle genes, and remove from the highly variable list genes 
+    that have absolute correlation score above given correlation threshold 
+    if confirm_change=True. It is a prerequisite to run 
+    :func:`get_highly_variable_genes` first. 
+
+    Warning: the default cell cycle gene sets are from mouse genes. Please convert them
+    to upper case if you want to apply it to human data. Also, consider using your own
+    gene sets. 
+
+    Parameters
+    ----------
+    adata: :class:`~anndata.AnnData` object
+    cycling_gene_list: `list`, optional
+        A list of cell cycle correlated genes to compute correlation with. 
+    corr_threshold: `float`, optional (default: 0.1)
+        Highly variable genes with absolute correlation score about this 
+        threshold will be removed from the highly variable gene list. 
+    confirm_change: `bool`, optional (default: False)
+        If set True, adata.var['highly_variable'] will be updated to exclude
+        cell cycle correlated genes. 
+    """
+
+    if 'highly_variable' not in adata.var.keys():
+        logg.error("Did not find highly variable genes index in adata.var['highly_variable']\n"
+                   "Please run get_highly_variable_genes first!")
+
+    else:
+        gene_list=np.array(adata.var_names)
+
+        cycling_gene_idx=np.in1d(gene_list,cycling_gene_list)
+        if np.sum(cycling_gene_idx)!=len(cycling_gene_list):
+            logg.error(f"Provided cyclcing genes: {cycling_gene_list}\n"
+              f"They are for mouse genes. Only {np.sum(cycling_gene_idx)} found in the reference gene list.")
+        else:
+            E=adata.X
+            cycling_expression=E[:,cycling_gene_idx].A.T
+
+            highvar_genes_idx=np.array(adata.var['highly_variable'])
+            highvar_genes=gene_list[highvar_genes_idx]
+            test_expression=E[:,highvar_genes_idx].A.T
+
+            cell_cycle_corr=hf.corr2_coeff(test_expression,cycling_expression)
+
+            #adata.uns['cycling_correlation']
+
+            if (not confirm_change):
+                max_corr=np.max(cell_cycle_corr,1)
+                fig = plt.figure(figsize = (4, 3.5))
+                ax0 = plt.subplot(1,1,1)
+                ax0.hist(max_corr,100)
+                ax0.set_xlabel('Max. corr. with cycling genes')
+                ax0.set_ylabel('Histogram')
+                    
+                logg.info("adata.var['highly_variable'] not updated.\n"
+                           "Please choose corr_threshold properly, and set confirm_change=True")
+            else:
+                
+                noCycle_idx=np.array(abs(cell_cycle_corr)<corr_threshold).sum(1)>0
+
+                highvar_genes_noCycle=highvar_genes[noCycle_idx]
+                logg.info(f"Number of selected non-cycling highly variable genes: {len(highvar_genes_noCycle)}\n"
+                    f"Remove {np.sum(~noCycle_idx)} cell cycle correlated genes.")
+
+                highvar_genes_noCycle_idx=np.in1d(gene_list,highvar_genes_noCycle)
+                adata.var['highly_variable']=highvar_genes_noCycle_idx
+                logg.info("adata.var['highly_variable'] updated")
+
+
+def get_X_pca(adata,n_pca_comp=40):
+    """
+    Update X_pca
+
+    Parameters
+    ----------
+    adata: :class:`~anndata.AnnData` object
     n_pca_comp: int, optional (default: 40)
         Number of top principle components to keep
 
@@ -164,29 +264,22 @@ def update_X_pca(adata,normalized_counts_per_cell=10000,min_counts=3,
     -------
     None, but the adata.obsm['X_pca'] is modified. 
     """
- 
-    print("X_pca is not provided or do not have the right cell number. Compute new X_pca from the feature count matrix!")
-    sc.pp.normalize_per_cell(adata, counts_per_cell_after=normalized_counts_per_cell)
 
-    print('Finding highly variable genes...')
-    gene_list=adata.var_names
-    highvar_genes = gene_list[hf.filter_genes(
-        adata.X, 
-        min_counts=min_counts, 
-        min_cells=min_cells, 
-        min_vscore_pctl=min_gene_vscore_pctl, 
-        show_vscore_plot=True)]
+    if 'highly_variable' not in adata.var.keys():
+        logg.error("Did not find highly variable genes index in adata.var['highly_variable']\n"
+                   "Please run get_highly_variable_genes first!")
+    else:
 
-    adata.var['highly_variable'] = False
-    adata.var.loc[highvar_genes, 'highly_variable'] = True
-    print(f'Keeping {len(highvar_genes)} genes')
-    
-    adata.obsm['X_pca'] = hf.get_pca(adata[:, highvar_genes].X, numpc=n_pca_comp,keep_sparse=False,normalize=True,random_state=0)
+        highvar_genes_idx=np.array(adata.var['highly_variable'])
+        gene_list=np.array(adata.var_names)
+        highvar_genes=gene_list[highvar_genes_idx]
+
+        adata.obsm['X_pca'] = hf.get_pca(adata[:, highvar_genes].X, numpc=n_pca_comp,keep_sparse=False,normalize=True,random_state=0)
 
 
-def update_X_umap(adata,n_neighbors=20,umap_min_dist=0.3):
+def get_X_emb(adata,n_neighbors=20,umap_min_dist=0.3):
     """
-    Update X_umap using :func:`scanpy.tl.umap`
+    Update X_emb using :func:`scanpy.tl.umap`
 
     We assume that X_pca is computed.
 
@@ -200,18 +293,19 @@ def update_X_umap(adata,n_neighbors=20,umap_min_dist=0.3):
 
     Returns
     -------
-    None, but the adata.obsm['X_umap'] is modified. 
+    None, but the adata.obsm['X_emb'] is modified. 
     """
 
     if not ('X_pca' in adata.obsm.keys()):
-        print('*X_pca* missing from adata.obsm... abort the operation')
+        logg.error('*X_pca* missing from adata.obsm... abort the operation')
     else:
         # Number of neighbors for KNN graph construction
         sc.pp.neighbors(adata, n_neighbors=n_neighbors)
         sc.tl.umap(adata, min_dist=umap_min_dist)
+        adata.obsm['X_emb']=adata.obsm['X_umap']
 
 
-def update_state_info(adata,leiden_resolution=0.5):
+def get_state_info(adata,leiden_resolution=0.5):
     """
     Update `state_info` using :func:`scanpy.tl.leiden`
 
@@ -232,7 +326,7 @@ def update_state_info(adata,leiden_resolution=0.5):
     """
 
     if not ('X_pca' in adata.obsm.keys()):
-        print('*X_pca* missing from adata.obsm... abort the operation')
+        logg.error('*X_pca* missing from adata.obsm... abort the operation')
     else:
         # Number of neighbors for KNN graph construction
         sc.tl.leiden(adata,resolution=leiden_resolution)
@@ -245,19 +339,19 @@ def check_adata_structure(adata):
 
     """
     if not ('X_pca' in adata.obsm.keys()):
-        print('*X_pca* missing from adata.obsm')
+        logg.error('*X_pca* missing from adata.obsm')
 
-    if not ('X_umap' in adata.obsm.keys()):
-        print('*X_umap* missing from adata.obsm')
+    if not ('X_emb' in adata.obsm.keys()):
+        logg.error('*X_emb* missing from adata.obsm')
 
     if not ('X_clone' in adata.obsm.keys()):
-        print('*X_clone* missing from adata.obsm')
+        logg.error('*X_clone* missing from adata.obsm')
 
     if not ('time_info' in adata.obs.keys()):
-        print('*time_info* missing from adata.obs')
+        logg.error('*time_info* missing from adata.obs')
 
     if not ('state_info' in adata.obs.keys()):
-        print('*state_info* missing from adata.obs')
+        logg.error('*state_info* missing from adata.obs')
 
 
 ############# refine clusters for state_info
@@ -270,6 +364,10 @@ def refine_state_info_by_leiden_clustering(adata,selected_time_points=[],
     Select states at desired time points to improve the clustering. When
     first run, set confirm_change=False. Only when you are happy with the 
     result, set confirm_change=True to update the adata.obs['state_info'].
+    The original state_info will be stored at adata.obs['old_state_info'].  
+
+    When you run it the first time, set confirm_change=False. Only when you are happy with 
+    the result, set confirm_change=True to update the adata.obs['state_info'].
     The original state_info will be stored at adata.obs['old_state_info'].  
 
     Parameters
@@ -302,7 +400,7 @@ def refine_state_info_by_leiden_clustering(adata,selected_time_points=[],
         selected_time_points=availabel_time_points
 
     if np.sum(np.in1d(selected_time_points,availabel_time_points))!=len(selected_time_points):
-        print(f"Selected time points not available. Please select from {availabel_time_points}")
+        logg.error(f"Selected time points not available. Please select from {availabel_time_points}")
 
     else:
         sp_idx=np.zeros(adata.shape[0],dtype=bool)
@@ -313,15 +411,15 @@ def refine_state_info_by_leiden_clustering(adata,selected_time_points=[],
         adata_sp=sc.AnnData(adata.X[sp_idx]);
         #adata_sp.var_names=adata.var_names
         adata_sp.obsm['X_pca']=adata.obsm['X_pca'][sp_idx]
-        adata_sp.obsm['X_umap']=adata.obsm['X_umap'][sp_idx]
+        adata_sp.obsm['X_emb']=adata.obsm['X_emb'][sp_idx]
         
         sc.pp.neighbors(adata_sp, n_neighbors=n_neighbors)
         sc.tl.leiden(adata_sp,resolution=leiden_resolution)
 
-        sc.pl.umap(adata_sp,color='leiden')
+        CSpl.embedding(adata_sp,color='leiden')
         
         if confirm_change:
-            print("Change state annotation at adata.obs['state_info']")
+            logg.info("Change state annotation at adata.obs['state_info']")
             adata.obs['old_state_info']=adata.obs['state_info']
             orig_state_annot=np.array(adata.obs['state_info'])
             temp_array=np.array(adata_sp.obs['leiden'])
@@ -330,31 +428,29 @@ def refine_state_info_by_leiden_clustering(adata,selected_time_points=[],
             
             orig_state_annot[sp_idx]=temp_array
             adata.obs['state_info']=pd.Categorical(orig_state_annot)
-            sc.pl.umap(adata,color='state_info')
+            CSpl.embedding(adata,color='state_info')
         
-        
-    
+
 
 def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
     selected_time_points=[],new_cluster_name='new_cluster',confirm_change=False,add_neighbor_N=5):
     """
     Refine state info according to marker gene expression.
 
-    A state is selected if it expressed all genes in the list of 
-    marker_genes, and above the relative threshold express_threshold, 
-    and satisfy the time point constraint. In addition, we also 
-    include cell states neighboring to these valid states to smooth 
-    the selection.
+    In this method, a state is selected if it expresses all genes in the list 
+    of marker_genes, and the expression are above the relative threshold express_threshold. 
+    You can also specify which time point you want to focus on. In addition, we also include 
+    cell states neighboring to these valid states to smooth the selection 
+    (controlled by add_neighbor_N).
     
-
-    When first run, set confirm_change=False. Only when you are happy with 
+    When you run it the first time, set confirm_change=False. Only when you are happy with 
     the result, set confirm_change=True to update the adata.obs['state_info'].
     The original state_info will be stored at adata.obs['old_state_info'].  
 
     Parameters
     ----------
     adata: :class:`~anndata.AnnData` object
-    marker_genes: `list`
+    marker_genes: `list` or 'str'
         List of marker genes to be used for defining cell states.
     express_threshold: `float`, optional (default: 0.1)
         Relative threshold of marker gene expression, in the range [0,1].
@@ -377,8 +473,8 @@ def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
     """
     
     time_info=adata.obs['time_info']
-    x_emb=adata.obsm['X_umap'][:,0]
-    y_emb=adata.obsm['X_umap'][:,1]
+    x_emb=adata.obsm['X_emb'][:,0]
+    y_emb=adata.obsm['X_emb'][:,1]
     availabel_time_points=list(set(time_info))
     
     if len(selected_time_points)==0:
@@ -394,6 +490,10 @@ def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
     selected_states_idx=np.ones(adata.shape[0],dtype=bool)
     gene_list=list(adata.var_names)
     tot_name=''
+
+    if type(marker_genes)==str:
+        marker_genes=[marker_genes]
+
     for marker_gene_temp in marker_genes:
         if marker_gene_temp in gene_list:
             expression=adata.obs_vector(marker_gene_temp)
@@ -411,21 +511,23 @@ def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
         selected_states_idx=hf.add_neighboring_cells_to_a_map(selected_states_idx,adata,neighbor_N=add_neighbor_N)
 
         fig=plt.figure(figsize=(4,3));ax=plt.subplot(1,1,1)
-        CSpl.plot_one_gene_SW(x_emb,y_emb,selected_states_idx,ax=ax)
+        CSpl.customized_embedding(x_emb,y_emb,selected_states_idx,ax=ax)
         ax.set_title(f"{tot_name}; Selected #: {np.sum(selected_states_idx)}")
         #print(f"Selected cell state number: {np.sum(selected_states_idx)}")
 
 
         if confirm_change:
             adata.obs['old_state_info']=adata.obs['state_info']
-            print("Change state annotation at adata.obs['state_info']")
+            logg.info("Change state annotation at adata.obs['state_info']")
             if new_cluster_name=='':
                 new_cluster_name=marker_genes[0]
 
             orig_state_annot=np.array(adata.obs['state_info'])
             orig_state_annot[selected_states_idx]=np.array([new_cluster_name for j in range(np.sum(selected_states_idx))])
             adata.obs['state_info']=pd.Categorical(orig_state_annot)
-            sc.pl.umap(adata,color='state_info')
+            CSpl.embedding(adata,color='state_info')
+    else:
+        logg.error("Either the gene names or the time point names are not right.")
 
 
 

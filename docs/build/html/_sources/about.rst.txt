@@ -1,92 +1,33 @@
-About scVelo
+About CoSpar
 ------------
 
-Measuring gene activity in individual cells requires destroying these cells to read out their content, making it
-challenging to study dynamic processes and to learn about cellular decision making. The introduction of RNA velocity by
-`La Manno et al. (Nature, 2018) <https://doi.org/10.1038/s41586-018-0414-6>`_ has
-enabled the recovery of directed dynamic information by leveraging the fact that newly
-transcribed, unspliced pre-mRNAs and mature, spliced mRNAs can be distinguished in common single-cell RNA-seq protocols,
-the former detectable by the presence of introns.
-This concept of measuring not only gene activity, but also their changes in individual cells (RNA velocity),
-has opened up new ways of studying cellular differentiation. The originally proposed framework obtains velocities as the deviation of the observed ratio of spliced and unspliced
-mRNA from an inferred steady state. Errors in velocity estimates arise if the central assumptions of a common splicing
-rate and the observation of the full splicing dynamics with steady-state mRNA levels are violated.
+High-throughput single-cell measurements have enabled unbiased study of development and differentiation, leading to numerous methods for dynamic inference. However, single-cell RNA sequencing (scRNA-seq) data alone does not fully constrain the differentiation dynamics, and existing methods inevitably operate under simplified assumptions. In parallel, the lineage information of individual cells can be profiled simultaneously along with their transcriptome by using a heritable and expressible DNA barcode as a lineage tracer. The barcode may remain static or evolve. However, sequencing is killing; we cannot get the actual single-cell dynamics in the transcriptomic space. In most cases, we can only get a snapshot of cells' lineage information at a single time point. In some *in vitro* systems like hematopoiesis or iPS, we can approximate the dynamics by re-sampling the same clone, i.e., cells from the same ancestor, over time. The approximation is inevitably crude due to the tradeoff between the wish to observe a clone earlier and the need to allow it to expand before sampling. Therefore, clonal data also provide only partial information of the dynamics. This opens up the opportunity to integrate state and lineage (clonal) information for dynamic inference. 
 
-With scVelo, developed by `Bergen et al. (Nature Biotechnology, 2020) <https://doi.org/10.1038/s41587-020-0591-3>`_,
-these restrictions are addressed by solving the full transcriptional dynamics of splicing kinetics using
-a likelihood-based dynamical model. This generalizes RNA velocity to a wide variety of systems comprising transient
-cell states, which are common in development and in response to perturbations.
-Further, scVelo infers gene-specific rates of transcription, splicing and degradation, and recovers the latent time of the underlying
-cellular processes. This latent time represents the cell’s internal clock and approximates the real time experienced by
-cells as they differentiate, based only on its transcriptional dynamics.
-Moreover, scVelo identifies regimes of regulatory changes such as stages of cell fate commitment and, therein,
-systematically detects putative driver genes.
+CoSpar, developed by `Wang & Klein (2021) <https://doi.org/>`_, is the first tool ever to perform dynamic inference by integrating state and lineage information. It solves for the transition probability map from cell states at an earlier time point to states at a later time point. It achieves accuracy and robustness by making use of intrinsic sparsity and coherence of the transition dynamics: neighboring initial states share similar yet sparse fate outcomes. Built upon the finite-time transition map, CoSpar can 1) infer fate potential of early states; 2) detect early fate bias among a heterogeneous progenitor population, and identify the early boundary of fate bifurcation; 3) identify putative driver genes for fate bifurcation; 4) by selecting progenitor states more accurately, we also provide a better pseudo time analysis, including a more accurate gene expression dynamics along the trajectory. CoSpar also provides several methods to analyze clonal data by itself, including the clonal coupling between fate clusters and clonal fate bias.  We envision CoSpar to be a platform to integrate key methods needed to analyze data with both state and lineage information. 
 
 
-RNA velocity models
-~~~~~~~~~~~~~~~~~~~
-With RNA velocity, inference of directional trajectories is explored by connecting measurements to the underlying mRNA splicing kinetics:
-Transcriptional induction for a particular gene results in an increase of (newly transcribed) precursor unspliced mRNAs
-while, conversely, repression or absence of transcription results in a decrease of unspliced mRNAs.
-Hence, by distinguishing unspliced from spliced mRNA, the change of mRNA abundance (RNA velocity) can be approximated.
-The combination of velocities across mRNAs can then be used to estimate the future state of an individual cell.
 
-RNA velocity estimation can currently be tackled with three existing approaches:
+Coherent sparsity optimization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+One formulation of dynamic inference is to identify a finite-time transition matrix :math:`T_{ij} (t_1,t_2)`, which describes the probability of a cell, initially in some state :math:`i` at time :math:`t_1`, giving rise to progeny in a state :math:`j` at time :math:`t_2`. However, scRNA-seq data alone do not constrain these maps fully, and strong assumptions have to be made.  We now extend these ideas to incorporate information from lineage tracing.
 
-- steady-state / deterministic model (using steady-state residuals)
-- stochastic model (using second-order moments),
-- dynamical model (using a likelihood-based framework).
-
-The **steady-state / deterministic model**, as being used in velocyto, estimates velocities as follows: Under the assumption
-that transcriptional phases (induction and repression) last sufficiently long to reach a steady-state equilibrium
-(active and inactive), velocities are quantified as the deviation of the observed ratio from its steady-state ratio.
-The equilibrium mRNA levels are approximated with a linear regression on the presumed steady states in the lower and upper quantiles.
-This simplification makes two fundamental assumptions: a common splicing rate across genes and steady-state mRNA levels to be
-reflected in the data. It can lead to errors in velocity estimates and cellular states as the assumptions are often
-violated, in particular when a population comprises multiple heterogeneous subpopulation dynamics.
-
-The **stochastic model** aims to better capture the steady states. By treating transcription, splicing and degradation
-as probabilistic events, the resulting Markov process is approximated by moment equations.
-By including second-order moments, it exploits not only the balance of unspliced to spliced
-mRNA levels but also their covariation. It has been demonstrated on the endocrine pancreas that
-stochasticity adds valuable information, overall yielding higher consistency than the deterministic
-model, while remaining as efficient in computation time.
-
-The **dynamical model** (most powerful while computationally most expensive) solves the full dynamics of splicing kinetics
-for each gene. It thereby adapts RNA velocity to widely varying specifications such as non-stationary populations,
-as does not rely on the restrictions of a common splicing rate or steady states to be sampled. :math:`\frac{s}{\sqrt{N}}`
-
-:math:`\frac{s}{\sqrt{N}}`
-
-The splicing dynamics
+The clonal data directly constrains the transition map. We denote *I(t)* as a clone-by-cell matrix that encodes the clonal information at time :math:`t`, and introduce  :math:`S`  as a cell-state similarity matrix that encodes the state information. The observed clonal data is sampled from a particular realization of the stochastic differentiation dynamics. To account for this bias and technical noises, we locally smooth the raw data to obtain the “average” cell density profile per clone:  :math:`P(t)=I(t)S`.  The transition map :math:`T` directly links density profiles at two time points: 
 
 .. math::
-   \begin{align}
-   \frac{du(t)}{dt}=&~ \alpha_k(t) - \beta u(t),\\
-   \frac{ds(t)}{dt}=&~ \beta u(t) - \gamma s(t),
-   \end{align}
+	\begin{equation}
+	P(t_2 )\approx P(t_1 )T(t_1,t_2)
+	\end{equation}
 
-is solved in a likelihood-based expectation-maximization framework, by iteratively estimating the
-parameters of reaction rates and latent cell-specific variables, i.e. transcriptional state *k* and cell-internal latent time *t*.
+In most cases, the number of clones (i.e., constraints) is less than that of initial states (i.e., variables), and  :math:`T` is not sufficiently constrained.To further constrain the map, we observe that: 1)  :math:`T` is a sparse matrix, since most cell states have sparse differentiation outcomes; 2)  :math:`T` is locally coherent as neighboring cell states share similar fate outcomes; 3) :math:`T` is a non-negative matrix. With these, the inference becomes an optimization problem:
 
-It thereby aims to learn the unspliced/spliced phase trajectory.
-Four transcriptional states are modeled to account for all possible configurations of gene activity:
-two dynamic transient states (induction and repression) and two steady states (active and inactive)
-potentially reached after each dynamic transition.
+.. math::
+	\begin{equation}
+	 \min_{P(t_1)}\min_{T} ||T||_1+\alpha ||LT||_2,  \; \text{s.t.} \; ||P(t_2)- P(t_1) T(t_1,t_2)||_{2}\le\epsilon;\; T\ge 0; \sum_j T_{ij}=1.
+	 \end{equation}
 
-In the expectation step, for a given model estimate of the unspliced/spliced phase trajectory,
-a latent time is assigned to an observed mRNA value by minimizing its distance to the phase trajectory.
-The transcriptional states are then assigned by associating a likelihood to the respective segments on the phase trajectory
-(induction, repression, active and inactive steady states).
-In the maximization step, the overall likelihood is then optimized by updating the parameters of reaction rates.
+Here, :math:`‖T‖_1` quantifies the sparsity of the matrix T through its l-1 norm, while  :math:`‖LT‖_2` quantifies the local coherence of :math:`T` (:math:`L` is the Laplacian of the cell state similarity graph, and :math:`LT` is the local divergence). The remaining constraints are from clonal observation, non-negativity of :math:`T`, and map normalization, respectively. Both :math:`\alpha` and :math:`\epsilon` are tunable parameters.  At :math:`\alpha=0`, the minimization takes the form of Lasso, a traditional algorithm for compressed sensing. Our formulation extends compressed sensing from vector-oriented to matrix-oriented, and improves its robustness by incorporating the local coherence constraint. The local coherence extension is reminiscent of the fused Lasso problem. We have developed CoSpar to solve the optimization. 
+	
+The above optimization is formulated as if we have initial clonal information by re-sampling clones. When we only have the clonal information at :math:`t_2`, we can still infer the transition map by jointly optimizing the map :math:`T` and the initial clonal data :math:`I(t_1)` such that the cost function is minimized. In this joint optimization, :math:`I(t_1 )` is further constrained such that all initial cell states are labeled by clones, and non-overlapping clones at :math:`t_2` label different cells at :math:`t_1`. 
 
-The model yields more consistent velocity estimates and better identification of transcriptional states.
-It further enables the systematic identification of dynamics-driving genes in a likelihood-based way,
-thereby finding the key drivers that govern cell fate transitions. Moreover, the dynamical model infers a universal
-cell-internal latent time shared across genes that enables relating genes and identifying regimes of transcriptional changes.
 
-For best results and above-described additional insights, we recommend using the dynamical model.
-If runtime is of importance, the stochastic model is advised to be used as it very efficiently approximates the dynamical model,
-taking few minutes on 30k cells. The dynamical yet can take up to one hour, however, enhancing efficiency is in progress.
-
-See `Bergen et al. (2020) <https://doi.org/10.1038/s41587-020-0591-3>`_ for a detailed exposition of the methods.
+See `Wang & Klein (2021) <https://doi.org/>`_ for a detailed exposition of the methods.

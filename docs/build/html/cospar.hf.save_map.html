@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.hf.save_map &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.hf.save_map &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/help_functions/_help_functions_CoSpar.py#L1007-L1025" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/help_functions/_help_functions_CoSpar.py#L1046-L1066" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -204,9 +215,9 @@
 <dl class="py function">
 <dt id="cospar.hf.save_map">
 <code class="sig-prename descclassname">cospar.hf.</code><code class="sig-name descname">save_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.hf.save_map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the adata</p>
-<p>The file name key <cite>data_des</cite> will be printed, and
-the saved file can be accessed again using this key.</p>
+<dd><p>Save the adata and print file name prefix.</p>
+<p>The file name prefix <cite>data_des</cite> will be printed, and
+the saved file can be accessed again using this prefix.</p>
 </dd></dl>
 
 </div>

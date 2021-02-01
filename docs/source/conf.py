@@ -199,8 +199,8 @@ def get_linenos(obj):
 project_dir = Path(__file__).parent.parent.parent
 github_url_cospar = "https://github.com/ShouWenWang/cospar/tree/master"
 # github_url_read_loom = "https://github.com/theislab/anndata/tree/master/anndata"
-# github_url_read = "https://github.com/theislab/scanpy/tree/master"
-# github_url_scanpy = "https://github.com/theislab/scanpy/tree/master/scanpy"
+github_url_read = "https://github.com/theislab/scanpy/tree/master"
+github_url_scanpy = "https://github.com/theislab/scanpy/tree/master/scanpy"
 from pathlib import PurePosixPath
 
 

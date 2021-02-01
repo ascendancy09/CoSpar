@@ -1,23 +1,21 @@
 import numpy as np
 import scipy
+import os
 import scipy.stats
 from sklearn.decomposition import PCA,TruncatedSVD
 from sklearn.neighbors import NearestNeighbors
 from scipy.sparse.csgraph import dijkstra
 from sklearn.neighbors import kneighbors_graph
 from sklearn.metrics import pairwise
-#import time
-#import os
-#import json
-#from datetime import datetime
-#import matplotlib.pyplot as plt
-import ot.bregman as otb
 import scipy.sparse as ssp
 import scanpy as sc
 import pandas as pd
+from scanpy import read
 import statsmodels.sandbox.stats.multicomp
 from scipy.spatial.distance import pdist
 from fastcluster import linkage
+from .. import settings
+from .. import logging as logg
 
 #import scipy.stats
 
@@ -95,6 +93,7 @@ def normalize_variance(E, column_stdevs=None):
         column_stdevs = np.sqrt(sparse_var(E, axis=0))
     return sparse_rowwise_multiply(E.T, 1 / column_stdevs).T
 
+# this is not working well
 def sparse_zscore(E, gene_mean=None, gene_stdev=None):
     """ z-score normalize each column of a sparse matrix """
     if gene_mean is None:
@@ -102,6 +101,25 @@ def sparse_zscore(E, gene_mean=None, gene_stdev=None):
     if gene_stdev is None:
         gene_stdev = np.sqrt(sparse_var(E))
     return sparse_rowwise_multiply((E - gene_mean).T, 1/gene_stdev).T
+
+
+def corr2_coeff(A,B):
+    '''
+        This method does not work if A and B are constituted of constant row vectors,
+        in which case the standard deviation becomes zero. 
+    '''
+    resol=10**(-15)
+    # Rowwise mean of input arrays & subtract from input arrays themeselves
+    A_mA = A - A.mean(1)[:,None]
+    B_mB = B - B.mean(1)[:,None]
+
+    # Sum of squares across rows
+    ssA = (A_mA**2).sum(1);
+    ssB = (B_mB**2).sum(1);
+
+    # Finally get corr coeff
+    return np.dot(A_mA,B_mB.T)/(np.sqrt(np.dot(ssA[:,None],ssB[None]))+resol)
+
 
 def sparse_rowwise_multiply(E, a):
     """ 
@@ -120,7 +138,7 @@ def sparse_rowwise_multiply(E, a):
 
     nrow = E.shape[0]
     if nrow!=a.shape[0]:
-        print("Dimension mismatch, multiplication failed")
+        logg.error("Dimension mismatch, multiplication failed")
         return E
     else:
         w = ssp.lil_matrix((nrow, nrow))
@@ -145,7 +163,7 @@ def sparse_column_multiply(E, a):
 
     ncol = E.shape[1]
     if ncol!=a.shape[0]:
-        print("Dimension mismatch, multiplication failed")
+        logg.error("Dimension mismatch, multiplication failed")
         return E
     else:
         w = ssp.lil_matrix((ncol, ncol))
@@ -153,7 +171,7 @@ def sparse_column_multiply(E, a):
         return (ssp.csr_matrix(E)*w)
 
 
-def matrix_row_or_column_thresholding(input_matrix,threshold=0.1,row_threshold=True,verbose=0):
+def matrix_row_or_column_thresholding(input_matrix,threshold=0.1,row_threshold=True):
     """ 
     Row or column-wise thresholding a matrix
 
@@ -176,8 +194,7 @@ def matrix_row_or_column_thresholding(input_matrix,threshold=0.1,row_threshold=T
     output_matrix=input_matrix.copy()
     max_vector=np.max(input_matrix,int(row_threshold))
     for j in range(len(max_vector)):
-        if verbose:
-            if j%2000==0: print(j)
+        #if j%2000==0: logg.hint(j)
         if row_threshold:
             idx=input_matrix[j,:]<threshold*max_vector[j]
             output_matrix[j,idx]=0
@@ -191,6 +208,13 @@ def matrix_row_or_column_thresholding(input_matrix,threshold=0.1,row_threshold=T
 def get_pca(E, base_ix=[], numpc=50, keep_sparse=False, normalize=True, random_state=0):
     """
     Run PCA on the counts matrix E, gene-level normalizing if desired.
+
+    By default, it performs z-score transformation for each gene across all cells, i.e., 
+    a gene normalization, before computing PCA. (There is currently no concensus on doing 
+    this or not. In scanpy, after count normalization (a per-cell normalization), it assumes 
+    that the individual gene counts in a cell is log-normally distributed, and performs a 
+    log-transformation before computing PCA. The z-score transformation is gene-specific, 
+    while the log-transformation is not.)
 
     Parameters
     ----------
@@ -369,6 +393,7 @@ def filter_genes(E, base_ix = [], min_vscore_pctl = 85, min_counts = 3, min_cell
 
     return gene_ix[ix]
 
+# We found that this does not work
 def remove_corr_genes(E, gene_list, exclude_corr_genes_list, test_gene_idx, min_corr = 0.1):
     """ 
     Remove signature-correlated genes from a list of test genes 
@@ -609,9 +634,9 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
         cell_id_t2=adata.uns['Tmap_cell_id_t1']
         cell_id_t1=adata.uns['Tmap_cell_id_t2']
 
-    x_emb=adata.obsm['X_umap'][:,0]
-    y_emb=adata.obsm['X_umap'][:,1]
-    data_des=adata.uns['data_des'][0]
+    x_emb=adata.obsm['X_emb'][:,0]
+    y_emb=adata.obsm['X_emb'][:,1]
+    data_des=adata.uns['data_des'][-1]
     
     if len(fate_array)==0: fate_array=list(set(state_annote_0))
     
@@ -626,10 +651,10 @@ def compute_fate_probability_map(adata,fate_array=[],used_map_name='transition_m
         adata.uns['fate_map']={'fate_array':fate_array,'fate_map':potential_vector,'fate_entropy':fate_entropy}
 
     else:
-        print(f"Error, used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
+        logg.error(f"used_map_name should be among adata.uns.keys(), with _transition_map as suffix")
 
         
-def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True):
+def compute_fate_map_and_intrinsic_bias(adata,selected_fates=[],used_map_name='transition_map',map_backwards=True):
     """
     Compute fate map and the relative bias compared to expectation.
     
@@ -694,7 +719,7 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
                     fate_array_flat.append(zz)
                     des_temp=des_temp+str(zz)+'_'
                 else:
-                    print(f'{zz} is not a valid cluster name. Please select from: {valid_state_annot}')
+                    logg.error(f'{zz} is not a valid cluster name. Please select from: {valid_state_annot}')
             mega_cluster_list.append(des_temp)
         else:
             if xx in valid_state_annot:
@@ -703,7 +728,7 @@ def compute_fate_map_and_bias(adata,selected_fates=[],used_map_name='transition_
                 fate_array_flat.append(xx)
                 mega_cluster_list.append(str(xx))
             else:
-                print(f'{xx} is not a valid cluster name. Please select from: {valid_state_annot}')
+                logg.error(f'{xx} is not a valid cluster name. Please select from: {valid_state_annot}')
                 mega_cluster_list.append('')
 
     compute_fate_probability_map(adata,fate_array=fate_array_flat,used_map_name=used_map_name,map_backwards=map_backwards)
@@ -834,7 +859,7 @@ def compute_shortest_path_distance(adata,num_neighbors_target=5,mode='distances'
     if mode!='connectivities':
         mode='distances'
 
-    print(f"Chosen mode is {mode}")
+    logg.hint(f"Chosen mode is {mode}")
     if method=='umap':
         sc.pp.neighbors(adata, n_neighbors=num_neighbors_target,method='umap')
         adj_matrix=adata.obsp[mode].A.copy()
@@ -923,68 +948,11 @@ def add_neighboring_cells_to_a_map(initial_idx,adata,neighbor_N=5):
 #         initial_idx=initial_idx | output_idx
 
     sc.pp.neighbors(adata, n_neighbors=neighbor_N) #,method='gauss')
-    output_idx=adata.uns['neighbors']['connectivities'][initial_idx].sum(0).A.flatten()>0
+    output_idx=adata.obsp['connectivities'][initial_idx].sum(0).A.flatten()>0
     post_idx=initial_idx | output_idx
     #print(f"Final: {np.sum(post_idx)}")
 
     return post_idx
-
-
-# This one is not necessary in the OT package. 
-def compute_symmetric_Wasserstein_distance(sp_id_target,sp_id_ref,full_cost_matrix,
-    target_value=[], ref_value=[],OT_epsilon=0.05,OT_stopThr=10**(-8),OT_max_iter=1000):
-    """
-    Compute symmetric Wasserstein distance between two distributions.
-
-    Parameters
-    ----------
-    sp_id_target: `np.array`, (n_1_sp,)
-        List of cell id's among the targeted population. 
-    sp_id_ref: `np.array`, (n_2_sp,)
-        List of cell id's for the reference sub population.
-    full_cost_matrix: `np.array`, shape (n_1, n_2)
-        A cost matrix to map all 'target' to all 'ref'. This is a full matrix.
-    target_value: `np.array`, (n_1_sp,)
-        The probability for each selected target state.
-    ref_value: `np.array`, (n_2_sp,)
-        The probability for each selected reference state.
-    OT_epsilon: `float`, optional (default: 0.05)
-        Entropic regularization parameter to compute the optional 
-        transport map from target to ref. 
-    OT_stopThr: `float`, optional (default: 10**(-8))
-        The stop thresholding for computing the transport map. 
-    OT_max_iter: `float`, optional (default: 1000)
-        The maximum number of iteration for computing the transport map. 
-
-    Return 
-    A vector for [forward_distance, backward_distance, the average]
-    """
-
-
-    import ot.bregman as otb
-    # normalized distribution
-    if len(target_value)==0:
-        target_value=np.ones(len(sp_id_target))
-    if len(ref_value)==0:
-        ref_value=np.ones(len(sp_id_ref))
-    
-    input_mu=target_value/np.sum(target_value);
-    input_nu=ref_value/np.sum(ref_value);
-
-    full_cost_matrix_1=full_cost_matrix[sp_id_target][:,sp_id_ref]
-    OT_transition_map_1=otb.sinkhorn_stabilized(input_mu,input_nu,full_cost_matrix_1,OT_epsilon,numItermax=OT_max_iter,stopThr=OT_stopThr)
-
-    # ot_config = {'C':full_cost_matrix_1,'G':target_value, 'epsilon': OT_epsilon, 'lambda1': 1, 'lambda2': 50,
-    #               'epsilon0': 1, 'tau': 10000, 'tolerance': 1e-08,
-    #               'max_iter': 1e7, 'batch_size': 5}
-    # OT_transition_map_1=optimal_transport_duality_gap(**ot_config)
-
-    full_cost_matrix_2=full_cost_matrix[sp_id_ref][:,sp_id_target]
-    OT_transition_map_2=otb.sinkhorn_stabilized(input_nu,input_mu,full_cost_matrix_2,OT_epsilon,numItermax=OT_max_iter,stopThr=OT_stopThr)
-
-    for_Wass_dis=np.sum(OT_transition_map_1*full_cost_matrix_1)
-    back_Wass_dis=np.sum(OT_transition_map_2*full_cost_matrix_2)
-    return [for_Wass_dis, back_Wass_dis, (for_Wass_dis+back_Wass_dis)/2]
 
 
 def get_hierch_order(hm, dist_metric='euclidean', linkage_method='ward'):
@@ -1077,14 +1045,16 @@ def above_the_line(x_array,x1,x2):
 
 def save_map(adata):
     """
-    Save the adata
+    Save the adata and print file name prefix. 
 
-    The file name key `data_des` will be printed, and 
-    the saved file can be accessed again using this key.
+    The file name prefix `data_des` will be printed, and 
+    the saved file can be accessed again using this prefix.
     """
 
-    data_des=adata.uns['data_des'][0]
-    data_path=adata.uns['data_path'][0]
+    data_des=adata.uns['data_des'][-1]
+    #data_path=adata.uns['data_path'][0]
+    data_path=settings.data_path
+
 
     # need to remove these, otherwise, it does not work
     for xx in  ['fate_trajectory', 'multiTime_cell_id_t1', 'multiTime_cell_id_t2', 'fate_map']:
@@ -1095,9 +1065,51 @@ def save_map(adata):
     adata.write_h5ad(file_name, compression='gzip')
     print(f"Saved file: data_des='{data_des}'")
 
+def save_preprocessed_adata(adata,data_des=''):
+    """
+    Save preprocessed adata.
 
+    It will remove un-needed entries, and use the default
+    key to save the results if a new data_des is not provided. 
+    """
 
-def check_available_choices(adata,verbose=True):
+    if len(data_des)==0:
+        data_des=adata.uns['data_des'][-1]
+    data_path=settings.data_path
+
+    check_list=list(adata.uns.keys())
+    for xx in  check_list:
+        if xx not in ['data_des','clonal_time_points']:
+            adata.uns.pop(xx)
+
+    check_list=list(adata.obsm.keys())
+    for xx in  check_list:
+        if xx not in ['X_clone', 'X_emb', 'X_pca']:
+            adata.obsm.pop(xx)
+
+    check_list=list(adata.obs.keys())
+    for xx in  check_list:
+        if xx not in ['state_info', 'time_info']:
+            adata.obs.pop(xx)
+
+    adata.write_h5ad(f'{data_path}/{data_des}_adata_preprocessed.h5ad', compression='gzip')
+    print(f"Saved file: data_des='{data_des}'")
+
+def load_saved_adata_with_key(data_des):
+    """
+    Load pre-saved adata based on the prefix 'data_des'
+    """
+
+    data_path=settings.data_path
+    #print(f"Load data: data_des='{data_des}'")
+    file_name=f'{data_path}/{data_des}_adata_with_transition_map.h5ad'
+    if os.path.exists(file_name):
+        adata=sc.read(file_name)
+        return adata
+    else:
+        logg.error(f"The file does not existed yet")
+
+def check_available_map(adata):
     """
     Check available transition map. 
 
@@ -1110,6 +1122,22 @@ def check_available_choices(adata,verbose=True):
             available_map.append(xx)
     adata.uns['available_map']=available_map
 
+def switch_adata_representation(adata,to_new=True):
+    if to_new:
+        adata.obsm['X_clone']=adata.obsm['cell_by_clone_matrix']
+        adata.obs['state_info']=adata.obs['state_annotation']
+        #adata.uns['data_des']=['paper_OneTimeClone_t*pos_17*pos_21*D27']
+        adata.obsm.pop('cell_by_clone_matrix')
+        adata.obs.pop('state_annotation')
+    else:
+        adata.obsm['cell_by_clone_matrix']=adata.obsm['X_clone']
+        adata.obs['state_annotation']=adata.obs['state_info']
+        #adata.uns['data_des']=['paper_OneTimeClone_t*pos_17*pos_21*D27']
+        adata.obsm.pop('X_clone')
+        adata.obs.pop('state_info')
+
+
+def check_available_clonal_info(adata):
 
     X_clone=adata.obsm['X_clone']
     time_info=adata.obs['time_info']
@@ -1127,11 +1155,24 @@ def check_available_choices(adata,verbose=True):
             clonal_time_points.append(xx)
     adata.uns['clonal_time_points']=clonal_time_points
 
-    if verbose:
-        print("Available transition maps:",available_map)
-        print("Availabel clusters:", list(set(adata.obs['state_info'])))
-        print("Availabel time points:", list(set(adata.obs['time_info'])))
-        print("Clonal time points:",clonal_time_points)
+
+def check_available_choices(adata):
+    """
+    Check available parameter choices.
+
+    Also update adata.uns['available_map'] and adata.uns['clonal_time_points'].
+    """
+
+    check_available_map(adata)
+    available_map=adata.uns['available_map']
+
+    check_available_clonal_info(adata)
+    clonal_time_points=adata.uns['clonal_time_points']
+
+    print("Available transition maps:",available_map)
+    print("Availabel clusters:", list(set(adata.obs['state_info'])))
+    print("Availabel time points:", list(set(adata.obs['time_info'])))
+    print("Clonal time points:",clonal_time_points)
 
 def compute_pca(m1, m2, n_components):
     matrices = list()

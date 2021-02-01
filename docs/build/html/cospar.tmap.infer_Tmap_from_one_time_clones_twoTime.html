@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.tmap.infer_Tmap_from_one_time_clones_twoTime &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.tmap.infer_Tmap_from_one_time_clones_twoTime &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cospar.pl.set_up_plotting" href="cospar.pl.set_up_plotting.html" />
+    <link rel="next" title="cospar.pl.clones_on_manifold" href="cospar.pl.clones_on_manifold.html" />
     <link rel="prev" title="cospar.tmap.infer_Tmap_from_one_time_clones_private" href="cospar.tmap.infer_Tmap_from_one_time_clones_private.html" /> 
 </head>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L2091-L2208" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L1913-L2039" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,10 +214,11 @@
 <h1>cospar.tmap.infer_Tmap_from_one_time_clones_twoTime<a class="headerlink" href="#cospar-tmap-infer-tmap-from-one-time-clones-twotime" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.tmap.infer_Tmap_from_one_time_clones_twoTime">
-<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">infer_Tmap_from_one_time_clones_twoTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata_orig</span></em>, <em class="sig-param"><span class="n">selected_two_time_points</span><span class="o">=</span><span class="default_value">['1', '2']</span></em>, <em class="sig-param"><span class="n">initialize_method</span><span class="o">=</span><span class="default_value">'OT'</span></em>, <em class="sig-param"><span class="n">OT_epsilon</span><span class="o">=</span><span class="default_value">0.02</span></em>, <em class="sig-param"><span class="n">OT_dis_KNN</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">OT_max_iter</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">OT_stopThr</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">HighVar_gene_pctl</span><span class="o">=</span><span class="default_value">80</span></em>, <em class="sig-param"><span class="n">Clone_update_iter_N</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">normalization_mode</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">noise_threshold</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">CoSpar_KNN</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">smooth_array</span><span class="o">=</span><span class="default_value">[15, 10, 5]</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">trunca_threshold</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_fixed_clonesize_t1</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sort_clone</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">save_subset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.infer_Tmap_from_one_time_clones_twoTime" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">infer_Tmap_from_one_time_clones_twoTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata_orig</span></em>, <em class="sig-param"><span class="n">selected_two_time_points</span><span class="o">=</span><span class="default_value">['1', '2']</span></em>, <em class="sig-param"><span class="n">initialize_method</span><span class="o">=</span><span class="default_value">'OT'</span></em>, <em class="sig-param"><span class="n">OT_epsilon</span><span class="o">=</span><span class="default_value">0.02</span></em>, <em class="sig-param"><span class="n">OT_dis_KNN</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">OT_cost</span><span class="o">=</span><span class="default_value">'SPD'</span></em>, <em class="sig-param"><span class="n">HighVar_gene_pctl</span><span class="o">=</span><span class="default_value">80</span></em>, <em class="sig-param"><span class="n">Clone_update_iter_N</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">normalization_mode</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">noise_threshold</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">CoSpar_KNN</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">smooth_array</span><span class="o">=</span><span class="default_value">[15, 10, 5]</span></em>, <em class="sig-param"><span class="n">trunca_threshold</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_fixed_clonesize_t1</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sort_clone</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">save_subset</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">joint_optimization</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.infer_Tmap_from_one_time_clones_twoTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infer transition map from clones with a single time point</p>
 <p>It is the same as <a class="reference internal" href="cospar.tmap.infer_Tmap_from_one_time_clones.html#cospar.tmap.infer_Tmap_from_one_time_clones" title="cospar.tmap.infer_Tmap_from_one_time_clones"><code class="xref py py-func docutils literal notranslate"><span class="pre">infer_Tmap_from_one_time_clones()</span></code></a>, except that
 it assumes that the input adata_orig has only two time points.</p>
+<p>joint_optimization: <cite>bool</cite>, optional (default: True).</p>
 </dd></dl>
 
 </div>
@@ -217,7 +229,7 @@ it assumes that the input adata_orig has only two time points.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cospar.pl.set_up_plotting.html" class="btn btn-neutral float-right" title="cospar.pl.set_up_plotting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.pl.clones_on_manifold.html" class="btn btn-neutral float-right" title="cospar.pl.clones_on_manifold" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="cospar.tmap.infer_Tmap_from_one_time_clones_private.html" class="btn btn-neutral float-left" title="cospar.tmap.infer_Tmap_from_one_time_clones_private" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

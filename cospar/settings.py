@@ -101,7 +101,7 @@ def set_rcParams_cospar(fontsize=12, color_map=None, frameon=None):
     rcParams["grid.color"] = ".8"
 
     # color map
-    rcParams["image.cmap"] = "RdBu_r" if color_map is None else color_map
+    rcParams["image.cmap"] = "Reds" if color_map is None else color_map
 
     # frame (mpl default: True)
     frameon = False if frameon is None else frameon

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.pl.fate_map &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.pl.fate_map &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cospar.pl.single_cell_transition_probability" href="cospar.pl.single_cell_transition_probability.html" />
+    <link rel="next" title="cospar.pl.single_cell_transition" href="cospar.pl.single_cell_transition.html" />
     <link rel="prev" title="cospar.pl.clonal_fate_bias" href="cospar.pl.clonal_fate_bias.html" /> 
 </head>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L291-L469" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L390-L529" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,19 +214,19 @@
 <h1>cospar.pl.fate_map<a class="headerlink" href="#cospar-pl-fate-map" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.pl.fate_map">
-<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">fate_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">selected_fates</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">used_map_name</span><span class="o">=</span><span class="default_value">'transition_map'</span></em>, <em class="sig-param"><span class="n">map_backwards</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_time_points</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">plot_background</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_target_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_color_scale</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_color_bar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">point_size</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">plot_fate_bias</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">alpha_target</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">figure_index</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">plot_horizontal</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.fate_map" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">fate_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">selected_fates</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">used_map_name</span><span class="o">=</span><span class="default_value">'transition_map'</span></em>, <em class="sig-param"><span class="n">map_backwards</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_time_points</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">plot_background</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_target_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_color_scale</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_color_bar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">point_size</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">alpha_target</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">figure_index</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">plot_horizontal</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.fate_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot transition probability to given fate/ancestor clusters</p>
 <p>If <cite>map_backwards=True</cite>, plot transition probability of early
 states to given fate clusters (fate map); else, plot transition
 probability of later states from given ancestor clusters (ancestor map).
-Figures are saved at defined directory at adata.uns[‘figure_path’].</p>
+Figures are saved at defined directory at settings.figure_path.</p>
 <p><cite>selected_fates</cite> could contain a nested list of clusters. If so, we
 combine each sub list into a mega-fate cluster and combine the fate
 map correspondingly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assume to contain transition maps at adata.uns.</p>
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assume to contain transition maps at adata.uns.</p>
 </dd>
 <dt><strong>selected_fates</strong> : <cite>list</cite></dt><dd><p>List of cluster_ids consistent with adata.obs[‘state_info’]</p>
 </dd>
@@ -243,12 +254,6 @@ normalization at the whole Tmap level.</p>
 </dd>
 <dt><strong>point_size</strong> : <cite>int</cite>, optional (default: 2)</dt><dd><p>Size of the data point.</p>
 </dd>
-<dt><strong>plot_fate_bias</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>Fate bias is defined by comparing the predicted_prob with the expected_prob
-(based on relative cluster size at targeted time point). Specifically, the bias is:
-0.5+0.5*(predict_prob-expect_prob)/(1-expect_prob), if predict_prob&gt;expect_prob;
-0.5+0.5*(expect_prob-predict_prob)/expect_prob, otherise.
-It sales from [0,1]. At 0.5, prediction match null hypothesis.</p>
-</dd>
 <dt><strong>alpha_target</strong> : <cite>float</cite>, optional (default: 0.2)</dt><dd><p>It controls the transpancy of the plotted target cell states,
 for visual effect. Range: [0,1].</p>
 </dd>
@@ -272,7 +277,7 @@ for visual effect. Range: [0,1].</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cospar.pl.single_cell_transition_probability.html" class="btn btn-neutral float-right" title="cospar.pl.single_cell_transition_probability" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.pl.single_cell_transition.html" class="btn btn-neutral float-right" title="cospar.pl.single_cell_transition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="cospar.pl.clonal_fate_bias.html" class="btn btn-neutral float-left" title="cospar.pl.clonal_fate_bias" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

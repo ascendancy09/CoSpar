@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.pl.fate_coupling_from_clones &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.pl.fate_coupling_from_clones &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L2123-L2168" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L2431-L2480" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,14 +214,14 @@
 <h1>cospar.pl.fate_coupling_from_clones<a class="headerlink" href="#cospar-pl-fate-coupling-from-clones" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.pl.fate_coupling_from_clones">
-<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">fate_coupling_from_clones</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">plot_time_point</span></em>, <em class="sig-param"><span class="n">selected_fates</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">color_bar</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.fate_coupling_from_clones" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">fate_coupling_from_clones</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">plot_time_point</span></em>, <em class="sig-param"><span class="n">selected_fates</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">color_bar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">rename_selected_fates</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.fate_coupling_from_clones" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot fate coupling determined by just clones.</p>
 <p>We select one time point with clonal measurement, and show the normalized
 clonal correlation among these fates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p></p>
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p></p>
 </dd>
 <dt><strong>plot_time_point</strong> : <cite>str</cite></dt><dd><p>Time point to select the cell states.</p>
 </dd>

@@ -1,0 +1,184 @@
+\babel@toc {english}{}
+\contentsline {chapter}{\numberline {1}CoSpar\IeC {\textquoteright }s key applications}{3}{chapter.1}
+\contentsline {chapter}{\numberline {2}Reference}{5}{chapter.2}
+\contentsline {chapter}{\numberline {3}Support}{7}{chapter.3}
+\contentsline {section}{\numberline {3.1}About CoSpar}{7}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Coherent sparsity optimization}{7}{subsection.3.1.1}
+\contentsline {section}{\numberline {3.2}API}{8}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Preprocessing}{9}{subsection.3.2.1}
+\contentsline {subsubsection}{cospar.pp.initialize\_adata\_object}{9}{subsubsection*.4}
+\contentsline {subsubsection}{cospar.pp.get\_X\_pca}{10}{subsubsection*.6}
+\contentsline {subsubsection}{cospar.pp.get\_X\_emb}{10}{subsubsection*.8}
+\contentsline {subsubsection}{cospar.pp.get\_state\_info}{10}{subsubsection*.10}
+\contentsline {subsubsection}{cospar.pp.refine\_state\_info\_by\_marker\_genes}{11}{subsubsection*.12}
+\contentsline {subsubsection}{cospar.pp.refine\_state\_info\_by\_leiden\_clustering}{11}{subsubsection*.14}
+\contentsline {subsection}{\numberline {3.2.2}Transition map inference}{12}{subsection.3.2.2}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_multitime\_clones}{12}{subsubsection*.16}
+\contentsline {subsubsection}{cospar.tmap.infer\_intraclone\_Tmap}{13}{subsubsection*.18}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_one\_time\_clones}{14}{subsubsection*.20}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_state\_info\_alone}{16}{subsubsection*.22}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_clonal\_info\_alone}{17}{subsubsection*.24}
+\contentsline {subsubsection}{cospar.tmap.generate\_similarity\_matrix}{18}{subsubsection*.26}
+\contentsline {subsubsection}{cospar.tmap.generate\_initial\_similarity}{18}{subsubsection*.28}
+\contentsline {subsubsection}{cospar.tmap.generate\_final\_similarity}{19}{subsubsection*.30}
+\contentsline {subsubsection}{cospar.tmap.select\_time\_points}{19}{subsubsection*.32}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_multitime\_clones\_private}{19}{subsubsection*.34}
+\contentsline {subsubsection}{cospar.tmap.refine\_Tmap\_through\_cospar\_noSmooth}{20}{subsubsection*.36}
+\contentsline {subsubsection}{cospar.tmap.refine\_Tmap\_through\_cospar}{21}{subsubsection*.38}
+\contentsline {subsubsection}{cospar.tmap.compute\_custom\_OT\_transition\_map}{22}{subsubsection*.40}
+\contentsline {subsubsection}{cospar.tmap.Tmap\_from\_highly\_variable\_genes}{22}{subsubsection*.42}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_one\_time\_clones\_private}{23}{subsubsection*.44}
+\contentsline {subsubsection}{cospar.tmap.infer\_Tmap\_from\_one\_time\_clones\_twoTime}{25}{subsubsection*.46}
+\contentsline {subsection}{\numberline {3.2.3}Plotting}{25}{subsection.3.2.3}
+\contentsline {subsubsection}{cospar.pl.clones\_on\_manifold}{25}{subsubsection*.48}
+\contentsline {subsubsection}{cospar.pl.barcode\_heatmap}{26}{subsubsection*.50}
+\contentsline {subsubsection}{cospar.pl.fate\_coupling\_from\_clones}{26}{subsubsection*.52}
+\contentsline {subsubsection}{cospar.pl.clonal\_fate\_bias}{26}{subsubsection*.54}
+\contentsline {subsubsection}{cospar.pl.fate\_map}{27}{subsubsection*.56}
+\contentsline {subsubsection}{cospar.pl.single\_cell\_transition}{28}{subsubsection*.58}
+\contentsline {subsubsection}{cospar.pl.fate\_bias\_intrinsic}{29}{subsubsection*.60}
+\contentsline {subsubsection}{cospar.pl.fate\_bias\_from\_binary\_competition}{30}{subsubsection*.62}
+\contentsline {subsubsection}{cospar.pl.dynamic\_trajectory\_from\_intrinsic\_bias}{31}{subsubsection*.64}
+\contentsline {subsubsection}{cospar.pl.dynamic\_trajectory\_from\_competition\_bias}{32}{subsubsection*.66}
+\contentsline {subsubsection}{cospar.pl.dynamic\_trajectory\_via\_iterative\_mapping}{33}{subsubsection*.68}
+\contentsline {subsubsection}{cospar.pl.gene\_expression\_dynamics}{34}{subsubsection*.70}
+\contentsline {subsubsection}{cospar.pl.fate\_coupling\_from\_Tmap}{35}{subsubsection*.72}
+\contentsline {subsubsection}{cospar.pl.differential\_genes}{36}{subsubsection*.74}
+\contentsline {subsubsection}{cospar.pl.differential\_genes\_for\_given\_fates}{36}{subsubsection*.76}
+\contentsline {subsubsection}{cospar.pl.embedding}{37}{subsubsection*.78}
+\contentsline {subsubsection}{cospar.pl.gene\_expression\_on\_manifold}{38}{subsubsection*.80}
+\contentsline {subsection}{\numberline {3.2.4}Datasets}{38}{subsection.3.2.4}
+\contentsline {subsubsection}{cospar.datasets.hematopoiesis\_subsampled}{38}{subsubsection*.82}
+\contentsline {subsubsection}{cospar.datasets.hematopoiesis\_all}{39}{subsubsection*.84}
+\contentsline {subsubsection}{cospar.datasets.lung}{39}{subsubsection*.86}
+\contentsline {subsubsection}{cospar.datasets.reprogramming\_no\_merge\_tags}{39}{subsubsection*.88}
+\contentsline {subsubsection}{cospar.datasets.reprogramming\_merge\_tags}{39}{subsubsection*.90}
+\contentsline {subsubsection}{cospar.datasets.synthetic\_bifurcation\_static\_BC}{40}{subsubsection*.92}
+\contentsline {subsubsection}{cospar.datasets.synthetic\_bifurcation\_dynamic\_BC}{40}{subsubsection*.94}
+\contentsline {subsection}{\numberline {3.2.5}Help functions}{40}{subsection.3.2.5}
+\contentsline {subsubsection}{cospar.hf.read}{41}{subsubsection*.96}
+\contentsline {subsubsection}{cospar.hf.check\_available\_map}{41}{subsubsection*.98}
+\contentsline {subsubsection}{cospar.hf.get\_dge\_SW}{42}{subsubsection*.100}
+\contentsline {subsubsection}{cospar.hf.compute\_fate\_probability\_map}{42}{subsubsection*.102}
+\contentsline {subsubsection}{cospar.hf.compute\_state\_potential}{42}{subsubsection*.104}
+\contentsline {subsubsection}{cospar.hf.filter\_genes}{43}{subsubsection*.106}
+\contentsline {subsubsection}{cospar.hf.compute\_fate\_map\_and\_intrinsic\_bias}{43}{subsubsection*.108}
+\contentsline {subsubsection}{cospar.hf.mapout\_trajectories}{44}{subsubsection*.110}
+\contentsline {subsubsection}{cospar.hf.save\_map}{45}{subsubsection*.112}
+\contentsline {subsubsection}{cospar.hf.get\_normalized\_covariance}{45}{subsubsection*.114}
+\contentsline {subsubsection}{cospar.hf.add\_neighboring\_cells\_to\_a\_map}{45}{subsubsection*.116}
+\contentsline {subsubsection}{cospar.hf.compute\_shortest\_path\_distance}{45}{subsubsection*.118}
+\contentsline {section}{\numberline {3.3}Installation}{46}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}PyPI}{46}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Development Version}{46}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Dependencies}{47}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.3.4}Jupyter Notebook}{47}{subsection.3.3.4}
+\contentsline {section}{\numberline {3.4}Getting Started}{47}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}CoSpar workflow at a glance}{47}{subsection.3.4.1}
+\contentsline {subsubsection}{Initialization}{47}{subsubsection*.120}
+\contentsline {subsubsection}{Basic preprocessing}{48}{subsubsection*.121}
+\contentsline {subsubsection}{Simple clonal analysis}{48}{subsubsection*.122}
+\contentsline {subsubsection}{Transition map inference}{48}{subsubsection*.123}
+\contentsline {subsubsection}{Visualization}{49}{subsubsection*.124}
+\contentsline {section}{\numberline {3.5}CoSpar basics}{50}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Initialization}{51}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}Preprocessing and dimension reduction (optional)}{52}{subsection.3.5.2}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{54}{subsubsection*.125}
+\contentsline {subsection}{\numberline {3.5.3}Transition map inference}{57}{subsection.3.5.3}
+\contentsline {subsection}{\numberline {3.5.4}Save or load pre\sphinxhyphen {}computed data}{59}{subsection.3.5.4}
+\contentsline {subsection}{\numberline {3.5.5}Plotting}{60}{subsection.3.5.5}
+\contentsline {subsubsection}{Plotting transition profiles for single cells}{60}{subsubsection*.126}
+\contentsline {subsubsection}{Fate map}{63}{subsubsection*.127}
+\contentsline {subsubsection}{Relative fate bias}{66}{subsubsection*.128}
+\contentsline {subsubsection}{Dynamic trajectory inference}{68}{subsubsection*.129}
+\contentsline {subsubsection}{Differential genes for two ancestor groups}{70}{subsubsection*.130}
+\contentsline {subsubsection}{Gene trend along the dynamic trajectory}{71}{subsubsection*.131}
+\contentsline {subsubsection}{Fate coupling of the transition map}{73}{subsubsection*.132}
+\contentsline {subsection}{\numberline {3.5.6}Miscellaneous}{74}{subsection.3.5.6}
+\contentsline {subsubsection}{Transition map from state information and the last clonal time point}{74}{subsubsection*.133}
+\contentsline {subsubsection}{Transition map from state information alone}{77}{subsubsection*.134}
+\contentsline {subsubsection}{Gene expression}{80}{subsubsection*.135}
+\contentsline {subsubsection}{Refine state annotation by marker genes}{81}{subsubsection*.136}
+\contentsline {subsubsection}{Refine state annotation by clustering states at given time points}{83}{subsubsection*.137}
+\contentsline {subsubsection}{Differential gene expression between two clusters}{83}{subsubsection*.138}
+\contentsline {section}{\numberline {3.6}Hematopoietic dataset}{84}{section.3.6}
+\contentsline {subsection}{\numberline {3.6.1}Load data}{85}{subsection.3.6.1}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{85}{subsubsection*.139}
+\contentsline {subsection}{\numberline {3.6.2}Part 1: Infer transition map using clones from both day4 and day6}{87}{subsection.3.6.2}
+\contentsline {subsubsection}{Map inference}{87}{subsubsection*.140}
+\contentsline {subsubsection}{Save or load pre\sphinxhyphen {}computed data}{89}{subsubsection*.141}
+\contentsline {subsubsection}{Plotting}{89}{subsubsection*.142}
+\contentsline {paragraph}{Plotting transition profiles for single cells}{90}{paragraph*.143}
+\contentsline {paragraph}{Fate map}{92}{paragraph*.144}
+\contentsline {paragraph}{Fate bias}{94}{paragraph*.145}
+\contentsline {paragraph}{Lineage coupling of the transition map}{96}{paragraph*.146}
+\contentsline {paragraph}{Dynamic trajectory inference}{97}{paragraph*.147}
+\contentsline {paragraph}{Differential genes for two ancestor groups}{97}{paragraph*.148}
+\contentsline {paragraph}{Gene trend along the dynamic trajectory}{98}{paragraph*.149}
+\contentsline {paragraph}{Apply other pseudotime methods on the selected cell states}{99}{paragraph*.150}
+\contentsline {paragraph}{Identify differentially expressed genes}{100}{paragraph*.151}
+\contentsline {subsubsection}{Transition map from only clonal information}{101}{subsubsection*.152}
+\contentsline {subsection}{\numberline {3.6.3}Part II: Infer transition map using clones from all time points}{103}{subsection.3.6.3}
+\contentsline {subsection}{\numberline {3.6.4}Part IIII: Infer transition map using only clones from the last time point}{107}{subsection.3.6.4}
+\contentsline {section}{\numberline {3.7}Reprogramming dataset (static barcoding)}{113}{section.3.7}
+\contentsline {subsection}{\numberline {3.7.1}Load data}{114}{subsection.3.7.1}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{115}{subsubsection*.153}
+\contentsline {subsection}{\numberline {3.7.2}Part 1: Infer transition map using clones from all time points}{121}{subsection.3.7.2}
+\contentsline {subsubsection}{Map inference}{121}{subsubsection*.154}
+\contentsline {subsubsection}{Save or load pre\sphinxhyphen {}computed data}{125}{subsubsection*.155}
+\contentsline {subsection}{\numberline {3.7.3}Plotting}{126}{subsection.3.7.3}
+\contentsline {subsubsection}{Plotting transition profiles for single cells}{126}{subsubsection*.156}
+\contentsline {paragraph}{Fate map}{128}{paragraph*.157}
+\contentsline {paragraph}{Relative fate bias}{128}{paragraph*.158}
+\contentsline {paragraph}{Identify differentially expressed genes}{130}{paragraph*.159}
+\contentsline {paragraph}{Differential genes for two ancestor groups}{131}{paragraph*.160}
+\contentsline {paragraph}{Map trajectory backwards iteratively}{132}{paragraph*.161}
+\contentsline {paragraph}{Gene trend along the trajectory}{133}{paragraph*.162}
+\contentsline {subsubsection}{Transition map from only clonal information}{136}{subsubsection*.163}
+\contentsline {subsection}{\numberline {3.7.4}Part II: Infer transition map using clones from the last time point}{137}{subsection.3.7.4}
+\contentsline {subsection}{\numberline {3.7.5}Part III: Infer transition map from state information alone}{147}{subsection.3.7.5}
+\contentsline {section}{\numberline {3.8}Reprogramming dataset (dynamic barcoding)}{151}{section.3.8}
+\contentsline {subsection}{\numberline {3.8.1}Load data}{152}{subsection.3.8.1}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{152}{subsubsection*.164}
+\contentsline {subsection}{\numberline {3.8.2}Part 1: Infer transition map using clones from all time points}{155}{subsection.3.8.2}
+\contentsline {subsubsection}{Map inference}{155}{subsubsection*.165}
+\contentsline {subsubsection}{Save or load pre\sphinxhyphen {}computed data}{159}{subsubsection*.166}
+\contentsline {subsubsection}{Plotting}{160}{subsubsection*.167}
+\contentsline {paragraph}{Plotting transition profiles for single cells}{160}{paragraph*.168}
+\contentsline {paragraph}{Fate map}{162}{paragraph*.169}
+\contentsline {paragraph}{Relative fate bias}{162}{paragraph*.170}
+\contentsline {paragraph}{Identify differentially expressed genes}{164}{paragraph*.171}
+\contentsline {paragraph}{Map trajectory backwards iteratively}{165}{paragraph*.172}
+\contentsline {paragraph}{Gene trend along the trajectory}{166}{paragraph*.173}
+\contentsline {subsubsection}{Transition map from only clonal information}{169}{subsubsection*.174}
+\contentsline {subsection}{\numberline {3.8.3}Part II: Infer transition map using clones from the last time point}{170}{subsection.3.8.3}
+\contentsline {section}{\numberline {3.9}Lung dataset}{181}{section.3.9}
+\contentsline {subsection}{\numberline {3.9.1}Load data}{181}{subsection.3.9.1}
+\contentsline {subsection}{\numberline {3.9.2}Preprocessing (optional)}{181}{subsection.3.9.2}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{182}{subsubsection*.175}
+\contentsline {subsection}{\numberline {3.9.3}Infer transition map using clones from the last time point}{185}{subsection.3.9.3}
+\contentsline {subsubsection}{Save data or load}{193}{subsubsection*.176}
+\contentsline {subsubsection}{Plotting}{194}{subsubsection*.177}
+\contentsline {paragraph}{Plot fate map}{194}{paragraph*.178}
+\contentsline {paragraph}{Relative fate bias}{194}{paragraph*.179}
+\contentsline {paragraph}{Dynamic trajectory inference on day 17}{196}{paragraph*.180}
+\contentsline {paragraph}{Differential genes for two ancestor groups on day 17}{197}{paragraph*.181}
+\contentsline {paragraph}{Dynamic trajectory on both day 17 and 21}{198}{paragraph*.182}
+\contentsline {paragraph}{Gene trend along the dynamic trajectory}{198}{paragraph*.183}
+\contentsline {section}{\numberline {3.10}Synthetic data (static barcoding)}{199}{section.3.10}
+\contentsline {subsection}{\numberline {3.10.1}Initialization and Preprocessing}{200}{subsection.3.10.1}
+\contentsline {subsubsection}{Loading data}{200}{subsubsection*.184}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{200}{subsubsection*.185}
+\contentsline {subsection}{\numberline {3.10.2}Transition map inference}{203}{subsection.3.10.2}
+\contentsline {subsubsection}{Transition map from multiple clonal time points.}{203}{subsubsection*.186}
+\contentsline {subsubsection}{Transition map from a single clonal time point}{207}{subsubsection*.187}
+\contentsline {subsection}{\numberline {3.10.3}Transition amp from only the clonal information}{210}{subsection.3.10.3}
+\contentsline {section}{\numberline {3.11}Synthetic data (dynamic barcoding)}{210}{section.3.11}
+\contentsline {subsection}{\numberline {3.11.1}Initialization and Preprocessing}{211}{subsection.3.11.1}
+\contentsline {subsubsection}{Loading data}{211}{subsubsection*.188}
+\contentsline {subsubsection}{Raw clonal data analysis (without using state information)}{211}{subsubsection*.189}
+\contentsline {subsection}{\numberline {3.11.2}Transition map inference}{218}{subsection.3.11.2}
+\contentsline {subsubsection}{Transition map from multiple clonal time points.}{218}{subsubsection*.190}
+\contentsline {subsubsection}{Transition map from a single clonal time point}{222}{subsubsection*.191}
+\contentsline {subsection}{\numberline {3.11.3}Transition amp from only the clonal information}{225}{subsection.3.11.3}
+\contentsline {chapter}{Python Module Index}{227}{section*.192}

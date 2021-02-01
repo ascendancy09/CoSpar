@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.tmap.compute_custom_OT_transition_map &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.tmap.compute_custom_OT_transition_map &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L1156-L1264" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L1151-L1283" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,37 +214,36 @@
 <h1>cospar.tmap.compute_custom_OT_transition_map<a class="headerlink" href="#cospar-tmap-compute-custom-ot-transition-map" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.tmap.compute_custom_OT_transition_map">
-<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">compute_custom_OT_transition_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">OT_epsilon</span><span class="o">=</span><span class="default_value">0.02</span></em>, <em class="sig-param"><span class="n">OT_max_iter</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">OT_stopThr</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">OT_dis_KNN</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.compute_custom_OT_transition_map" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">compute_custom_OT_transition_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">OT_epsilon</span><span class="o">=</span><span class="default_value">0.02</span></em>, <em class="sig-param"><span class="n">OT_dis_KNN</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">OT_solver</span><span class="o">=</span><span class="default_value">'duality_gap'</span></em>, <em class="sig-param"><span class="n">OT_cost</span><span class="o">=</span><span class="default_value">'SPD'</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.compute_custom_OT_transition_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute Tmap from state info using optimal transport (OT).</p>
-<p>This realization is based on <code class="xref py py-func docutils literal notranslate"><span class="pre">ot.bregman.sinkhorn_stabilized()</span></code>.
-The cost function is from shortest path distance, and we set the
-initial and final distribution to be both uniform.</p>
-<p>The KNN graph generation does not consider local cell density
-heterogeneity. The shortest path distance is the cumulative gene expression
-distance along the path, not the cumulative connectivity. The function tends
-to be very slow, both the computation of shortest path distance, and also the
-generation of OT_map. Since CoSpar is not so sensitive to initialization,
-we might provide another implementation that sacrifice accuracy, but boost speed.</p>
+<p>We provide the options for the OT solver, and also the cost function.
+The OT solver does not seem to matter, although ‘duality_gap’ is faster.
+The cost function could affect the OT map results. Using shortest path
+distance (‘SPD’) is slower but more accurate, while using gene expression
+distance (‘GED’) is faster but less accurate. The performance of cospar
+is robust to the initialized map (this is especially so in terms of fate
+bias, not so much for the fate map alone)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assumed to be preprocessed, only has two time points.</p>
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assumed to be preprocessed, only has two time points.</p>
 </dd>
 <dt><strong>OT_epsilon</strong> : <cite>float</cite>, optional (default: 0.02)</dt><dd><p>The entropic regularization, &gt;0, a larger one increases
 uncertainty of the transition</p>
 </dd>
-<dt><strong>OT_max_iter</strong> : <cite>int</cite>, optional (default: 1000)</dt><dd><p>Maximum round of iteration.</p>
-</dd>
-<dt><strong>OT_stopThr</strong> : <cite>float</cite>, optional (default: 1e-09)</dt><dd><p>Stop if the cost function change per iteration is
-less than this threshold.</p>
-</dd>
 <dt><strong>OT_dis_KNN</strong> : <cite>int</cite>, optional (default: 5)</dt><dd><p>Number of nearest neighbors to construct the KNN graph for
 computing the shortest path distance.</p>
 </dd>
+<dt><strong>OT_solver</strong> : <cite>str</cite>, optional (default: <cite>duality_gap</cite>)</dt><dd><p>The method used to compute the optimal transport map. Availabel choice:
+{‘duality_gap’,’fixed_iters’}. Our test shows that they produce the same
+results, while ‘duality_gap’ is almost twice faster.</p>
+</dd>
+<dt><strong>OT_cost</strong> : <cite>str</cite>, optional (default: <cite>SPD</cite>), options {‘GED’,’SPD’}</dt><dd><p>The cost metric. We provide gene expression distance (GED), and also
+shortest path distance (SPD). GED is much faster, but SPD is more accurate.
+However, cospar is robust to the initialization.</p>
+</dd>
 <dt><strong>compute_new</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>If True, compute OT_map and also the shortest path distance from scratch,
 whether it was computed and saved before or not.</p>
-</dd>
-<dt><strong>verbose</strong> : <cite>bool</cite>, optional (default: True)</dt><dd><p>True, print information of the analysis; False, do not print.</p>
 </dd>
 </dl>
 </dd>

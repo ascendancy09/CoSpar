@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.tmap.infer_Tmap_from_multitime_clones &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.tmap.infer_Tmap_from_multitime_clones &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L629-L732" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/tmap/map_reconstruction.py#L616-L725" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,17 +214,21 @@
 <h1>cospar.tmap.infer_Tmap_from_multitime_clones<a class="headerlink" href="#cospar-tmap-infer-tmap-from-multitime-clones" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.tmap.infer_Tmap_from_multitime_clones">
-<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">infer_Tmap_from_multitime_clones</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata_orig</span></em>, <em class="sig-param"><span class="n">selected_clonal_time_points</span></em>, <em class="sig-param"><span class="n">smooth_array</span><span class="o">=</span><span class="default_value">[15, 10, 5]</span></em>, <em class="sig-param"><span class="n">CoSpar_KNN</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">noise_threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">demulti_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">normalization_mode</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">use_all_cells</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_subset</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">trunca_threshold</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.infer_Tmap_from_multitime_clones" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.tmap.</code><code class="sig-name descname">infer_Tmap_from_multitime_clones</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata_orig</span></em>, <em class="sig-param"><span class="n">selected_clonal_time_points</span></em>, <em class="sig-param"><span class="n">smooth_array</span><span class="o">=</span><span class="default_value">[15, 10, 5]</span></em>, <em class="sig-param"><span class="n">CoSpar_KNN</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">noise_threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">demulti_threshold</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">normalization_mode</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">use_all_cells</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_subset</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">trunca_threshold</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">compute_new</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.tmap.infer_Tmap_from_multitime_clones" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infer Tmap for clonal data with multiple time points.</p>
-<p>It propares adata object for cells of targeted time points by
+<p>It prepares adata object for cells of targeted time points by
 <a class="reference internal" href="cospar.tmap.select_time_points.html#cospar.tmap.select_time_points" title="cospar.tmap.select_time_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_time_points()</span></code></a>, generate the similarity matrix
 via <a class="reference internal" href="cospar.tmap.generate_similarity_matrix.html#cospar.tmap.generate_similarity_matrix" title="cospar.tmap.generate_similarity_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_similarity_matrix()</span></code></a>, and iterately calls
 the core function <a class="reference internal" href="cospar.tmap.refine_Tmap_through_cospar.html#cospar.tmap.refine_Tmap_through_cospar" title="cospar.tmap.refine_Tmap_through_cospar"><code class="xref py py-func docutils literal notranslate"><span class="pre">refine_Tmap_through_cospar()</span></code></a> to update
 the transition map.</p>
+<p>The inferred map allows transitions between neighboring time points.
+For example, if selected_clonal_time_points=[‘day1’,’day2’,’day3’],
+then it computes transitions for pairs (day1, day2) and (day2, day3),
+but not (day1, day3).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata_orig</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Should be prepared from our anadata initialization.</p>
+<dt><strong>adata_orig</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Should be prepared from our anadata initialization.</p>
 </dd>
 <dt><strong>selected_clonal_time_points</strong> : <cite>list</cite> of <cite>str</cite></dt><dd><p>List of time points to be included for analysis.
 We assume that each selected time point has clonal measurement.
@@ -222,7 +237,8 @@ It should be in ascending order: ‘day_1’,’day_2’….</p>
 <dt><strong>smooth_array</strong> : <cite>list</cite>, optional (default: [15,10,5])</dt><dd><p>List of smooth rounds at each iteration.
 The n-th entry determines the smooth round for the Smatrix
 at the n-th iteration. Its length determins the number of
-iteration.</p>
+iteration. It is better to use a number at the multiple of
+5, i.e., 5, 10, 15, 20,…</p>
 </dd>
 <dt><strong>CoSpar_KNN</strong> : <cite>int</cite>, optional (default: 20)</dt><dd><p>the number of neighbors for KNN graph used for computing the
 similarity matrix.</p>
@@ -259,12 +275,10 @@ But will also increase the computation time significantly.</p>
 computed and saved before or not. This is activated only when
 <cite>use_full_Smatrix=False</cite>.</p>
 </dd>
-<dt><strong>verbose</strong> : <cite>bool</cite>, optional (default: True)</dt><dd><p>True, print information of the analysis; False, do not print.</p>
-</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>adata</strong> (<a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object) – Store results at adata.uns[‘transition_map’]
+<dd class="field-even"><p><strong>adata</strong> (<a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object) – Store results at adata.uns[‘transition_map’]
 and adata.uns[‘intraclone_transition_map’]. This adata is different
 from the input adata_orig due to subsampling cells.</p>
 </dd>

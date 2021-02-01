@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.pp.initialize_adata_object &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.pp.initialize_adata_object &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cospar.pp.update_X_pca" href="cospar.pp.update_X_pca.html" />
+    <link rel="next" title="cospar.pp.get_X_pca" href="cospar.pp.get_X_pca.html" />
     <link rel="prev" title="API" href="api.html" /> 
 </head>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/preprocessing/_preprocessing.py#L15-L136" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/preprocessing/_preprocessing.py#L19-L131" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,8 +214,8 @@
 <h1>cospar.pp.initialize_adata_object<a class="headerlink" href="#cospar-pp-initialize-adata-object" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.pp.initialize_adata_object">
-<code class="sig-prename descclassname">cospar.pp.</code><code class="sig-name descname">initialize_adata_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell_by_feature_matrix</span></em>, <em class="sig-param"><span class="n">gene_names</span></em>, <em class="sig-param"><span class="n">time_info</span></em>, <em class="sig-param"><span class="n">X_clone</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">X_pca</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">X_emb</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">state_info</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">data_path</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">figure_path</span><span class="o">=</span><span class="default_value">'figure'</span></em>, <em class="sig-param"><span class="n">data_des</span><span class="o">=</span><span class="default_value">'cospar'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pp.initialize_adata_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialized the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</p>
+<code class="sig-prename descclassname">cospar.pp.</code><code class="sig-name descname">initialize_adata_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell_by_gene_matrix</span></em>, <em class="sig-param"><span class="n">gene_names</span></em>, <em class="sig-param"><span class="n">time_info</span></em>, <em class="sig-param"><span class="n">X_clone</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">X_pca</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">X_emb</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">state_info</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">data_des</span><span class="o">=</span><span class="default_value">'cospar'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pp.initialize_adata_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialized the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</p>
 <p>The principal components (<cite>X_pca</cite>), 2-d embedding (<cite>X_emb</cite>), and
 state_info can be provided upfront, or generated in the next step.
 If the clonal information (X_clone) is not provided,
@@ -212,7 +223,7 @@ the transition map will be generated using only the state information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>cell_by_feature_matrix</strong> : <cite>np.ndarray</cite>, <cite>sp.spmatrix</cite></dt><dd><p>The (annotated) data matrix. Rows correspond to cells and columns to genes.</p>
+<dt><strong>cell_by_gene_matrix</strong> : <cite>np.ndarray</cite>, <cite>sp.spmatrix</cite></dt><dd><p>The (annotated) data matrix. Rows correspond to cells and columns to genes.</p>
 </dd>
 <dt><strong>gene_names</strong> : <cite>np.ndarray</cite></dt><dd><p>An array of gene names.</p>
 </dd>
@@ -232,14 +243,6 @@ It is used only for plotting after the transition map is created</p>
 Create with leiden clustering if not set.
 This will be used only after the map is created. Can be adjusted later</p>
 </dd>
-<dt><strong>data_path</strong> : <cite>str</cite>, optional (default:’data’)</dt><dd><p>A relative path to save data. The data_path name should be
-unique to this dataset for saving all relevant results.
-If the data folder does not existed before, create a new one.</p>
-</dd>
-<dt><strong>figure_path</strong> : <cite>str</cite>, optional (default:’figure’)</dt><dd><p>A relative path to save figures. The figure_path name should be
-unique to this dataset for saving all relevant results.
-If the figure folder does not existed before, create a new one.</p>
-</dd>
 <dt><strong>data_des</strong> : <cite>str</cite>, optional (default:’cospar’)</dt><dd><p>This is just a name to label/distinguish this data.
 Will be used for saving the results.
 It should be a unique name for a new dataset.</p>
@@ -248,10 +251,10 @@ It should be a unique name for a new dataset.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p>Generate an <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object with the following entries</p></li>
+<li><p>Generate an <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object with the following entries</p></li>
 <li><p><strong>obs</strong> (<em>‘time_info’, ‘state_info’</em>)</p></li>
-<li><p><strong>uns</strong> (<em>‘data_des’, ‘data_path’, ‘figure_path’, ‘clonal_time_points’</em>)</p></li>
-<li><p><strong>obsm</strong> (<em>‘X_clone’, ‘X_pca’, ‘X_umap’</em>)</p></li>
+<li><p><strong>uns</strong> (<em>‘data_des’, ‘clonal_time_points’</em>)</p></li>
+<li><p><strong>obsm</strong> (<em>‘X_clone’, ‘X_pca’, ‘X_emb’</em>)</p></li>
 </ul>
 </p>
 </dd>
@@ -266,7 +269,7 @@ It should be a unique name for a new dataset.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cospar.pp.update_X_pca.html" class="btn btn-neutral float-right" title="cospar.pp.update_X_pca" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.pp.get_X_pca.html" class="btn btn-neutral float-right" title="cospar.pp.get_X_pca" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

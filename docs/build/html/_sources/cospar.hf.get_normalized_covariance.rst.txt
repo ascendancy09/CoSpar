@@ -1,4 +1,4 @@
-:github_url: https://github.com/ShouWenWang/cospar/tree/master/cospar/help_functions/_help_functions_CoSpar.py#L937-L980
+:github_url: https://github.com/ShouWenWang/cospar/tree/master/cospar/help_functions/_help_functions_CoSpar.py#L976-L1019
 
 
 

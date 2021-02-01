@@ -7,132 +7,160 @@ from . import logging as logg
 
 url_prefix='https://kleintools.hms.harvard.edu/tools/downloads/cospar'
 
-def synthetic_bifurcation(data_path='data_bifur',figure_path='figure_bifur',data_des='bifur'):
+def synthetic_bifurcation_static_BC(data_des='bifur'):
     """
-    We re-sample clones that go through a simulated bifurcation differentiation
-    process.  
+    Synthetic clonal datasets with static barcoding.
 
-    It has only two time points. There is only a single 
-    round of barcoding at the beginning. 
+    We simulated a differentiation process over a bifurcation fork. In this simulation, 
+    cells are barcoded in the beginning, and the barcodes remain un-changed.  
+    In the simulation we resample clones over time, 
+    like the experimental design to obtain the hematopoietic dataset 
+    or the reprogramming dataset. The dataset has two time points.  
+
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
-    data_name='bifur_adata_preprocessed.h5ad'
+    data_path=settings.data_path
+    figure_path=settings.figure_path
+    data_name='bifurcation_static_BC_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
-def synthetic_bifurcation_continuous_barcoding(data_path='data_bifur_conBC',figure_path='figure_bifur_conBC',data_des='bifur_conBC'):
+def synthetic_bifurcation_dynamic_BC(data_des='bifur_conBC'):
     """
-    We re-sample clones that go through a simulated bifurcation differentiation
-    process.  
+    Synthetic clonal datasets with dynamic barcoding.
 
-    It has only two time points. There is only a single 
-    round of barcoding at the beginning. 
+    We simulated a differentiation process over a bifurcation fork. In this simulation, 
+    cells are barcoded, and the barcodes could accumulate mutations, which we call 
+    `dynamic barcoding`. In the simulation we resample clones over time, 
+    like the experimental design to obtain the hematopoietic dataset 
+    or the reprogramming dataset. The dataset has two time points. 
+
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
-    data_name='bifur_adata_preprocessed.h5ad'
+    data_path=settings.data_path
+    figure_path=settings.figure_path
+    data_name='bifurcation_dynamic_BC_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
-def reprogramming_merge_tags(data_path='data_reprog_M',figure_path='figure_reprog_M',data_des='CellTagging'):
+def reprogramming_merge_tags(data_des='CellTagging'):
     """
     The reprogramming dataset from 
 
-    Biddy, B. A. et al. `Single-cell mapping of lineage and identity in direct 
-    reprogramming`. Nature 564, 219–224 (2018).
+    * Biddy, B. A. et al. `Single-cell mapping of lineage and identity in direct reprogramming`. Nature 564, 219–224 (2018).
 
     This dataset has multiple time points for both the clones and the state measurements. 
 
-    The cells are barcoded over 3 rounds during the entire differentiation process. 
-    We combine up to 3 tags from the same cell into a single clonal label in 
-    representing the X_clone matrix. In this representation, each cell has at most 
-    one clonal label. 
+    The cells are barcoded over 3 rounds (i.e., 3 tags) during the entire differentiation 
+    process. We treat barcode tags from each round as independent clonal label 
+    here. In this representation, each cell can have multiple clonal labels 
+    at different time points.
+    
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
+    data_path=settings.data_path
+    figure_path=settings.figure_path
     data_name='CellTagging_ConcatenateClone_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
-def reprogramming_no_merge_tags(data_path='data_reprog_noM',figure_path='figure_reprog_noM',data_des='CellTagging_NoConcat'):
+def reprogramming_no_merge_tags(data_des='CellTagging_NoConcat'):
     """
     The reprogramming dataset from 
 
-    Biddy, B. A. et al. `Single-cell mapping of lineage and identity in direct 
-    reprogramming`. Nature 564, 219–224 (2018).
+    * Biddy, B. A. et al. `Single-cell mapping of lineage and identity in direct reprogramming`. Nature 564, 219–224 (2018).
 
     This dataset has multiple time points for both the clones and the state measurements. 
 
-    The cells are barcoded over 3 rounds during the entire differentiation process. We treat
-    barcode tags from each round as independent clonal label here. In this representation, 
-    each cell can have multiple clonal labels.   
+    The cells are barcoded over 3 rounds (i.e., 3 tags) during the entire differentiation 
+    process. We treat barcode tags from each round as independent clonal label here. 
+    In this representation, each cell has at most one clonal label. Effectively, 
+    we convert the barcodes into static labels that do not carry temporal information.
+    
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
+    data_path=settings.data_path
+    figure_path=settings.figure_path
     data_name='CellTagging_NoConcat_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
-def lung(data_path='data_lung',figure_path='figure_lung',data_des='Lung'):
+def lung(data_des='Lung'):
     """
     The direct lung differentiation dataset from 
 
-    Hurley, K. et al. `Reconstructed Single-Cell Fate Trajectories Define Lineage 
-    Plasticity Windows during Differentiation of Human PSC-Derived Distal Lung Progenitors`. 
-    Cell Stem Cell (2020) doi:10.1016/j.stem.2019.12.009.
+    * Hurley, K. et al. Cell Stem Cell (2020) doi:10.1016/j.stem.2019.12.009.
 
     This dataset has multiple time points for the state manifold, but only one time point
     for the clonal observation on day 27. 
+    
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
+    data_path=settings.data_path
+    figure_path=settings.figure_path
     data_name='Lung_pos17_21_D27_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
-def hematopoiesis_all(data_path='data_blood_all',figure_path='figure_blood_all',data_des='LARRY'):
+def hematopoiesis_all(data_des='LARRY'):
     """
     All of the hematopoiesis data set from 
 
-    Weinreb, C., Rodriguez-Fraticelli, A., Camargo, F. D. & Klein, A. M. 
-    `Lineage tracing on transcriptional landscapes links state to fate 
-    during differentiation`. Science 367, (2020)
+    * Weinreb, C., Rodriguez-Fraticelli, A., Camargo, F. D. & Klein, A. M. Science 367, (2020)
 
-    .. image:: https://user-images.githubusercontent.com/4595786/104988296-b987ce00-59e5-11eb-8dbe-a463b355a9fd.png
-    :width: 600px
-    :align: middle
 
     This dataset has 3 time points for both the clones and the state measurements. 
-
     This dataset is very big. Generating the transition map for this datset 
     could take many hours when run for the first time. 
+    
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
+    data_path=settings.data_path
+    figure_path=settings.figure_path
     data_name='LARRY_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
 
 
-def hematopoiesis_15perct(data_path='data_blood_15perct',figure_path='figure_blood_15perct',data_des='LARRY_sp500_ranking1'):
+def hematopoiesis_subsampled(data_des='LARRY_sp500_ranking1'):
     """
     Top 15% most heterogeneous clones of the hematopoiesis data set from 
 
-    Weinreb, C., Rodriguez-Fraticelli, A., Camargo, F. D. & Klein, A. M. 
-    `Lineage tracing on transcriptional landscapes links state to fate 
-    during differentiation`. Science 367, (2020)
+    * Weinreb, C., Rodriguez-Fraticelli, A., Camargo, F. D. & Klein, A. M. Science 367, (2020)
+
 
     This dataset has 3 time points for both the clones and the state measurements. 
-
     This sub-sampled data better illustrates the power of CoSpar in robstly 
     inferring differentiation dynamics from a noisy clonal dataset. Also, it 
     is smaller, and much faster to analyze. 
+    
+    Parameters
+    ----------
+    data_des: `str`
+        A key to label this dataset. 
     """
 
-    settings.data_path=data_path
-    settings.figure_path=figure_path
+    data_path=settings.data_path
+    figure_path=settings.figure_path
     data_name='LARRY_sp500_ranking1_adata_preprocessed.h5ad'
     return load_data_core(data_path,figure_path,data_name,data_des)
 
@@ -159,7 +187,7 @@ def load_data_core(data_path,figure_path,data_name,data_des):
         adata.uns['data_des']=[str(data_des)]
         return adata
     else:
-        print("Error, files do not exist")
+        logg.error("Error, files do not exist")
         return None    
 
 def _check_datafile_present_and_download(path, backup_url=None):

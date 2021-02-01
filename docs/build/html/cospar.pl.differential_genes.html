@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.pl.differential_genes &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.pl.differential_genes &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="cospar.pl.differential_genes_for_given_fates" href="cospar.pl.differential_genes_for_given_fates.html" />
-    <link rel="prev" title="cospar.pl.driver_genes_from_competition_bias" href="cospar.pl.driver_genes_from_competition_bias.html" /> 
+    <link rel="prev" title="cospar.pl.fate_coupling_from_Tmap" href="cospar.pl.fate_coupling_from_Tmap.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L1141-L1251" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L1428-L1539" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,16 +214,14 @@
 <h1>cospar.pl.differential_genes<a class="headerlink" href="#cospar-pl-differential-genes" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.pl.differential_genes">
-<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">differential_genes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">idx_for_group_A</span></em>, <em class="sig-param"><span class="n">idx_for_group_B</span></em>, <em class="sig-param"><span class="n">plot_groups</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">gene_N</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">plot_gene_N</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">point_size</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.differential_genes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">differential_genes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">plot_groups</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">gene_N</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">plot_gene_N</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">point_size</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.differential_genes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform differential gene expression analysis and plot top DGE genes.</p>
+<p>We use Wilcoxon rank-sum test to calculate P values, followed by
+Benjamini-Hochberg correction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Need to contain gene expression matrix.</p>
-</dd>
-<dt><strong>idx_for_group_A</strong> : <cite>np.array</cite></dt><dd><p>A <cite>bool</cite> array for ancestor cells for cluster A.</p>
-</dd>
-<dt><strong>idx_for_group_A</strong></dt><dd><p>A <cite>bool</cite> array for ancestor cells for cluster A.</p>
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Need to contain gene expression matrix, and DGE cell groups A, B.</p>
 </dd>
 <dt><strong>plot_groups</strong> : <cite>bool</cite>, optional (default: True)</dt><dd><p>If true, plot the selected ancestor states for A, B</p>
 </dd>
@@ -249,7 +258,7 @@ the two groups, with the top being more differentially expressed.</p></li>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="cospar.pl.differential_genes_for_given_fates.html" class="btn btn-neutral float-right" title="cospar.pl.differential_genes_for_given_fates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="cospar.pl.driver_genes_from_competition_bias.html" class="btn btn-neutral float-left" title="cospar.pl.driver_genes_from_competition_bias" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cospar.pl.fate_coupling_from_Tmap.html" class="btn btn-neutral float-left" title="cospar.pl.fate_coupling_from_Tmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

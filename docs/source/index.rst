@@ -51,15 +51,32 @@ Your help to improve CoSpar is highly appreciated.
    :maxdepth: 1
    :hidden:
 
-   api
    about
+   api
+   
 
 .. toctree::
    :caption: Tutorial 
    :maxdepth: 1
    :hidden:
 
-   20201121-Bifurcation_model_staticBC-CoSapr_basic
+   installation
+   getting_started
+   20210121_cospar_tutorial
+
+.. toctree::
+   :caption: Examples
+   :maxdepth: 1
+   :hidden:
+
+   20210121_all_hematopoietic_data
+   20210121_reprogramming_data_merge_tags
+   20210121_reprogramming_data_no_merge_tags
+   20210121_lung_data
+   20210120-Bifurcation_model_static_barcoding
+   20210120-Bifurcation_model_dynamic_barcoding
+
+
 
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/scvelo.svg

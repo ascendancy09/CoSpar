@@ -12,38 +12,23 @@ CoSpar is built around the :class:`~anndata.AnnData` object (usually called `ada
 The structure is defined in :func:`pp.initialize_adata_object`. For each cell, 
 we store its time information at `adata.obs['time_info']`, state information 
 at `adata.obs['state_info']`,  clonal information at `adata.obsm['X_clone']`, 
-and 2-d embedding at `adata.obsm['X_umap']`. 
+and 2-d embedding at `adata.obsm['X_emb']`. 
+
+
+Once the :class:`~anndata.AnnData` object is initialized via :func:`cs.pp.initialize_adata_object`, the typical flow of analysis is to 1) perform preprocessing and dimension reduction (``cs.pp.*``), 2) visualize and analyzing clonal data alone (``cs.pl.*``), 3) infer transition map (``cs.tmap.*``), and 4) analyze inferred map by plotting (``cs.pl.*``). We also provide miscellaneous functions to assist with the analysis (``cs.hf.*``). See :doc:`tutorial <getting_started>` for details. 
 
 
 
-Once the :class:`~anndata.AnnData` object is initiated via :func:`cs.pp.initialize_adata_object`, the typical flow of analysis is
-
-* Perform preprocessing and dimension reduction (``cs.pp.*``). This is optional if the data is preprocessed and a good dimension reduction is performed before :class:`~anndata.AnnData` initialization. We recommend that this step is performed by external packages like :mod:`~scanpy`, which is also built around the :class:`~anndata.AnnData` object.  
-
-
-
-* Perform raw clonal data analysis (``cs.pl.*``). It allows to visualize clonal dynamics or structure on state manifold, identify the fraction of fate-biased clones, assess the differentiation coupling between different fate clusters based on counting clones alone, and compute a transition map based on clonal information.     
-
-* Infer transition map by integrating state and clonal information with coherent sparsity optimization. The user is required to choose one of the following methods to run:
-
-   * :func:`cs.tmap.infer_Tmap_from_multitime_clones`. This requires that the clones have multiple time points. The results are stored at `adata.uns['transition_map']` and `adata.uns['intraclone_transition_map']`.
-
-   * :func:`cs.tmap.infer_Tmap_from_one_time_clones`. This requires that the clones have at least one time point, and that the state information has at least two time points.  This method requires initializing the map based on state information alone by using either the `OT` or `HighVar` method, with the initialized map stored at `adata.uns['OT_transition_map']` and  `adata.uns['HighVar_transition_map']`, respectively.  
-
-* Analyze any of the pre-computed transition maps using the plotting tools provided in ``cs.pl.*`` by specifying which map you want to use. We also provide some help functions to assist with analysis (``cs.hf.*``).   
-
-
-
-Initialization and preprocessing
---------------------------------
+Preprocessing
+-------------
 
 .. autosummary::
    :toctree: .
 
    pp.initialize_adata_object
-   pp.update_X_pca
-   pp.update_X_umap
-   pp.update_state_info
+   pp.get_X_pca
+   pp.get_X_emb
+   pp.get_state_info
    pp.refine_state_info_by_marker_genes
    pp.refine_state_info_by_leiden_clustering
 
@@ -60,8 +45,8 @@ Transition map inference
    tmap.infer_Tmap_from_multitime_clones
    tmap.infer_intraclone_Tmap
    tmap.infer_Tmap_from_one_time_clones
-   tmap.infer_weinreb_Tmap
-   tmap.infer_naive_Tmap
+   tmap.infer_Tmap_from_state_info_alone
+   tmap.infer_Tmap_from_clonal_info_alone
 
 **Internal functions** 
 
@@ -80,7 +65,6 @@ Transition map inference
 
    tmap.compute_custom_OT_transition_map
    tmap.Tmap_from_highly_variable_genes
-   tmap.infer_initial_states_of_a_clone
    tmap.infer_Tmap_from_one_time_clones_private
    tmap.infer_Tmap_from_one_time_clones_twoTime
 
@@ -88,13 +72,6 @@ Transition map inference
 Plotting
 --------
 
-**General** 
-
-.. autosummary::
-   :toctree: .
-   
-   pl.set_up_plotting
-   pl.scatter_plot_on_embedding
 
 **Clone analysis** (clone visualization, clustering etc.)
 
@@ -114,10 +91,13 @@ Plotting
    :toctree: .
 
    pl.fate_map
-   pl.single_cell_transition_probability
-   pl.binary_fate_choice
-   pl.dynamic_trajectory
-   pl.gene_trend_along_dynamic_trajectory
+   pl.single_cell_transition
+   pl.fate_bias_intrinsic
+   pl.fate_bias_from_binary_competition
+   pl.dynamic_trajectory_from_intrinsic_bias
+   pl.dynamic_trajectory_from_competition_bias
+   pl.dynamic_trajectory_via_iterative_mapping
+   pl.gene_expression_dynamics
    pl.fate_coupling_from_Tmap
 
 
@@ -125,12 +105,33 @@ Plotting
 
 .. autosummary::
    :toctree: .
-
-   pl.gene_expression_on_manifold
-   pl.driver_genes_from_intrinsic_bias
-   pl.driver_genes_from_competition_bias
+   
    pl.differential_genes
    pl.differential_genes_for_given_fates
+   
+**General**
+
+.. autosummary::
+   :toctree: .
+
+   pl.embedding
+   pl.gene_expression_on_manifold
+
+
+Datasets
+--------
+
+.. autosummary::
+   :toctree: .
+   
+   datasets.hematopoiesis_subsampled
+   datasets.hematopoiesis_all
+   datasets.lung
+   datasets.reprogramming_no_merge_tags
+   datasets.reprogramming_merge_tags
+   datasets.synthetic_bifurcation_static_BC
+   datasets.synthetic_bifurcation_dynamic_BC
+
 
 
 Help functions
@@ -139,18 +140,20 @@ Help functions
 .. autosummary::
    :toctree: .
 
+   hf.read
+   hf.check_available_map
    hf.get_dge_SW
    hf.compute_fate_probability_map
    hf.compute_state_potential
-   hf.remove_corr_genes
    hf.filter_genes
-   hf.get_pca
-   hf.compute_fate_map_and_bias
+   hf.compute_fate_map_and_intrinsic_bias
    hf.mapout_trajectories
    hf.save_map
+   hf.load_saved_adata
    hf.get_normalized_covariance
-   hf.compute_symmetric_Wasserstein_distance
    hf.add_neighboring_cells_to_a_map
    hf.compute_shortest_path_distance
+   
+
 
 

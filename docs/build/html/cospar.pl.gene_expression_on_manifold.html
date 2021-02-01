@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cospar.pl.gene_expression_on_manifold &mdash; CoSpar 0.0.1 documentation</title>
+  <title>cospar.pl.gene_expression_on_manifold &mdash; CoSpar 0.0.2 documentation</title>
   
 
   
@@ -43,8 +43,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cospar.pl.driver_genes_from_intrinsic_bias" href="cospar.pl.driver_genes_from_intrinsic_bias.html" />
-    <link rel="prev" title="cospar.pl.fate_coupling_from_Tmap" href="cospar.pl.fate_coupling_from_Tmap.html" /> 
+    <link rel="next" title="cospar.datasets.hematopoiesis_subsampled" href="cospar.datasets.hematopoiesis_subsampled.html" />
+    <link rel="prev" title="cospar.pl.embedding" href="cospar.pl.embedding.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -95,12 +95,23 @@
             
               <p class="caption"><span class="caption-text">Main</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About scVelo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="20201121-Bifurcation_model_staticBC-CoSapr_basic.html">CoSpar basics with synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">Hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
 </ul>
 
             
@@ -161,7 +172,7 @@
           
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L229-L281" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ShouWenWang/cospar/tree/master/cospar/plotting/_plotting.py#L226-L288" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -203,20 +214,22 @@
 <h1>cospar.pl.gene_expression_on_manifold<a class="headerlink" href="#cospar-pl-gene-expression-on-manifold" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="cospar.pl.gene_expression_on_manifold">
-<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">gene_expression_on_manifold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">selected_genes</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plot_time_points</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.gene_expression_on_manifold" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cospar.pl.</code><code class="sig-name descname">gene_expression_on_manifold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">adata</span></em>, <em class="sig-param"><span class="n">selected_genes</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plot_time_points</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">color_bar</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cospar.pl.gene_expression_on_manifold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot gene expression on the state manifold</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev44+gf1d1e17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assume to contain transition maps at adata.uns.</p>
+<dt><strong>adata</strong> : <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object</dt><dd><p>Assume to contain transition maps at adata.uns.</p>
 </dd>
-<dt><strong>selected_genes</strong> : <cite>list</cite></dt><dd><p>List of genes to plot.</p>
+<dt><strong>selected_genes</strong> : <cite>list</cite> or ‘str’</dt><dd><p>List of genes to plot.</p>
 </dd>
 <dt><strong>savefig</strong> : <cite>bool</cite>, optional (default: False)</dt><dd><p>Save the figure.</p>
 </dd>
 <dt><strong>plot_time_points</strong> : <cite>list</cite>, optional (default: all)</dt><dd><p>A list of time points to further restrict the cell states to plot.
 If map_backwards=True, plot initial states that are among these time points;
 else, plot later states that are among these time points.</p>
+</dd>
+<dt><strong>color_bar</strong> : <cite>bool</cite>, (default: False)</dt><dd><p>If True, plot the color bar.</p>
 </dd>
 </dl>
 </dd>
@@ -231,8 +244,8 @@ else, plot later states that are among these time points.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cospar.pl.driver_genes_from_intrinsic_bias.html" class="btn btn-neutral float-right" title="cospar.pl.driver_genes_from_intrinsic_bias" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="cospar.pl.fate_coupling_from_Tmap.html" class="btn btn-neutral float-left" title="cospar.pl.fate_coupling_from_Tmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cospar.datasets.hematopoiesis_subsampled.html" class="btn btn-neutral float-right" title="cospar.datasets.hematopoiesis_subsampled" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cospar.pl.embedding.html" class="btn btn-neutral float-left" title="cospar.pl.embedding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
