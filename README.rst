@@ -4,7 +4,7 @@ CoSpar - dynamic inference by integrating transcriptome and lineage information
 ===============================================================================
 
 .. image:: https://user-images.githubusercontent.com/4595786/104988296-b987ce00-59e5-11eb-8dbe-a463b355a9fd.png
-   :width: 300px
+   :width: 100px
    :align: left
 
 **CoSpar** is a toolkit for dynamic inference from lineage-traced single cells. |br|
@@ -21,12 +21,6 @@ CoSpar's key applications
 - infer gene expression dynamics along the trajectory. 
 - infer putative driver genes.
 - infer fate coupling.
-
-
-.. Upcoming talks
-.. ^^^^^^^^^^^^^^
-.. - `Sep 15: Temporal Single-Cell Analysis (SCOG) <https://twitter.com/fabian_theis/status/1305621028056465412>`_
-.. - `Nov 12: Single Cell Biology (SCB) <https://coursesandconferences.wellcomegenomecampus.org/our-events/single-cell-biology-2020/>`_
 
 
 
