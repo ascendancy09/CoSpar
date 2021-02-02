@@ -1,0 +1,1811 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Reprogramming dataset (dynamic barcoding) &mdash; CoSpar 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lung dataset" href="20210121_lung_data.html" />
+    <link rel="prev" title="Reprogramming dataset (static barcoding)" href="20210121_reprogramming_data_merge_tags.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">All hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Reprogramming dataset (dynamic barcoding)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/theislab/cospar_notebooks/blob/master/20210121_reprogramming_data_no_merge_tags.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Reprogramming-dataset-(dynamic-barcoding)">
+<h1>Reprogramming dataset (dynamic barcoding)<a class="headerlink" href="#Reprogramming-dataset-(dynamic-barcoding)" title="Permalink to this headline">¶</a></h1>
+<p>The reprogramming dataset from <em>Biddy, B. A. et al. Nature 564, 219–224 (2018)</em>. This dataset has multiple time points for both the clones and the state measurements.</p>
+<p>The cells are barcoded over 3 rounds during the entire differentiation process. We treat barcode tags from each round as independent clonal label here. In this representation, each cell can have multiple clonal labels at different time points.</p>
+<p><strong>Key components</strong>:</p>
+<ul class="simple">
+<li><p>Part 1: Infer transition map using clones from all time points</p></li>
+<li><p>Part II: Infer transition map using clones from the last time point</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cospar</span> <span class="k">as</span> <span class="nn">cs</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">print_version</span><span class="p">()</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c1"># use png to reduce file size.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running cospar 0.0.2 (python 3.6.12) on 2021-01-31 19:03.
+</pre></div></div>
+</div>
+<div class="section" id="Load-data">
+<h2>Load data<a class="headerlink" href="#Load-data" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">adata_orig</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">reprogramming_no_merge_tags</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">adata_orig</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AnnData object with n_obs × n_vars = 18803 × 28001
+    obs: &#39;time_info&#39;, &#39;state_info&#39;
+    uns: &#39;available_map&#39;, &#39;clonal_time_points&#39;, &#39;data_des&#39;, &#39;state_info_colors&#39;
+    obsm: &#39;X_clone&#39;, &#39;X_emb&#39;, &#39;X_pca&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;state_info&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_7_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_7_0.png" style="width: 556px; height: 274px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">check_available_choices</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Available transition maps: []
+Availabel clusters: [&#39;19&#39;, &#39;2&#39;, &#39;20&#39;, &#39;18&#39;, &#39;Failed&#39;, &#39;9&#39;, &#39;13&#39;, &#39;8&#39;, &#39;11&#39;, &#39;15&#39;, &#39;16&#39;, &#39;5&#39;, &#39;10&#39;, &#39;12&#39;, &#39;4&#39;, &#39;22&#39;, &#39;3&#39;, &#39;0&#39;, &#39;7&#39;, &#39;21&#39;, &#39;Reprogrammed&#39;]
+Availabel time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+Clonal time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+</pre></div></div>
+</div>
+<div class="section" id="Raw-clonal-data-analysis-(without-using-state-information)">
+<h3>Raw clonal data analysis (without using state information)<a class="headerlink" href="#Raw-clonal-data-analysis-(without-using-state-information)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#cs.pl.clones_on_manifold(adata_orig,selected_clone_list=[1],color_list=[&#39;black&#39;,&#39;red&#39;,&#39;blue&#39;],point_size=2)</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">clones_on_manifold</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clone_list</span><span class="o">=</span><span class="p">[</span><span class="mi">324</span><span class="p">,</span><span class="mi">313</span><span class="p">],</span><span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#324,313,446,716,367</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_10_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_10_0.png" style="width: 247px; height: 184px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_10_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_10_1.png" style="width: 247px; height: 184px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_time_point</span><span class="o">=</span><span class="s1">&#39;8&#39;</span>
+<span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">]</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">plot_time_point</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="n">selected_fates</span><span class="p">,</span> <span class="n">color_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_11_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_11_0.png" style="width: 370px; height: 283px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_time_point</span><span class="o">=</span><span class="s1">&#39;8&#39;</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">barcode_heatmap</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">plot_time_point</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="n">selected_fates</span><span class="p">,</span> <span class="n">color_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_12_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_12_0.png" style="width: 282px; height: 433px;" />
+</div>
+</div>
+<p>The computation requires simulation, with time linearly proportional to N_resampling, and the number of clones. Can take hours for big data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">clonal_fate_bias</span><span class="p">,</span><span class="n">clone_id</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">clonal_fate_bias</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span>
+    <span class="n">clone_size_thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">N_resampling</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">compute_new</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_14_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_14_0.png" style="width: 283px; height: 246px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_14_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_14_1.png" style="width: 310px; height: 265px;" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Part-1:-Infer-transition-map-using-clones-from-all-time-points">
+<h2>Part 1: Infer transition map using clones from all time points<a class="headerlink" href="#Part-1:-Infer-transition-map-using-clones-from-all-time-points" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Map-inference">
+<h3>Map inference<a class="headerlink" href="#Map-inference" title="Permalink to this headline">¶</a></h3>
+<p>Running it the first time takes 20 mins, 17 mins of which are used to compute the similarity matrix. When it is run again, it only takes 3 mins.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">noise_threshold</span><span class="o">=</span><span class="mf">0.2</span> <span class="c1">#</span>
+<span class="n">selected_clonal_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">,</span><span class="s1">&#39;8&#39;</span><span class="p">]</span>
+<span class="c1">#selected_clonal_time_points=[&#39;7&#39;,&#39;8&#39;]</span>
+<span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_multitime_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clonal_time_points</span><span class="p">,</span><span class="n">smooth_array</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">noise_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">demulti_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-------Step 1: Select time points---------
+--&gt; Clonal cell fraction (day 3-4): 0.5632183908045977
+--&gt; Clonal cell fraction (day 4-5): 0.8427464008859358
+--&gt; Clonal cell fraction (day 5-6): 0.8514851485148515
+--&gt; Clonal cell fraction (day 6-7): 0.8354622871046229
+--&gt; Clonal cell fraction (day 7-8): 0.854301948051948
+--&gt; Clonal cell fraction (day 4-3): 0.12181616832779624
+--&gt; Clonal cell fraction (day 5-4): 0.7069306930693069
+--&gt; Clonal cell fraction (day 6-5): 0.9105839416058394
+--&gt; Clonal cell fraction (day 7-6): 0.890625
+--&gt; Clonal cell fraction (day 8-7): 0.9279731993299832
+--&gt; Numer of cells that are clonally related -- day 3: 49  and day 4: 110
+--&gt; Numer of cells that are clonally related -- day 4: 761  and day 5: 2142
+--&gt; Numer of cells that are clonally related -- day 5: 2580  and day 6: 2994
+--&gt; Numer of cells that are clonally related -- day 6: 2747  and day 7: 4389
+--&gt; Numer of cells that are clonally related -- day 7: 4210  and day 8: 6094
+Valid clone number &#39;FOR&#39; post selection 1178
+Cell number=17495, Clone number=1343
+-------Step 2: Compute the full Similarity matrix if necessary---------
+Compute similarity matrix: computing new; beta=0.1
+Smooth round: 1
+--&gt; Time elapsed: 0.1337580680847168
+Smooth round: 2
+--&gt; Time elapsed: 0.5934758186340332
+Smooth round: 3
+--&gt; Time elapsed: 4.39215874671936
+--&gt; Orignal sparsity=0.1440132780842932, Thresholding
+--&gt; Final sparsity=0.08134327961173121
+similarity matrix truncated (Smooth round=3):  7.517376899719238
+Smooth round: 4
+--&gt; Time elapsed: 8.568882942199707
+--&gt; Orignal sparsity=0.2782366721346004, Thresholding
+--&gt; Final sparsity=0.1435782907327997
+similarity matrix truncated (Smooth round=4):  6.493448972702026
+Smooth round: 5
+--&gt; Time elapsed: 15.888505935668945
+--&gt; Orignal sparsity=0.37387141506207067, Thresholding
+--&gt; Final sparsity=0.2072778864557119
+similarity matrix truncated (Smooth round=5):  7.890843152999878
+Save the matrix~~~
+Smooth round: 6
+--&gt; Time elapsed: 21.847924947738647
+--&gt; Orignal sparsity=0.45353977091439257, Thresholding
+--&gt; Final sparsity=0.2689848859325567
+similarity matrix truncated (Smooth round=6):  7.91843581199646
+Smooth round: 7
+--&gt; Time elapsed: 24.09710192680359
+--&gt; Orignal sparsity=0.5228332749578013, Thresholding
+--&gt; Final sparsity=0.32826160348792477
+similarity matrix truncated (Smooth round=7):  7.959678888320923
+Smooth round: 8
+--&gt; Time elapsed: 28.971921920776367
+--&gt; Orignal sparsity=0.5844685765175182, Thresholding
+--&gt; Final sparsity=0.38362760964515485
+similarity matrix truncated (Smooth round=8):  8.130839109420776
+Smooth round: 9
+--&gt; Time elapsed: 33.23370909690857
+--&gt; Orignal sparsity=0.6382832981536288, Thresholding
+--&gt; Final sparsity=0.4347932758186628
+similarity matrix truncated (Smooth round=9):  8.56610894203186
+Smooth round: 10
+--&gt; Time elapsed: 34.91329598426819
+--&gt; Orignal sparsity=0.6850691009500649, Thresholding
+--&gt; Final sparsity=0.48187784020689256
+similarity matrix truncated (Smooth round=10):  7.945361852645874
+Save the matrix~~~
+Smooth round: 11
+--&gt; Time elapsed: 48.110677003860474
+--&gt; Orignal sparsity=0.7256668380762321, Thresholding
+--&gt; Final sparsity=0.5251253879869471
+similarity matrix truncated (Smooth round=11):  8.004131078720093
+Smooth round: 12
+--&gt; Time elapsed: 39.93495488166809
+--&gt; Orignal sparsity=0.7608566277859781, Thresholding
+--&gt; Final sparsity=0.5648926975432402
+similarity matrix truncated (Smooth round=12):  8.09719705581665
+Smooth round: 13
+--&gt; Time elapsed: 55.33443212509155
+--&gt; Orignal sparsity=0.7914519214016483, Thresholding
+--&gt; Final sparsity=0.6015221957973469
+similarity matrix truncated (Smooth round=13):  8.601667881011963
+Smooth round: 14
+--&gt; Time elapsed: 50.29007625579834
+--&gt; Orignal sparsity=0.8182097402031955, Thresholding
+--&gt; Final sparsity=0.6353063058254474
+similarity matrix truncated (Smooth round=14):  7.615164756774902
+Smooth round: 15
+--&gt; Time elapsed: 54.27081823348999
+--&gt; Orignal sparsity=0.8416467679655742, Thresholding
+--&gt; Final sparsity=0.6664864314513196
+similarity matrix truncated (Smooth round=15):  9.232807874679565
+Save the matrix~~~
+-------Step 3: Optimize the transition map recursively---------
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  2.567207098007202
+--&gt; Time elapsed:  5.323064088821411
+--&gt; Time elapsed:  2.1344919204711914
+--&gt; Time elapsed:  6.327005863189697
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  2.0665841102600098
+--&gt; Time elapsed:  4.253573179244995
+--&gt; Time elapsed:  2.279231071472168
+--&gt; Time elapsed:  3.66169810295105
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.7392430305480957
+--&gt; Time elapsed:  1.6739377975463867
+--&gt; Time elapsed:  1.539405107498169
+--&gt; Time elapsed:  3.2196900844573975
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 2
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 3
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 4
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  35.21870803833008
+Phase II: time elapsed --  54.632588148117065
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 2
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 3
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 4
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  22.832170963287354
+Phase II: time elapsed --  40.86349606513977
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 2
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 3
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 4
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  11.405003070831299
+Phase II: time elapsed --  33.78306317329407
+No need for Final Smooth (i.e., clonally states are the final state space for Tmap)
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 2
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 3
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Relative time point pair index: 4
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+-----------Total used time: 1172.3317241668701 s ------------
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_18_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_18_1.png" style="width: 363px; height: 241px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Save-or-load-pre-computed-data">
+<h3>Save or load pre-computed data<a class="headerlink" href="#Save-or-load-pre-computed-data" title="Permalink to this headline">¶</a></h3>
+<p>This can be used to save maps obtained from different parameter choices. Usually, different parameter choice will result to different ‘data_des’, a prefix to define the map. Saving an adata would print the ‘data_des’, which can be used to load the corresponding map.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">save_data</span><span class="o">=</span><span class="kc">True</span>
+<span class="k">if</span> <span class="n">save_data</span><span class="p">:</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">save_map</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+<span class="n">load_data</span><span class="o">=</span><span class="kc">False</span>
+<span class="k">if</span> <span class="n">load_data</span><span class="p">:</span>
+    <span class="c1">## Updated Jan 28, 2021</span>
+    <span class="c1">#data_des=&#39;CellTagging_NoConcat_TwoTimeClone_t*3*4*5*6*7*8&#39;</span>
+    <span class="n">data_des</span><span class="o">=</span><span class="s1">&#39;CellTagging_NoConcat_OneTimeClone_t*3*4*5*6*7*8&#39;</span>
+    <span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">load_saved_adata_with_key</span><span class="p">(</span><span class="n">data_des</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Saved file: data_des=&#39;CellTagging_NoConcat_TwoTimeClone_t*3*4*5*6*7*8&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">check_available_choices</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Available transition maps: [&#39;transition_map&#39;, &#39;intraclone_transition_map&#39;]
+Availabel clusters: [&#39;19&#39;, &#39;2&#39;, &#39;20&#39;, &#39;18&#39;, &#39;Failed&#39;, &#39;9&#39;, &#39;13&#39;, &#39;8&#39;, &#39;11&#39;, &#39;15&#39;, &#39;16&#39;, &#39;5&#39;, &#39;10&#39;, &#39;12&#39;, &#39;4&#39;, &#39;22&#39;, &#39;3&#39;, &#39;0&#39;, &#39;7&#39;, &#39;21&#39;, &#39;Reprogrammed&#39;]
+Availabel time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+Clonal time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Plotting">
+<h3>Plotting<a class="headerlink" href="#Plotting" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Plotting-transition-profiles-for-single-cells">
+<h4>Plotting transition profiles for single cells<a class="headerlink" href="#Plotting-transition-profiles-for-single-cells" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">selected_state_id_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="mi">3500</span><span class="p">,</span><span class="mi">6000</span><span class="p">,</span><span class="mi">5500</span><span class="p">]</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">single_cell_transition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_state_id_list</span><span class="o">=</span><span class="n">selected_state_id_list</span><span class="p">,</span>
+                                    <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_24_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_24_0.png" style="width: 282px; height: 883px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Fate-map">
+<h4>Fate map<a class="headerlink" href="#Fate-map" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;intraclone_transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_26_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_26_0.png" style="width: 288px; height: 435px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Relative-fate-bias">
+<h4>Relative fate bias<a class="headerlink" href="#Relative-fate-bias" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_intrinsic</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_28_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_28_0.png" style="width: 528px; height: 230px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_28_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_28_1.png" style="width: 600px; height: 266px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;7&#39;</span><span class="p">],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_29_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_29_0.png" style="width: 318px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_29_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_29_1.png" style="width: 302px; height: 266px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Identify-differentially-expressed-genes">
+<h4>Identify differentially expressed genes<a class="headerlink" href="#Identify-differentially-expressed-genes" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span>
+ <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span> <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">bias_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">avoid_target_states</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_31_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_31_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Map-trajectory-backwards-iteratively">
+<h4>Map trajectory backwards iteratively<a class="headerlink" href="#Map-trajectory-backwards-iteratively" title="Permalink to this headline">¶</a></h4>
+<p>From our experience, it is better to use the intra-clone transition map to compute the trajectory</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot each tiem point separately, use the transition map.</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Failed&#39;</span><span class="p">,</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_34_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_34_0.png" style="width: 1432px; height: 237px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot each tiem point separately, use the transition map.</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_35_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_35_0.png" style="width: 1432px; height: 237px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot each tiem point separately, use the intra-clone transition map.</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span>
+                        <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;intraclone_transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_36_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_36_0.png" style="width: 1432px; height: 237px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot each tiem point separately, use the intra-clone transition map.</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Failed&#39;</span><span class="p">,</span>
+                        <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;intraclone_transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_37_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_37_0.png" style="width: 1432px; height: 237px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Gene-trend-along-the-trajectory">
+<h4>Gene trend along the trajectory<a class="headerlink" href="#Gene-trend-along-the-trajectory" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The results are based on pre-computed dynamic trajectories from the immediate previous step</span>
+<span class="c1"># better to use the &#39;intraclone transition map&#39;</span>
+
+<span class="n">gene_name_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Col1a2&#39;</span><span class="p">,</span><span class="s1">&#39;Apoa1&#39;</span><span class="p">,</span><span class="s1">&#39;Peg3&#39;</span><span class="p">,</span><span class="s1">&#39;Spint2&#39;</span><span class="p">,</span><span class="s1">&#39;Mettl7a1&#39;</span><span class="p">,</span><span class="s1">&#39;Cdh1&#39;</span><span class="p">]</span>
+<span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Failed&#39;</span>
+<span class="n">adata_selected</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span> <span class="n">traj_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+      <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert_PseudoTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compute_new</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fig_width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">gene_exp_percentile</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">plot_raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:729: PlotnineWarning: Saving 3.5 x 2.163 in image.
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:730: PlotnineWarning: Filename: figure_cospar/CellTagging_NoConcat_TwoTimeClone_t*3*4*5*6*7*8_fate_trajectory_pseutoTime_gene_expression_Failed_True.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_39_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_39_1.png" style="width: 718px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_39_2.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_39_2.png" style="width: 695px; height: 429px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The results are based on pre-computed dynamic trajectories from a previous step</span>
+<span class="c1"># better to use the &#39;intraclone transition map&#39;</span>
+
+<span class="n">gene_name_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Col1a2&#39;</span><span class="p">,</span><span class="s1">&#39;Apoa1&#39;</span><span class="p">,</span><span class="s1">&#39;Peg3&#39;</span><span class="p">,</span><span class="s1">&#39;Spint2&#39;</span><span class="p">,</span><span class="s1">&#39;Mettl7a1&#39;</span><span class="p">,</span><span class="s1">&#39;Cdh1&#39;</span><span class="p">]</span>
+<span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Reprogrammed&#39;</span>
+<span class="n">adata_selected</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span> <span class="n">traj_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+      <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert_PseudoTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compute_new</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fig_width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">gene_exp_percentile</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">plot_raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:729: PlotnineWarning: Saving 3.5 x 2.163 in image.
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:730: PlotnineWarning: Filename: figure_cospar/CellTagging_NoConcat_TwoTimeClone_t*3*4*5*6*7*8_fate_trajectory_pseutoTime_gene_expression_Reprogrammed_True.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_40_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_40_1.png" style="width: 718px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_40_2.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_40_2.png" style="width: 695px; height: 429px;" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Transition-map-from-only-clonal-information">
+<h3>Transition map from only clonal information<a class="headerlink" href="#Transition-map-from-only-clonal-information" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_clonal_info_alone</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;naive&#39;</span><span class="p">)</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;clonal_transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_42_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_42_0.png" style="width: 318px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_42_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_42_1.png" style="width: 310px; height: 266px;" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Part-II:-Infer-transition-map-using-clones-from-the-last-time-point">
+<h2>Part II: Infer transition map using clones from the last time point<a class="headerlink" href="#Part-II:-Infer-transition-map-using-clones-from-the-last-time-point" title="Permalink to this headline">¶</a></h2>
+<p>It takes 12 mins to compute for the first time (excluding the time for computing similarity matrix); and 5 mins later.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">initial_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">]</span>
+<span class="n">clonal_time_point</span><span class="o">=</span><span class="s1">&#39;8&#39;</span>
+<span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_one_time_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">initial_time_points</span><span class="p">,</span><span class="n">clonal_time_point</span><span class="p">,</span>
+        <span class="n">initialize_method</span><span class="o">=</span><span class="s1">&#39;OT&#39;</span><span class="p">,</span><span class="n">OT_cost</span><span class="o">=</span><span class="s1">&#39;SPD&#39;</span><span class="p">,</span><span class="n">smooth_array</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">noise_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-------------------------------New Start--------------------------------------------------
+Current time point: 3
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (6654, 770)
+--&gt; After excluding zero-sized clones at t2: (6654, 694)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.001177072525024414
+--&gt; Time elapsed:  0.48853087425231934
+--&gt; Time elapsed:  0.0019659996032714844
+--&gt; Time elapsed:  0.4351649284362793
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.0006508827209472656
+--&gt; Time elapsed:  0.3633909225463867
+--&gt; Time elapsed:  0.0007488727569580078
+--&gt; Time elapsed:  0.34566497802734375
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.0004506111145019531
+--&gt; Time elapsed:  0.29157400131225586
+--&gt; Time elapsed:  0.0007388591766357422
+--&gt; Time elapsed:  0.26699209213256836
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  0.6211681365966797
+Phase II: time elapsed --  0.6230154037475586
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  0.37720394134521484
+Phase II: time elapsed --  0.3812239170074463
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  0.3452720642089844
+Phase II: time elapsed --  0.34787702560424805
+Final round of Smooth (to expand the state space of Tmap to include non-clonal states)
+Phase I: time elapsed --  0.3672800064086914
+Phase II: time elapsed --  0.36899375915527344
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Finishing computing transport map from CoSpar using inferred clonal data, used time 33.415353775024414
+-------------------------------New Start--------------------------------------------------
+Current time point: 4
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (7470, 1172)
+--&gt; After excluding zero-sized clones at t2: (7470, 694)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.014316082000732422
+--&gt; Time elapsed:  0.4230778217315674
+--&gt; Time elapsed:  0.0210421085357666
+--&gt; Time elapsed:  0.3985321521759033
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.01192021369934082
+--&gt; Time elapsed:  0.3132040500640869
+--&gt; Time elapsed:  0.009737968444824219
+--&gt; Time elapsed:  0.33245396614074707
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.007749795913696289
+--&gt; Time elapsed:  0.2143690586090088
+--&gt; Time elapsed:  0.008270978927612305
+--&gt; Time elapsed:  0.19117307662963867
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  2.654543876647949
+Phase II: time elapsed --  2.7132139205932617
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  0.8287158012390137
+Phase II: time elapsed --  0.905642032623291
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  0.6787478923797607
+Phase II: time elapsed --  0.7454941272735596
+Final round of Smooth (to expand the state space of Tmap to include non-clonal states)
+Phase I: time elapsed --  0.6463139057159424
+Phase II: time elapsed --  0.721977949142456
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Finishing computing transport map from CoSpar using inferred clonal data, used time 38.43891382217407
+-------------------------------New Start--------------------------------------------------
+Current time point: 5
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (9597, 1395)
+--&gt; After excluding zero-sized clones at t2: (9597, 694)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.1458601951599121
+--&gt; Time elapsed:  0.4339921474456787
+--&gt; Time elapsed:  0.17587995529174805
+--&gt; Time elapsed:  0.4758181571960449
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.24487805366516113
+--&gt; Time elapsed:  0.6403329372406006
+--&gt; Time elapsed:  0.11470293998718262
+--&gt; Time elapsed:  0.41714906692504883
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.08960103988647461
+--&gt; Time elapsed:  0.2675468921661377
+--&gt; Time elapsed:  0.07383918762207031
+--&gt; Time elapsed:  0.28000593185424805
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  9.28814697265625
+Phase II: time elapsed --  9.838491201400757
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  1.9691081047058105
+Phase II: time elapsed --  2.8161470890045166
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  1.2565879821777344
+Phase II: time elapsed --  1.7074029445648193
+Final round of Smooth (to expand the state space of Tmap to include non-clonal states)
+Phase I: time elapsed --  1.3795409202575684
+Phase II: time elapsed --  1.9576280117034912
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Finishing computing transport map from CoSpar using inferred clonal data, used time 66.69856905937195
+-------------------------------New Start--------------------------------------------------
+Current time point: 6
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (9855, 1318)
+--&gt; After excluding zero-sized clones at t2: (9855, 694)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.2619459629058838
+--&gt; Time elapsed:  0.7324919700622559
+--&gt; Time elapsed:  0.17139315605163574
+--&gt; Time elapsed:  0.44153594970703125
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.25110292434692383
+--&gt; Time elapsed:  0.7214927673339844
+--&gt; Time elapsed:  0.14876961708068848
+--&gt; Time elapsed:  0.44804930686950684
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.11345887184143066
+--&gt; Time elapsed:  0.34697699546813965
+--&gt; Time elapsed:  0.08201289176940918
+--&gt; Time elapsed:  0.3031740188598633
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  10.852234125137329
+Phase II: time elapsed --  12.136868953704834
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  2.7241013050079346
+Phase II: time elapsed --  4.04835319519043
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  2.057713031768799
+Phase II: time elapsed --  3.348417043685913
+Final round of Smooth (to expand the state space of Tmap to include non-clonal states)
+Phase I: time elapsed --  1.9296200275421143
+Phase II: time elapsed --  3.4538490772247314
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Finishing computing transport map from CoSpar using inferred clonal data, used time 86.09633207321167
+-------------------------------New Start--------------------------------------------------
+Current time point: 7
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (11495, 1152)
+--&gt; After excluding zero-sized clones at t2: (11495, 694)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+--&gt; Inferring early clonal states: current clone id 1000
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.6876559257507324
+--&gt; Time elapsed:  1.2539939880371094
+--&gt; Time elapsed:  0.675605058670044
+--&gt; Time elapsed:  1.0762779712677002
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.35739731788635254
+--&gt; Time elapsed:  0.5441539287567139
+--&gt; Time elapsed:  0.23572874069213867
+--&gt; Time elapsed:  0.441788911819458
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  0.3040962219238281
+--&gt; Time elapsed:  0.3232109546661377
+--&gt; Time elapsed:  0.30980396270751953
+--&gt; Time elapsed:  0.28934192657470703
+Current iteration: 0
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  18.118456840515137
+Phase II: time elapsed --  19.51311182975769
+Current iteration: 1
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  3.0614500045776367
+Phase II: time elapsed --  4.439972162246704
+Current iteration: 2
+Use smooth_round=5
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Start to smooth the refined clonal map
+Phase I: time elapsed --  1.9136219024658203
+Phase II: time elapsed --  3.1833479404449463
+Final round of Smooth (to expand the state space of Tmap to include non-clonal states)
+Phase I: time elapsed --  2.3375039100646973
+Phase II: time elapsed --  3.925551176071167
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+Finishing computing transport map from CoSpar using inferred clonal data, used time 95.20202279090881
+-----------Total used time: 339.69058084487915 s ------------
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">check_available_choices</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Available transition maps: [&#39;transition_map&#39;, &#39;OT_transition_map&#39;]
+Availabel clusters: [&#39;19&#39;, &#39;2&#39;, &#39;20&#39;, &#39;18&#39;, &#39;Failed&#39;, &#39;9&#39;, &#39;13&#39;, &#39;8&#39;, &#39;11&#39;, &#39;15&#39;, &#39;16&#39;, &#39;5&#39;, &#39;10&#39;, &#39;12&#39;, &#39;4&#39;, &#39;22&#39;, &#39;3&#39;, &#39;0&#39;, &#39;7&#39;, &#39;21&#39;, &#39;Reprogrammed&#39;]
+Availabel time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+Clonal time points: [&#39;6&#39;, &#39;4&#39;, &#39;3&#39;, &#39;5&#39;, &#39;7&#39;, &#39;8&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">plot_color_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">plot_background</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">auto_color_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">plot_horizontal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_48_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_48_0.png" style="width: 538px; height: 230px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_50_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_50_0.png" style="width: 318px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_50_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_50_1.png" style="width: 310px; height: 266px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;OT_transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_51_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_51_0.png" style="width: 318px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_51_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_51_1.png" style="width: 310px; height: 266px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Reprogrammed&#39;</span><span class="p">,</span><span class="s1">&#39;Failed&#39;</span><span class="p">],</span>
+ <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span> <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">bias_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">avoid_target_states</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_53_0.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_53_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+<p>The selected states, combined with the target states are stored as dynamic trajectory at <code class="docutils literal notranslate"><span class="pre">adata.uns['dynamic_trajectory']</span></code>. We can plot gene trend along this trajectory.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">gene_name_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Col1a2&#39;</span><span class="p">,</span><span class="s1">&#39;Apoa1&#39;</span><span class="p">,</span><span class="s1">&#39;Peg3&#39;</span><span class="p">,</span><span class="s1">&#39;Spint2&#39;</span><span class="p">,</span><span class="s1">&#39;Mettl7a1&#39;</span><span class="p">,</span><span class="s1">&#39;Cdh1&#39;</span><span class="p">]</span>
+<span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Reprogrammed&#39;</span>
+<span class="n">adata_selected</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span> <span class="n">traj_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert_PseudoTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:729: PlotnineWarning: Saving 3.5 x 2.163 in image.
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:730: PlotnineWarning: Filename: figure_cospar/CellTagging_NoConcat_OneTimeClone_t*3*4*5*6*7*8_fate_trajectory_pseutoTime_gene_expression_Reprogrammed_True.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_56_1.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_56_1.png" style="width: 718px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_reprogramming_data_no_merge_tags_56_2.png" class="no-scaled-link" src="_images/20210121_reprogramming_data_no_merge_tags_56_2.png" style="width: 713px; height: 429px;" />
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="20210121_lung_data.html" class="btn btn-neutral float-right" title="Lung dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="20210121_reprogramming_data_merge_tags.html" class="btn btn-neutral float-left" title="Reprogramming dataset (static barcoding)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

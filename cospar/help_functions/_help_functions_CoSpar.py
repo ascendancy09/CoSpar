@@ -1065,6 +1065,37 @@ def save_map(adata):
     adata.write_h5ad(file_name, compression='gzip')
     print(f"Saved file: data_des='{data_des}'")
 
+
+
+def check_adata_structure(adata):
+    """
+    Check whether the adata has the right structure. 
+    """
+
+    flag=True
+    if not ('X_pca' in adata.obsm.keys()):
+        logg.error('*X_pca* missing from adata.obsm')
+        flag=False
+
+    if not ('X_emb' in adata.obsm.keys()):
+        logg.error('*X_emb* missing from adata.obsm')
+        flag=False
+
+    if not ('X_clone' in adata.obsm.keys()):
+        logg.error('*X_clone* missing from adata.obsm')
+        flag=False
+
+    if not ('time_info' in adata.obs.keys()):
+        logg.error('*time_info* missing from adata.obs')
+        flag=False
+
+    if not ('state_info' in adata.obs.keys()):
+        logg.error('*state_info* missing from adata.obs')
+        flag=False
+
+    if flag:
+        print("The adata structure looks fine!")
+
 def save_preprocessed_adata(adata,data_des=''):
     """
     Save preprocessed adata.

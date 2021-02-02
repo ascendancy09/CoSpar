@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Getting Started &mdash; CoSpar 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CoSpar basics" href="20210121_cospar_tutorial.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="20210121_all_hematopoietic_data.html">All hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/theislab/cospar/blob/master/docs/source/getting_started.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>Here, we explain the basics of using CoSpar. In the next tutorial, we will demonstrate its usage in a sub-sampled dataset of hematopoiesis.</p>
+<p>The input data for CoSpar are matrices for state and clonal information, and a vector for temporal annotation. We assume that the dataset has more than one time point.</p>
+<p>First, import CoSpar with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cospar</span> <span class="k">as</span> <span class="nn">cs</span>
+</pre></div>
+</div>
+<p>For better visualization you can change the matplotlib settings to our defaults with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<p>Given the gene expression matrix, clonal matrix, and other information, initialize the anndata object using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">initialize_adata_object</span><span class="p">(</span><span class="n">RNA_count_matrix</span><span class="p">,</span><span class="n">gene_names</span><span class="p">,</span><span class="n">time_info</span><span class="p">,</span>
+<span class="n">X_clone</span><span class="o">=</span><span class="p">[],</span><span class="n">X_pca</span><span class="o">=</span><span class="p">[],</span><span class="n">X_emb</span><span class="o">=</span><span class="p">[],</span><span class="n">state_info</span><span class="o">=</span><span class="p">[],</span><span class="n">data_des</span><span class="o">=</span><span class="s1">&#39;cospar&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object adata stores the count matrix (<code class="docutils literal notranslate"><span class="pre">adata.X</span></code>), gene names (<code class="docutils literal notranslate"><span class="pre">adata.var_names</span></code>), and temporal annotation of cells (<code class="docutils literal notranslate"><span class="pre">adata.obs['time_info']</span></code>).  The clonal matrix <code class="docutils literal notranslate"><span class="pre">X_clone</span></code> is optional and will be stored at  <code class="docutils literal notranslate"><span class="pre">adata.obsm['X_clone']</span></code>.  If not provided, you can still infer transition map based on state information alone, and proceed with the analysis. You can also provide the selected PCA matrix <cite>X_pca</cite>,  the embedding matrix <code class="docutils literal notranslate"><span class="pre">X_emb</span></code>, and the state annotation <code class="docutils literal notranslate"><span class="pre">state_info</span></code>, which will be stored at <code class="docutils literal notranslate"><span class="pre">adata.obsm['X_pca']</span></code>, <code class="docutils literal notranslate"><span class="pre">adata.obsm['X_emb']</span></code>, and <code class="docutils literal notranslate"><span class="pre">adata.obs['state_info']</span></code>, respectively.  <code class="docutils literal notranslate"><span class="pre">data_des</span></code> is a string to label a dataset (<code class="docutils literal notranslate"><span class="pre">adata.uns['data_des']</span></code>), and should be unique for each dataset to avoid conflicts.</p>
+<img src="http://falexwolf.de/img/scanpy/anndata.svg" style="width: 300px"><p>If you do not have a dataset yet, you can still play around using one of the built-in datasets, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">hematopoiesis_subsampled</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="preprocessing-dimension-reduction">
+<h2>Preprocessing &amp; dimension reduction<a class="headerlink" href="#preprocessing-dimension-reduction" title="Permalink to this headline">¶</a></h2>
+<p>Assuming basic quality control (excluding cells with low read count etc.) have been done, we provide basic preprocessing (gene selection and normalization) and dimension reduction related analysis (PCA, UMAP embedding etc.)  at <code class="docutils literal notranslate"><span class="pre">cs.pp.*</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">get_highly_variable_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">remove_cell_cycle_correlated_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">get_X_pca</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">get_X_emb</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first step <code class="docutils literal notranslate"><span class="pre">get_highly_variable_genes</span></code> also includes count matrix normalization. The second step, which is optional but recommended, removes cell cycle correlated genes among the selected highly variable genes. In <code class="docutils literal notranslate"><span class="pre">get_X_pca</span></code>, we apply z-score transformation for each gene expression prior to computing the PCA. In <code class="docutils literal notranslate"><span class="pre">get_X_emb</span></code>, we simply use the umap function from <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/index.html#module-scanpy" title="(in Scanpy v1.7.0rc2.dev14+g1baac547)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scanpy</span></code></a>. We also extract state information using leiden clustering implemented in <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/index.html#module-scanpy" title="(in Scanpy v1.7.0rc2.dev14+g1baac547)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scanpy</span></code></a>. These steps can also be performed by external packages like <a class="reference external" href="https://scanpy.readthedocs.io/en/latest/api/index.html#module-scanpy" title="(in Scanpy v1.7.0rc2.dev14+g1baac547)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scanpy</span></code></a> directly, which is also built around the <a class="reference external" href="https://anndata.readthedocs.io/en/latest/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.7.6.dev48+g5f3be07)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a> object.</p>
+</div>
+<div class="section" id="simple-clonal-analysis">
+<h2>Simple clonal analysis<a class="headerlink" href="#simple-clonal-analysis" title="Permalink to this headline">¶</a></h2>
+<p>We provide a few plotting functions to help visually exploring the clonal data before any downstream analysis. You can visualize clones on state manifold directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">clones_on_manifold</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can generate the barcode heatmap across given clusters to inspect clonal behavior:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">barcode_heatmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can quantify the clonal coupling across different fate clusters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_clones</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Strong coupling implies the existence of bi-potent or multi-potent cell states at the time of barcoding. Finally, you can infer the fate bias of each clone towards a designated fate cluster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">clonal_fate_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A biased clone towards this cluster has a statistically significant cell fraction in this cluster.</p>
+</div>
+<div class="section" id="transition-map-inference">
+<h2>Transition map inference<a class="headerlink" href="#transition-map-inference" title="Permalink to this headline">¶</a></h2>
+<p>The core of the software is the efficient and robust inference of a transition map by integrating state and clonal information. If the dataset has multiple clonal time points, you can run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_multitime_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clonal_time_points</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It subsamples the input data according to selected time points (at least 2) with clonal information, computes the transition map (stored at <code class="docutils literal notranslate"><span class="pre">adata.uns['transition_map']</span></code>), and returns the subsampled adata object. The inferred map allows transitions between neighboring time points. For example, if selected_clonal_time_points=[‘day1’, ‘day2’, ‘day3’], then it computes transitions for pairs (‘day1’, ‘day2’) and (‘day2’, ‘day3’), but not (‘day1’, ‘day3’). As a byproduct, it also returns a transition map that allows only intra-clone transitions (<code class="docutils literal notranslate"><span class="pre">adata.uns['intraclone_transition_map']</span></code>). The intra-clone transition map can also be computed from <code class="docutils literal notranslate"><span class="pre">adata.uns['transition_map']</span></code>) at preferred parameters by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_intraclone_Tmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the dataset has only one clonal time point, or you wish to infer the transition map just based on a single clonal time point, you can run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_one_time_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">initial_time_points</span><span class="p">,</span> <span class="n">clonal_time_point</span><span class="p">,</span><span class="n">initialize_method</span><span class="o">=</span><span class="s1">&#39;OT&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You need to define both <code class="docutils literal notranslate"><span class="pre">initial_time_points</span></code> and <code class="docutils literal notranslate"><span class="pre">clonal_time_point</span></code>. We provide two methods for initializing the map using state information alone: 1) <code class="docutils literal notranslate"><span class="pre">OT</span></code> for using standard optimal transport approach; 2) <code class="docutils literal notranslate"><span class="pre">HighVar</span></code> for a customized approach that converts highly variable genes into pseudo multi-time clones and run <code class="docutils literal notranslate"><span class="pre">cs.tmap.infer_Tmap_from_multitime_clones</span></code> to construct the map. Depending on the choice,  the initialized map is stored at <code class="docutils literal notranslate"><span class="pre">adata.uns['OT_transition_map']</span></code> or  <code class="docutils literal notranslate"><span class="pre">adata.uns['HighVar_transition_map']</span></code>. Afterwards, CoSpar performs a joint optimization to infer both the initial clonal structure and also the transition map. The final product is stored at <code class="docutils literal notranslate"><span class="pre">adata.uns['transition_map']</span></code>. This method returns a map for transitions from all given initial time points to the designated clonal time point.  For example, if initial_time_points=[‘day1’, ‘day2’], and clonal_time_point=’day3’, then the method computes transitions for pairs (‘day1’, ‘day3’) and (‘day2’, ‘day3’). However, there are no transitions from ‘day1’ to ‘day2’.</p>
+<p>If you do not have any clonal information, you can still run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_state_info_alone</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">initial_time_points</span><span class="p">,</span><span class="n">target_time_point</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;OT&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is the same as <code class="docutils literal notranslate"><span class="pre">cs.tmap.infer_Tmap_from_one_time_clones</span></code> except that we exclude the final joint optimization that requires clonal information. The resulting map is stored at <code class="docutils literal notranslate"><span class="pre">adata.uns['OT_transition_map']</span></code> or  <code class="docutils literal notranslate"><span class="pre">adata.uns['HighVar_transition_map']</span></code>, depending on the method choice.</p>
+<p>We also provide simple methods that infer transition map from only the clonal information:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_clonal_info_alone</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is stored at <code class="docutils literal notranslate"><span class="pre">adata.uns['clonal_transition_map']</span></code>.</p>
+</div>
+<div class="section" id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<p>Finally, each of the computed transition maps can be explored on state embedding at the single-cell level using a variety of plotting functions. There are some common parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">used_map_name</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>). It determines which transition map to use for analysis. Choices: {‘transition_map’, ‘intraclone_transition_map’, ‘OT_transition_map’, ‘HighVar_transition_map’,’clonal_transition_map’}</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">selected_fates</span></code> (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>). Selected clusters to aggregate differentiation dynamics and visualize fate bias etc.. It allows a nested structure, e.g., <a href="#id1"><span class="problematic" id="id2">``</span></a>selected_fates``=[‘a’, [‘b’, ‘c’]] selects two clusters:  cluster ‘a’ and the other that combines ‘b’ and ‘c’.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">map_backwards</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>).  We can analyze either the forward transitions, i.e., where the selected states or clusters are going (<code class="docutils literal notranslate"><span class="pre">map_backwards=False</span></code>), or the backward transitions, i.e., where these selected states or clusters came from (<code class="docutils literal notranslate"><span class="pre">map_backwards=False</span></code>). The latter is more useful and is the default.</p></li>
+</ul>
+<p>Below, we frame the task in the language of analyzing backward transitions (map_backwards=True) for convenience. To see where a cell came from, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">single_cell_transition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To see the probability of initial cell states to give rise to given fate clusters, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To infer the relative fate bias of initial cell states towards given fate clusters, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_intrinsic</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first method (<code class="docutils literal notranslate"><span class="pre">fate_bias_intrinsic</span></code>) quantifies the fate bias of a state towards each designated cluster by normalizing the predicted fate probability with the expected fate bias,
+the fraction of cells in this cluster at the corresponding time point. The second method evaluates the fate bias of a state towards one cluster over the other.</p>
+<p>To infer the dynamic trajectory towards given fate clusters, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_intrinsic_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first two methods assume two input fate clusters, and infer each trajectory by thresholding the corresponding fate bias using either the intrinsic method or the binary competition method. They export the selected ancestor state for the two fate clusters at <code class="docutils literal notranslate"><span class="pre">adata.obs['cell_group_A']</span></code> and <code class="docutils literal notranslate"><span class="pre">adata.obs['cell_group_B']</span></code>, which can be used to infer the driver genes for fate bifurcation by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">differential_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The last method (<code class="docutils literal notranslate"><span class="pre">dynamic_trajectory_via_iterative_mapping</span></code>) infers the trajectory by iteratively tracing a selected fate cluster all the way back to the initial time point. For all three methods,  the inferred trajectory for each fate will be saved at <code class="docutils literal notranslate"><span class="pre">adata.uns['dynamic_trajectory'][fate_name]</span></code>, and we can explore the gene expression dynamics along this trajectory using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">selected_fate</span></code> should be among those that have pre-computed dynamic trajectories.</p>
+<p>If there are multiple mature fate clusters, you can infer their differentiation coupling by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_Tmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="20210121_cospar_tutorial.html" class="btn btn-neutral float-right" title="CoSpar basics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

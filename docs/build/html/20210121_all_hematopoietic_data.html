@@ -1,0 +1,1548 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>All hematopoietic dataset &mdash; CoSpar 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reprogramming dataset (static barcoding)" href="20210121_reprogramming_data_merge_tags.html" />
+    <link rel="prev" title="CoSpar basics" href="20210121_cospar_tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoSpar
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About CoSpar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_cospar_tutorial.html">CoSpar basics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">All hematopoietic dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_merge_tags.html">Reprogramming dataset (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_reprogramming_data_no_merge_tags.html">Reprogramming dataset (dynamic barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210121_lung_data.html">Lung dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_static_barcoding.html">Synthetic data (static barcoding)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20210120-Bifurcation_model_dynamic_barcoding.html">Synthetic data (dynamic barcoding)</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoSpar</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>All hematopoietic dataset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/theislab/cospar_notebooks/blob/master/20210121_all_hematopoietic_data.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="All-hematopoietic-dataset">
+<h1>All hematopoietic dataset<a class="headerlink" href="#All-hematopoietic-dataset" title="Permalink to this headline">¶</a></h1>
+<p>Hematopoiesis dataset from <em>Weinreb, C., Rodriguez-Fraticelli, A., Camargo, F. D. &amp; Klein, A. M. Science 367, (2020)</em>.</p>
+<p>This dataset has 3 time points for both the clonal and state measurements. This dataset has ~50000 cells. Running the whole pipeline for the first time could take 5.2 hours in a standard personal computer. Most of the time (3.3 h) is used for generating the similarity matrix, which are saved for later usage. It also generates output files that amount to 25G storage.</p>
+<p><strong>Key components:</strong></p>
+<ul class="simple">
+<li><p>Part 1: Infer transition map using clones from both day 4 and day 6</p></li>
+<li><p>Part II: Infer transition map using clones from all time points</p></li>
+<li><p>Part III: Infer transition map using only clones from the last time point</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">new_path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;/CoSpar/&quot;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_path</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">cospar</span> <span class="k">as</span> <span class="nn">cs</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">print_version</span><span class="p">()</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;LARRY_data_1&#39;</span> <span class="c1"># A relative path to save data. If not existed before, create a new one.</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">figure_path</span><span class="o">=</span><span class="s1">&#39;LARRY_figure_1&#39;</span> <span class="c1"># A relative path to save figures. If not existed before, create a new one.</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_figure_params</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c1"># use png to reduce file size.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running cospar 0.0.2 (python 3.6.12) on 2021-02-01 17:26.
+</pre></div></div>
+</div>
+<div class="section" id="Load-data">
+<h2>Load data<a class="headerlink" href="#Load-data" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">adata_orig</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">hematopoiesis_all</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">adata_orig</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AnnData object with n_obs × n_vars = 49116 × 25289
+    obs: &#39;time_info&#39;, &#39;state_info&#39;
+    uns: &#39;clonal_time_points&#39;, &#39;data_des&#39;, &#39;state_info_colors&#39;
+    obsm: &#39;X_clone&#39;, &#39;X_emb&#39;, &#39;X_pca&#39;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;state_info&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_7_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_7_0.png" style="width: 470px; height: 274px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">check_available_choices</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Available transition maps: []
+Availabel clusters: [&#39;Lymphoid&#39;, &#39;Neu_Mon&#39;, &#39;Meg&#39;, &#39;Mast&#39;, &#39;Baso&#39;, &#39;Eos&#39;, &#39;Neutrophil&#39;, &#39;undiff&#39;, &#39;Monocyte&#39;, &#39;Erythroid&#39;, &#39;Ccr7_DC&#39;, &#39;pDC&#39;]
+Availabel time points: [&#39;4&#39;, &#39;6&#39;, &#39;2&#39;]
+Clonal time points: [&#39;4&#39;, &#39;6&#39;, &#39;2&#39;]
+</pre></div></div>
+</div>
+<div class="section" id="Raw-clonal-data-analysis-(without-using-state-information)">
+<h3>Raw clonal data analysis (without using state information)<a class="headerlink" href="#Raw-clonal-data-analysis-(without-using-state-information)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">clones_on_manifold</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clone_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">],</span><span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_10_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_10_0.png" style="width: 247px; height: 184px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_time_point</span><span class="o">=</span><span class="s1">&#39;4&#39;</span>
+<span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ccr7_DC&#39;</span><span class="p">,</span><span class="s1">&#39;Mast&#39;</span><span class="p">,</span><span class="s1">&#39;Meg&#39;</span><span class="p">,</span><span class="s1">&#39;pDC&#39;</span><span class="p">,</span><span class="s1">&#39;Eos&#39;</span><span class="p">,</span><span class="s1">&#39;Lymphoid&#39;</span><span class="p">,</span><span class="s1">&#39;Erythroid&#39;</span><span class="p">,</span><span class="s1">&#39;Baso&#39;</span><span class="p">,</span>  <span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="s1">&#39;Monocyte&#39;</span><span class="p">]</span>
+<span class="n">celltype_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mDC&#39;</span><span class="p">,</span>  <span class="s1">&#39;Mast&#39;</span><span class="p">,</span> <span class="s1">&#39;Meg&#39;</span><span class="p">,</span> <span class="s1">&#39;pDC&#39;</span><span class="p">,</span> <span class="s1">&#39;Eos&#39;</span><span class="p">,</span> <span class="s1">&#39;Ly&#39;</span><span class="p">,</span> <span class="s1">&#39;Ery&#39;</span><span class="p">,</span> <span class="s1">&#39;Baso&#39;</span><span class="p">,</span> <span class="s1">&#39;Neu&#39;</span><span class="p">,</span> <span class="s1">&#39;Mon&#39;</span><span class="p">]</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">plot_time_point</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="n">selected_fates</span><span class="p">,</span>
+                <span class="n">color_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">rename_selected_fates</span><span class="o">=</span><span class="n">celltype_names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_11_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_11_0.png" style="width: 281px; height: 283px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_time_point</span><span class="o">=</span><span class="s1">&#39;4&#39;</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">barcode_heatmap</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">plot_time_point</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="n">selected_fates</span><span class="p">,</span> <span class="n">color_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_12_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_12_0.png" style="width: 284px; height: 433px;" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># select_fate_cluster=&#39;Monocyte&#39;</span>
+<span class="c1"># clonal_fate_bias,clone_id=cs.pl.clonal_fate_bias(adata_orig,select_fate_cluster,</span>
+<span class="c1">#             clone_size_thresh=5,N_resampling=100,compute_new=False)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Part-1:-Infer-transition-map-using-clones-from-both-day-4-and-day-6">
+<h2>Part 1: Infer transition map using clones from both day 4 and day 6<a class="headerlink" href="#Part-1:-Infer-transition-map-using-clones-from-both-day-4-and-day-6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Map-inference">
+<h3>Map inference<a class="headerlink" href="#Map-inference" title="Permalink to this headline">¶</a></h3>
+<p>When first run, it takes 3 h 37 mins, in which 3 h 20 mins are used for computing the similarity matrices and saving these data. It takes only 20 mins for later runs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">noise_threshold</span><span class="o">=</span><span class="mf">0.2</span> <span class="c1">#</span>
+<span class="n">selected_clonal_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">]</span>
+<span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_multitime_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clonal_time_points</span><span class="p">,</span><span class="n">smooth_array</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">noise_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">demulti_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-------Step 1: Select time points---------
+--&gt; Clonal cell fraction (day 4-6): 0.8093837722229649
+--&gt; Clonal cell fraction (day 6-4): 0.8744969393621699
+--&gt; Numer of cells that are clonally related -- day 4: 12110  and day 6: 25858
+Valid clone number &#39;FOR&#39; post selection 3047
+Cell number=37968, Clone number=3047
+-------Step 2: Compute the full Similarity matrix if necessary---------
+-------Step 3: Optimize the transition map recursively---------
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  3.6500370502471924
+--&gt; Time elapsed:  13.65189504623413
+--&gt; Time elapsed:  2.4639596939086914
+--&gt; Time elapsed:  16.49741291999817
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  2.360732078552246
+--&gt; Time elapsed:  6.549123048782349
+--&gt; Time elapsed:  1.8333170413970947
+--&gt; Time elapsed:  7.555174827575684
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  1.488502025604248
+--&gt; Time elapsed:  4.99379825592041
+--&gt; Time elapsed:  1.444505214691162
+--&gt; Time elapsed:  6.130573987960815
+Current iteration: 0
+Use smooth_round=20
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  49.74023079872131
+Phase II: time elapsed --  94.529611825943
+Current iteration: 1
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  37.64717125892639
+Phase II: time elapsed --  83.24693202972412
+Current iteration: 2
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  32.15070080757141
+Phase II: time elapsed --  82.16131782531738
+No need for Final Smooth (i.e., clonally states are the final state space for Tmap)
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+-----------Total used time: 619.0953500270844 s ------------
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_17_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_17_1.png" style="width: 363px; height: 241px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Save-or-load-pre-computed-data">
+<h3>Save or load pre-computed data<a class="headerlink" href="#Save-or-load-pre-computed-data" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">save_data</span><span class="o">=</span><span class="kc">False</span>
+<span class="k">if</span> <span class="n">save_data</span><span class="p">:</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">save_map</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+<span class="n">load_data</span><span class="o">=</span><span class="kc">False</span>
+<span class="k">if</span> <span class="n">load_data</span><span class="p">:</span><span class="c1">### Plotting</span>
+    <span class="c1"># updated Jan 27, 2021</span>
+    <span class="c1">#data_des=&#39;LARRY_TwoTimeClone_t*4*6&#39;### Plotting</span>
+    <span class="n">data_des</span><span class="o">=</span><span class="s1">&#39;LARRY_OneTimeClone_t*4*6&#39;</span>
+    <span class="c1">#data_des=&#39;LARRY_TwoTimeClone_t*2*4*6&#39;</span>
+    <span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">load_saved_adata_with_key</span><span class="p">(</span><span class="n">data_des</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting">
+<h3>Plotting<a class="headerlink" href="#Plotting" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Plotting-transition-profiles-for-single-cells">
+<h4>Plotting transition profiles for single cells<a class="headerlink" href="#Plotting-transition-profiles-for-single-cells" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">selected_state_id_list</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">single_cell_transition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_state_id_list</span><span class="o">=</span><span class="n">selected_state_id_list</span><span class="p">,</span>
+                                    <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_21_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_21_0.png" style="width: 282px; height: 883px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Fate-map">
+<h4>Fate map<a class="headerlink" href="#Fate-map" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_23_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_23_0.png" style="width: 287px; height: 2417px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;intraclone_transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_24_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_24_0.png" style="width: 288px; height: 435px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Relative-fate-bias">
+<h4>Relative fate bias<a class="headerlink" href="#Relative-fate-bias" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_intrinsic</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">,</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_26_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_26_0.png" style="width: 528px; height: 230px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_26_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_26_1.png" style="width: 600px; height: 266px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">,</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_27_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_27_0.png" style="width: 315px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_27_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_27_1.png" style="width: 310px; height: 266px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Fate-coupling-of-the-transition-map">
+<h4>Fate coupling of the transition map<a class="headerlink" href="#Fate-coupling-of-the-transition-map" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fate_array</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ccr7_DC&#39;</span><span class="p">,</span><span class="s1">&#39;Mast&#39;</span><span class="p">,</span><span class="s1">&#39;Meg&#39;</span><span class="p">,</span><span class="s1">&#39;pDC&#39;</span><span class="p">,</span><span class="s1">&#39;Eos&#39;</span><span class="p">,</span><span class="s1">&#39;Lymphoid&#39;</span><span class="p">,</span><span class="s1">&#39;Erythroid&#39;</span><span class="p">,</span><span class="s1">&#39;Baso&#39;</span><span class="p">,</span>  <span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="s1">&#39;Monocyte&#39;</span><span class="p">]</span>
+<span class="n">celltype_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mDC&#39;</span><span class="p">,</span>  <span class="s1">&#39;Mast&#39;</span><span class="p">,</span> <span class="s1">&#39;Meg&#39;</span><span class="p">,</span> <span class="s1">&#39;pDC&#39;</span><span class="p">,</span> <span class="s1">&#39;Eos&#39;</span><span class="p">,</span> <span class="s1">&#39;Ly&#39;</span><span class="p">,</span> <span class="s1">&#39;Ery&#39;</span><span class="p">,</span> <span class="s1">&#39;Baso&#39;</span><span class="p">,</span> <span class="s1">&#39;Neu&#39;</span><span class="p">,</span> <span class="s1">&#39;Mon&#39;</span><span class="p">]</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_Tmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="n">fate_array</span><span class="p">,</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">rename_selected_fates</span><span class="o">=</span><span class="n">celltype_names</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_29_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_29_0.png" style="width: 366px; height: 283px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Dynamic-trajectory-inference">
+<h4>Dynamic trajectory inference<a class="headerlink" href="#Dynamic-trajectory-inference" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+ <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span> <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">bias_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">avoid_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_31_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_31_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Differential-genes-for-two-ancestor-groups">
+<h4>Differential genes for two ancestor groups<a class="headerlink" href="#Differential-genes-for-two-ancestor-groups" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">dge_gene_A</span><span class="p">,</span> <span class="n">dge_gene_B</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">differential_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">plot_gene_N</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_33_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_33_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_33_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_33_1.png" style="width: 472px; height: 171px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_33_2.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_33_2.png" style="width: 472px; height: 171px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Gene-trend-along-the-dynamic-trajectory">
+<h4>Gene trend along the dynamic trajectory<a class="headerlink" href="#Gene-trend-along-the-dynamic-trajectory" title="Permalink to this headline">¶</a></h4>
+<p>The selected states, combined with the target states are stored as dynamic trajectory at <code class="docutils literal notranslate"><span class="pre">adata.uns['dynamic_trajectory']</span></code>. We can plot gene trend along this trajectory</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">gene_name_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Gata1&#39;</span><span class="p">,</span><span class="s1">&#39;Mpo&#39;</span><span class="p">,</span> <span class="s1">&#39;Elane&#39;</span><span class="p">,</span> <span class="s1">&#39;S100a8&#39;</span><span class="p">]</span>
+<span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Neutrophil&#39;</span>
+<span class="n">adata_selected</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span> <span class="n">traj_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert_PseudoTime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compute_new</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fig_width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">gene_exp_percentile</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">plot_raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:729: PlotnineWarning: Saving 3.5 x 2.163 in image.
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:730: PlotnineWarning: Filename: LARRY_figure_1/LARRY_TwoTimeClone_t*4*6_fate_trajectory_pseutoTime_gene_expression_Neutrophil_True.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_36_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_36_1.png" style="width: 718px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_36_2.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_36_2.png" style="width: 695px; height: 429px;" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Transition-map-from-only-clonal-information">
+<h3>Transition map from only clonal information<a class="headerlink" href="#Transition-map-from-only-clonal-information" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_clonal_info_alone</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;weinreb&#39;</span><span class="p">)</span>
+
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;clonal_transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Used uni-potent clone fraction 0.6307843780767969
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_38_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_38_1.png" style="width: 288px; height: 435px;" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Part-II:-Infer-transition-map-using-clones-from-all-time-points">
+<h2>Part II: Infer transition map using clones from all time points<a class="headerlink" href="#Part-II:-Infer-transition-map-using-clones-from-all-time-points" title="Permalink to this headline">¶</a></h2>
+<p>As the similarity matrices have been pre-computed, this step only takes 20 mins.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">noise_threshold</span><span class="o">=</span><span class="mf">0.2</span> <span class="c1">#</span>
+<span class="n">selected_clonal_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">]</span>
+<span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_multitime_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">selected_clonal_time_points</span><span class="p">,</span><span class="n">smooth_array</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">noise_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">demulti_threshold</span><span class="o">=</span><span class="n">noise_threshold</span><span class="p">,</span><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-------Step 1: Select time points---------
+--&gt; Clonal cell fraction (day 2-4): 0.48396946564885496
+--&gt; Clonal cell fraction (day 4-6): 0.8093837722229649
+--&gt; Clonal cell fraction (day 4-2): 0.3728111215078198
+--&gt; Clonal cell fraction (day 6-4): 0.8744969393621699
+--&gt; Numer of cells that are clonally related -- day 2: 2219  and day 4: 5578
+--&gt; Numer of cells that are clonally related -- day 4: 12110  and day 6: 25858
+Valid clone number &#39;FOR&#39; post selection 3617
+Cell number=41455, Clone number=3617
+-------Step 2: Compute the full Similarity matrix if necessary---------
+-------Step 3: Optimize the transition map recursively---------
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  3.66806697845459
+--&gt; Time elapsed:  11.894880056381226
+--&gt; Time elapsed:  4.091122150421143
+--&gt; Time elapsed:  14.33942198753357
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  3.155916929244995
+--&gt; Time elapsed:  9.219360828399658
+--&gt; Time elapsed:  3.0509612560272217
+--&gt; Time elapsed:  12.352034091949463
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  2.2867770195007324
+--&gt; Time elapsed:  7.890136003494263
+--&gt; Time elapsed:  1.9791839122772217
+--&gt; Time elapsed:  11.085279941558838
+Current iteration: 0
+Use smooth_round=20
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  84.11776471138
+Phase II: time elapsed --  151.46205687522888
+Current iteration: 1
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  77.9543559551239
+Phase II: time elapsed --  156.9614222049713
+Current iteration: 2
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  61.05989670753479
+Phase II: time elapsed --  169.7226047515869
+No need for Final Smooth (i.e., clonally states are the final state space for Tmap)
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+--&gt; Relative time point pair index: 1
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+-----------Total used time: 851.1030747890472 s ------------
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_41_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_41_1.png" style="width: 363px; height: 241px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># combine all time points</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_43_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_43_0.png" style="width: 500px; height: 237px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot each tiem point separately, use the intra-clone transition map.</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_via_iterative_mapping</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;intraclone_transition_map&#39;</span><span class="p">,</span>
+    <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">map_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">plot_separately</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_time_constaint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_44_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_44_0.png" style="width: 733px; height: 237px;" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The results are based on pre-computed dynamic trajectories from a previous step</span>
+<span class="c1"># better to use the &#39;intraclone transition map&#39; in the previous step.</span>
+
+<span class="n">gene_name_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Gata1&#39;</span><span class="p">,</span><span class="s1">&#39;Mpo&#39;</span><span class="p">,</span> <span class="s1">&#39;Elane&#39;</span><span class="p">,</span> <span class="s1">&#39;S100a8&#39;</span><span class="p">]</span>
+<span class="n">selected_fate</span><span class="o">=</span><span class="s1">&#39;Neutrophil&#39;</span>
+<span class="n">adata_selected</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">gene_expression_dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fate</span><span class="p">,</span><span class="n">gene_name_list</span><span class="p">,</span> <span class="n">traj_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert_PseudoTime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compute_new</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fig_width</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">gene_exp_percentile</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">plot_raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:729: PlotnineWarning: Saving 3.5 x 2.163 in image.
+/Users/shouwenwang/miniconda3/envs/CoSpar_env/lib/python3.6/site-packages/plotnine/ggplot.py:730: PlotnineWarning: Filename: LARRY_figure_1/LARRY_TwoTimeClone_t*2*4*6_fate_trajectory_pseutoTime_gene_expression_Neutrophil_True.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_46_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_46_1.png" style="width: 718px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_46_2.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_46_2.png" style="width: 695px; height: 429px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Part-III:-Infer-transition-map-using-only-clones-from-the-last-time-point">
+<h2>Part III: Infer transition map using only clones from the last time point<a class="headerlink" href="#Part-III:-Infer-transition-map-using-only-clones-from-the-last-time-point" title="Permalink to this headline">¶</a></h2>
+<p>When run for the firs time, assuming that the similarity matrices are pre-computed, it takes 73 mins. Around 40 mins of which are used to compute the initialized map.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">initial_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">]</span> <span class="c1">#[&#39;2&#39;,&#39;4&#39;]</span>
+<span class="n">clonal_time_point</span><span class="o">=</span><span class="s1">&#39;6&#39;</span>
+<span class="n">adata</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">tmap</span><span class="o">.</span><span class="n">infer_Tmap_from_one_time_clones</span><span class="p">(</span><span class="n">adata_orig</span><span class="p">,</span><span class="n">initial_time_points</span><span class="p">,</span><span class="n">clonal_time_point</span><span class="p">,</span><span class="n">Clone_update_iter_N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">initialize_method</span><span class="o">=</span><span class="s1">&#39;OT&#39;</span><span class="p">,</span><span class="n">OT_cost</span><span class="o">=</span><span class="s1">&#39;SPD&#39;</span><span class="p">,</span><span class="n">smooth_array</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span><span class="n">noise_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">use_full_Smatrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-------------------------------New Start--------------------------------------------------
+Current time point: 4
+-----------Pre-processing and sub-sampling cells------------
+----------------
+Step 1: Use OT method for initialization
+Load pre-computed shortest path distance matrix
+Load pre-computed custon OT matrix
+----------------
+Step 2: Jointly optimize the transition map and the initial clonal states!
+Joint optimization that consider possibility of clonal overlap: v2
+--&gt; original clone shape: (44531, 5000)
+--&gt; After excluding zero-sized clones at t2: (44531, 3949)
+Sort clones by size (small to large)
+Infer the number of initial cells to extract for each clone in advance
+--&gt; Inferring early clonal states: current clone id 0
+--&gt; Inferring early clonal states: current clone id 100
+--&gt; Inferring early clonal states: current clone id 200
+--&gt; Inferring early clonal states: current clone id 300
+--&gt; Inferring early clonal states: current clone id 400
+--&gt; Inferring early clonal states: current clone id 500
+--&gt; Inferring early clonal states: current clone id 600
+--&gt; Inferring early clonal states: current clone id 700
+--&gt; Inferring early clonal states: current clone id 800
+--&gt; Inferring early clonal states: current clone id 900
+--&gt; Inferring early clonal states: current clone id 1000
+--&gt; Inferring early clonal states: current clone id 1100
+--&gt; Inferring early clonal states: current clone id 1200
+--&gt; Inferring early clonal states: current clone id 1300
+--&gt; Inferring early clonal states: current clone id 1400
+--&gt; Inferring early clonal states: current clone id 1500
+--&gt; Inferring early clonal states: current clone id 1600
+--&gt; Inferring early clonal states: current clone id 1700
+--&gt; Inferring early clonal states: current clone id 1800
+--&gt; Inferring early clonal states: current clone id 1900
+--&gt; Inferring early clonal states: current clone id 2000
+--&gt; Inferring early clonal states: current clone id 2100
+--&gt; Inferring early clonal states: current clone id 2200
+--&gt; Inferring early clonal states: current clone id 2300
+--&gt; Inferring early clonal states: current clone id 2400
+--&gt; Inferring early clonal states: current clone id 2500
+--&gt; Inferring early clonal states: current clone id 2600
+--&gt; Inferring early clonal states: current clone id 2700
+--&gt; Inferring early clonal states: current clone id 2800
+--&gt; Inferring early clonal states: current clone id 2900
+--&gt; Inferring early clonal states: current clone id 3000
+--&gt; Inferring early clonal states: current clone id 3100
+--&gt; Inferring early clonal states: current clone id 3200
+--&gt; Inferring early clonal states: current clone id 3300
+--&gt; Inferring early clonal states: current clone id 3400
+--&gt; Inferring early clonal states: current clone id 3500
+--&gt; Inferring early clonal states: current clone id 3600
+--&gt; Inferring early clonal states: current clone id 3700
+--&gt; Inferring early clonal states: current clone id 3800
+--&gt; Inferring early clonal states: current clone id 3900
+---------Compute the transition map-----------
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  3.981484889984131
+--&gt; Time elapsed:  13.805161952972412
+--&gt; Time elapsed:  5.065578937530518
+--&gt; Time elapsed:  12.689456939697266
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  3.187398910522461
+--&gt; Time elapsed:  8.711445093154907
+--&gt; Time elapsed:  3.170758008956909
+--&gt; Time elapsed:  11.070081949234009
+Compute similarity matrix: load existing data
+--&gt; Time elapsed:  2.3958258628845215
+--&gt; Time elapsed:  6.91269588470459
+--&gt; Time elapsed:  2.0598580837249756
+--&gt; Time elapsed:  10.68928599357605
+Current iteration: 0
+Use smooth_round=20
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  80.92401266098022
+Phase II: time elapsed --  165.1714289188385
+Current iteration: 1
+Use smooth_round=15
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  55.97332787513733
+Phase II: time elapsed --  149.27714896202087
+Current iteration: 2
+Use smooth_round=10
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Start to smooth the refined clonal map
+Phase I: time elapsed --  56.067983865737915
+Phase II: time elapsed --  172.90910410881042
+No need for Final Smooth (i.e., clonally states are the final state space for Tmap)
+----Demultiplexed transition map----
+Clone normalization
+--&gt; Relative time point pair index: 0
+--&gt; Clone id: 0
+--&gt; Clone id: 1000
+--&gt; Clone id: 2000
+--&gt; Clone id: 3000
+Finishing computing transport map from CoSpar using inferred clonal data, used time 920.3555781841278
+-----------Total used time: 1060.1137290000916 s ------------
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_map</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+               <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_51_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_51_0.png" style="width: 288px; height: 435px;" />
+</div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">transition_map</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">,</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_54_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_54_0.png" style="width: 315px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_54_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_54_1.png" style="width: 310px; height: 266px;" />
+</div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">OT_transition_map</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_bias_from_binary_competition</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">,</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">],</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;OT_transition_map&#39;</span><span class="p">,</span>
+            <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span><span class="n">plot_target_state</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_56_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_56_0.png" style="width: 315px; height: 266px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_56_1.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_56_1.png" style="width: 302px; height: 266px;" />
+</div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">transition_map</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fate_array</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ccr7_DC&#39;</span><span class="p">,</span><span class="s1">&#39;Mast&#39;</span><span class="p">,</span><span class="s1">&#39;Meg&#39;</span><span class="p">,</span><span class="s1">&#39;pDC&#39;</span><span class="p">,</span><span class="s1">&#39;Eos&#39;</span><span class="p">,</span><span class="s1">&#39;Lymphoid&#39;</span><span class="p">,</span><span class="s1">&#39;Erythroid&#39;</span><span class="p">,</span><span class="s1">&#39;Baso&#39;</span><span class="p">,</span>  <span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="s1">&#39;Monocyte&#39;</span><span class="p">]</span>
+<span class="n">celltype_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mDC&#39;</span><span class="p">,</span>  <span class="s1">&#39;Mast&#39;</span><span class="p">,</span> <span class="s1">&#39;Meg&#39;</span><span class="p">,</span> <span class="s1">&#39;pDC&#39;</span><span class="p">,</span> <span class="s1">&#39;Eos&#39;</span><span class="p">,</span> <span class="s1">&#39;Ly&#39;</span><span class="p">,</span> <span class="s1">&#39;Ery&#39;</span><span class="p">,</span> <span class="s1">&#39;Baso&#39;</span><span class="p">,</span> <span class="s1">&#39;Neu&#39;</span><span class="p">,</span> <span class="s1">&#39;Mon&#39;</span><span class="p">]</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_Tmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="n">fate_array</span><span class="p">,</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span>
+                        <span class="n">rename_selected_fates</span><span class="o">=</span><span class="n">celltype_names</span><span class="p">,</span><span class="n">color_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_59_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_59_0.png" style="width: 366px; height: 283px;" />
+</div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">OT_transition_map</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fate_array</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ccr7_DC&#39;</span><span class="p">,</span><span class="s1">&#39;Mast&#39;</span><span class="p">,</span><span class="s1">&#39;Meg&#39;</span><span class="p">,</span><span class="s1">&#39;pDC&#39;</span><span class="p">,</span><span class="s1">&#39;Eos&#39;</span><span class="p">,</span><span class="s1">&#39;Lymphoid&#39;</span><span class="p">,</span><span class="s1">&#39;Erythroid&#39;</span><span class="p">,</span><span class="s1">&#39;Baso&#39;</span><span class="p">,</span>  <span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span> <span class="s1">&#39;Monocyte&#39;</span><span class="p">]</span>
+<span class="n">celltype_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mDC&#39;</span><span class="p">,</span>  <span class="s1">&#39;Mast&#39;</span><span class="p">,</span> <span class="s1">&#39;Meg&#39;</span><span class="p">,</span> <span class="s1">&#39;pDC&#39;</span><span class="p">,</span> <span class="s1">&#39;Eos&#39;</span><span class="p">,</span> <span class="s1">&#39;Ly&#39;</span><span class="p">,</span> <span class="s1">&#39;Ery&#39;</span><span class="p">,</span> <span class="s1">&#39;Baso&#39;</span><span class="p">,</span> <span class="s1">&#39;Neu&#39;</span><span class="p">,</span> <span class="s1">&#39;Mon&#39;</span><span class="p">]</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">fate_coupling_from_Tmap</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="n">selected_fates</span><span class="o">=</span><span class="n">fate_array</span><span class="p">,</span><span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;OT_transition_map&#39;</span><span class="p">,</span>
+                        <span class="n">rename_selected_fates</span><span class="o">=</span><span class="n">celltype_names</span><span class="p">,</span><span class="n">color_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_61_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_61_0.png" style="width: 366px; height: 283px;" />
+</div>
+</div>
+<p>From <code class="docutils literal notranslate"><span class="pre">transition_map</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+ <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;transition_map&#39;</span><span class="p">,</span> <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">bias_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">avoid_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_64_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_64_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+<p>From <code class="docutils literal notranslate"><span class="pre">OT_transition_map</span></code>. We change sum_fate_prob_thresh=0.3 to get rid of low-probability states.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cs</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">dynamic_trajectory_from_competition_bias</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">selected_fates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neutrophil&#39;</span><span class="p">,</span><span class="s1">&#39;Monocyte&#39;</span><span class="p">],</span>
+ <span class="n">used_map_name</span><span class="o">=</span><span class="s1">&#39;OT_transition_map&#39;</span><span class="p">,</span> <span class="n">map_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_time_points</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">bias_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum_fate_prob_thresh</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">avoid_target_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/20210121_all_hematopoietic_data_66_0.png" class="no-scaled-link" src="_images/20210121_all_hematopoietic_data_66_0.png" style="width: 583px; height: 283px;" />
+</div>
+</div>
+<p>We can see that the <code class="docutils literal notranslate"><span class="pre">OT_transition_map</span></code>, which is constructed using the shortest path distance (not WOT map that uses gene expression distance), still has the potential to recover the ealy fate bias boundary, although the boundary is much more blurry than what coherent sparsity optimization would predicted.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="20210121_reprogramming_data_merge_tags.html" class="btn btn-neutral float-right" title="Reprogramming dataset (static barcoding)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="20210121_cospar_tutorial.html" class="btn btn-neutral float-left" title="CoSpar basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shou-Wen Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

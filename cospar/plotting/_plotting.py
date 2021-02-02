@@ -1092,7 +1092,7 @@ def dynamic_trajectory_from_intrinsic_bias(adata,selected_fates=[],used_map_name
 
     Returns
     -------
-    Store the inferred ancestor states in adata.uns['Cell_group_A'] and adata.uns['Cell_group_B']
+    Store the inferred ancestor states in adata.uns['cell_group_A'] and adata.uns['cell_group_B']
 
     Combine ancestor states and target states into adata.uns['dynamic_trajectory'] for each fate. 
     """
@@ -1170,8 +1170,8 @@ def dynamic_trajectory_from_intrinsic_bias(adata,selected_fates=[],used_map_name
                 group_A_idx_full[cell_id_t1[sp_idx]]=idx_for_group_A[sp_idx]
                 group_B_idx_full=np.zeros(adata.shape[0],dtype=bool)
                 group_B_idx_full[cell_id_t1[sp_idx]]=idx_for_group_B[sp_idx]
-                adata.obs['Cell_group_A']=group_A_idx_full
-                adata.obs['Cell_group_B']=group_B_idx_full             
+                adata.obs['cell_group_A']=group_A_idx_full
+                adata.obs['cell_group_B']=group_B_idx_full             
 
 
                 if plot_ancestor:
@@ -1286,7 +1286,7 @@ def dynamic_trajectory_from_competition_bias(adata,selected_fates=[],used_map_na
 
     Returns
     -------
-    Store the inferred ancestor states in adata.uns['Cell_group_A'] and adata.uns['Cell_group_B']
+    Store the inferred ancestor states in adata.uns['cell_group_A'] and adata.uns['cell_group_B']
 
     Combine ancestor states and target states into adata.uns['dynamic_trajectory'] for each fate. 
     """
@@ -1375,8 +1375,8 @@ def dynamic_trajectory_from_competition_bias(adata,selected_fates=[],used_map_na
                 group_A_idx_full[cell_id_t1[sp_idx]]=idx_for_group_A[sp_idx]
                 group_B_idx_full=np.zeros(adata.shape[0],dtype=bool)
                 group_B_idx_full[cell_id_t1[sp_idx]]=idx_for_group_B[sp_idx]
-                adata.obs['Cell_group_A']=group_A_idx_full
-                adata.obs['Cell_group_B']=group_B_idx_full                
+                adata.obs['cell_group_A']=group_A_idx_full
+                adata.obs['cell_group_B']=group_B_idx_full                
 
 
                 if plot_ancestor:
@@ -1462,8 +1462,8 @@ def differential_genes(adata,plot_groups=True,gene_N=100,plot_gene_N=5,
 
     diff_gene_A=[]
     diff_gene_B=[]
-    idx_for_group_A=adata.obs['Cell_group_A']
-    idx_for_group_B=adata.obs['Cell_group_B']
+    idx_for_group_A=adata.obs['cell_group_A']
+    idx_for_group_B=adata.obs['cell_group_B']
     #hf.check_available_map(adata)
     #set_up_plotting()
     if (np.sum(idx_for_group_A)==0) or (np.sum(idx_for_group_B)==0):
@@ -1643,8 +1643,8 @@ def differential_genes_for_given_fates(adata,selected_fates=[],plot_time_points=
         group_A_idx_full[np.nonzero(sp_idx)[0]]=idx_for_group_A
         group_B_idx_full=np.zeros(adata.shape[0],dtype=bool)
         group_B_idx_full[np.nonzero(sp_idx)[0]]=idx_for_group_B
-        adata.obs['Cell_group_A']=group_A_idx_full
-        adata.obs['Cell_group_B']=group_B_idx_full
+        adata.obs['cell_group_A']=group_A_idx_full
+        adata.obs['cell_group_B']=group_B_idx_full
         #adata.uns['DGE_analysis']=[adata_1,idx_for_group_A,idx_for_group_B]
 
         diff_gene_A,diff_gene_B=differential_genes(adata,plot_groups=plot_groups,gene_N=gene_N,plot_gene_N=plot_gene_N,savefig=savefig,point_size=point_size)

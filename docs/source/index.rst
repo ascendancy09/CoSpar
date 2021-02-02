@@ -7,21 +7,20 @@ CoSpar - dynamic inference by integrating transcriptome and lineage information
    :width: 300px
    :align: left
 
-**CoSpar** is a toolkit for dynamic inference in lineage-traced single cells. |br|
+**CoSpar** is a toolkit for dynamic inference from lineage-traced single cells. |br|
 The methods are based on
 `S.-W. Wang & A.M. Klein (ToBeSubmitted, 2021) <https://doi.org/xxx>`_.
 
-Dynamic inference based on single-cell state measurement alone requires serious simplifications. On the other hand, direct dynamic measurement via lineage tracing only captures partial information and are very noisy. Exploiting both the local coherence and sparsity of differentiation transitions, CoSpar robustly infer the transition map of a development/differentiation system by integrating state and lineage measurement. CoSpar can recover early fate bias undetected in other dynamic inference methods, even using more noisy and fewer data. 
+Dynamic inference based on single-cell state measurement alone requires serious simplifications. On the other hand, direct dynamic measurement via lineage tracing only captures partial information and is very noisy. CoSpar integrates both state and lineage information to infer the transition map of a development/differentiation system. It gains superior robustness and accuracy by exploiting both the local coherence and sparsity of differentiation transitions, i.e., neighboring initial states share similar yet sparse fate outcomes.  Building around the most popular :class:`~anndata.AnnData` object in the single-cell community, CoSpar is dedicated to building an integrated analysis framework for datasets with both state and lineage information. It offers essential toolkits for analyzing clonal information, state information, or their integration. 
 
 CoSpar's key applications
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-- infer the finite-time single-cell transition amplitude from one state to another.
-- map a cell forward or backward in time.
-- infer the fate potential of a cell. 
-- identify the boundary of fate bifurcation. 
-- identify putative driver genes.
-- identify fate-bias clones.
-- infer differentiation coupling between different fate clusters.
+- infer transition maps using only clonal information, state information, or their integration. 
+- identify early fate bias/commitment of a cell 
+- infer differentiation trajectories leading to a fate.
+- infer gene expression dynamics along the trajectory. 
+- infer putative driver genes.
+- infer fate coupling.
 
 
 .. Upcoming talks

@@ -19,46 +19,37 @@ from .. import logging as logg
 def initialize_adata_object(cell_by_gene_matrix,gene_names,time_info,
     X_clone=[],X_pca=[],X_emb=[],state_info=[],data_des='cospar'):
     """
-    Initialized the :class:`~anndata.AnnData` object
+    Initialized the :class:`~anndata.AnnData` object.
 
     The principal components (`X_pca`), 2-d embedding (`X_emb`), and 
-    state_info can be provided upfront, or generated in the next step.
-    If the clonal information (X_clone) is not provided, 
-    the transition map will be generated using only the state information.
+    `state_info` can be provided upfront, or generated in the next step.
+    The clonal information (`X_clone`) is also optional.
 
     Parameters
     ---------- 
-    cell_by_gene_matrix: `np.ndarray`, `sp.spmatrix`
-        The (annotated) data matrix. Rows correspond to cells and columns to genes. 
-
+    cell_by_gene_matrix: `np.ndarray` or `sp.spmatrix`
+        The count matrix for state information. 
+        Rows correspond to cells and columns to genes. 
     gene_names: `np.ndarray`
         An array of gene names.
-    
     time_info: `np.ndarray`
         Time annotation for each cell in `str`,like 'Day27' or 'D27'.
         However, it can also contain other sample_info, 
         like 'GFP+_day27', and 'GFP-_day27'.
-        
-    X_clone: `sp.spmatrix` (also accpet `np.ndarray`)        
-        The clonal data matrix, with the row in cell_id, and column in barcode_id.
-        For evolvable barcoding, a cell may carry several different barcode_id. 
-
-    X_pca: `np.ndarray`, optional (default: [])
-        A matrix of the shape n_cell*n_pct. Create if not set. 
-
-    X_emb: `np.ndarray`, optional (default: [])
-        Two-dimensional matrix for embedding.  Create with UMAP if not set.
-        It is used only for plotting after the transition map is created
-
-    state_info: `np.ndarray`, optional (default: [])
+    X_clone: `sp.spmatrix` or `np.ndarray`, optional (default: None)        
+        The clonal data matrix, with the row in cell id, and column in barcode id.
+        For evolvable barcoding, a cell may carry several different barcode id. 
+    X_pca: `np.ndarray`, optional (default: None)
+        A matrix of the shape n_cell*n_pct. Used for computing similarity matrices.
+    X_emb: `np.ndarray`, optional (default: None)
+        Two-dimensional matrix for embedding.  
+    state_info: `np.ndarray`, optional (default: None)
         The classification and annotation for each cell state. 
-        Create with leiden clustering if not set. 
-        This will be used only after the map is created. Can be adjusted later
-
+        This will be used only after the map is created. Can be adjusted later.
     data_des: `str`, optional (default:'cospar')
         This is just a name to label/distinguish this data. 
-        Will be used for saving the results. 
-        It should be a unique name for a new dataset.
+        Will be used for saving the results. It should be a unique 
+        name for a new dataset stored in the same folder to avoid conflicts.
             
     Returns
     -------
@@ -136,26 +127,26 @@ def get_highly_variable_genes(adata,normalized_counts_per_cell=10000,min_counts=
     """
     Get highly variable genes.
 
-    We assume that data preprocessing are already done (e.g., via scanpy.pp), including
-    removing low quality cells, regress out cell cycle effect, removing doublets etc. 
+    We assume that data preprocessing are already done, like removing low quality cells. 
     It first perform count normalization, then variable gene selection. 
 
     Parameters
     ----------
     adata: :class:`~anndata.AnnData` object
-    normalized_counts_per_cell: int, optional (default: 1000)
+    normalized_counts_per_cell: `int`, optional (default: 1000)
         count matrix normalization 
-    min_counts: int, optional (default: 3)  
+    min_counts: `int`, optional (default: 3)  
         Minimum number of UMIs per cell to be considered for selecting highly variable genes. 
-    min_cells: int, optional (default: 3)
+    min_cells: `int`, optional (default: 3)
         Minimum number of cells per gene to be considered for selecting highly variable genes. 
-    min_gene_vscore_pctl: int, optional (default: 85)
-        Genes wht a variability percentile higher than this threshold are marked as 
-        highly variable genes for dimension reduction. Range: [0,100]
+    min_gene_vscore_pctl: `int`, optional (default: 85)
+        Gene expression variability threshold, in the unit of percentile,  
+        for selecting highly variable genes. Range: [0,100], with a higher 
+        number selecting more variable genes. 
 
     Returns
     -------
-    None, but the adata.var['highly_variable'] is modified. 
+    None. Modify adata.var['highly_variable'].
     """
 
     sc.pp.normalize_per_cell(adata, counts_per_cell_after=normalized_counts_per_cell)
@@ -181,10 +172,9 @@ def remove_cell_cycle_correlated_genes(adata,cycling_gene_list=['Ube2c','Hmgb2',
     """
     Remove cell-cycle correlated genes.
 
-    Take pre-selected highly variable genes, compute their correlation with 
-    the set of cell cycle genes, and remove from the highly variable list genes 
-    that have absolute correlation score above given correlation threshold 
-    if confirm_change=True. It is a prerequisite to run 
+    Take pre-selected highly variable genes, and compute their correlation with 
+    the set of cell cycle genes. If confirm_change=True, remove those having absolute correlation 
+    score are above given correlation threshold. It is a prerequisite to run 
     :func:`get_highly_variable_genes` first. 
 
     Warning: the default cell cycle gene sets are from mouse genes. Please convert them
@@ -252,7 +242,7 @@ def remove_cell_cycle_correlated_genes(adata,cycling_gene_list=['Ube2c','Hmgb2',
 
 def get_X_pca(adata,n_pca_comp=40):
     """
-    Update X_pca
+    Get X_pca.
 
     Parameters
     ----------
@@ -262,7 +252,7 @@ def get_X_pca(adata,n_pca_comp=40):
 
     Returns
     -------
-    None, but the adata.obsm['X_pca'] is modified. 
+    None. Modify adata.obsm['X_pca']. 
     """
 
     if 'highly_variable' not in adata.var.keys():
@@ -279,21 +269,21 @@ def get_X_pca(adata,n_pca_comp=40):
 
 def get_X_emb(adata,n_neighbors=20,umap_min_dist=0.3):
     """
-    Update X_emb using :func:`scanpy.tl.umap`
+    Get X_emb using :func:`scanpy.tl.umap`
 
     We assume that X_pca is computed.
 
     Parameters
     ----------
     adata: :class:`~anndata.AnnData` object
-    n_neighbors: int, optional (default: 20)
-        neighber number for constructing the KNN graph, using the UMAP method. 
-    umap_min_dist: float, optional (default: 0.3)
+    n_neighbors: `int`, optional (default: 20)
+        Neighber number for constructing the KNN graph, using the UMAP method. 
+    umap_min_dist: `float`, optional (default: 0.3)
         The effective minimum distance between embedded points. 
 
     Returns
     -------
-    None, but the adata.obsm['X_emb'] is modified. 
+    None. Modify adata.obsm['X_emb'].
     """
 
     if not ('X_pca' in adata.obsm.keys()):
@@ -309,20 +299,20 @@ def get_state_info(adata,leiden_resolution=0.5):
     """
     Update `state_info` using :func:`scanpy.tl.leiden`
 
-    We assume that X_pca is computed.
+    We assume that `adata.obsm['X_pca']` exists.
 
     Parameters
     ----------
     adata: :class:`~anndata.AnnData` object
-    n_neighbors: int, optional (default: 20)
-        neighber number for constructing the KNN graph, using the UMAP method. 
-    leiden_resolution: float, optional (default: 0.5)
+    n_neighbors: `int`, optional (default: 20)
+        Neighber number for constructing the KNN graph, using the UMAP method. 
+    leiden_resolution: `float`, optional (default: 0.5)
         A parameter value controlling the coarseness of the clustering. 
         Higher values lead to more clusters.
 
     Returns
     -------
-    None, but the adata.obs['state_info'] is modified. 
+    None. Modify adata.obs['state_info']. 
     """
 
     if not ('X_pca' in adata.obsm.keys()):
@@ -333,25 +323,6 @@ def get_state_info(adata,leiden_resolution=0.5):
         adata.obs['state_info']=adata.obs['leiden']
 
 
-def check_adata_structure(adata):
-    """
-    Check whether the adata has the right structure. 
-
-    """
-    if not ('X_pca' in adata.obsm.keys()):
-        logg.error('*X_pca* missing from adata.obsm')
-
-    if not ('X_emb' in adata.obsm.keys()):
-        logg.error('*X_emb* missing from adata.obsm')
-
-    if not ('X_clone' in adata.obsm.keys()):
-        logg.error('*X_clone* missing from adata.obsm')
-
-    if not ('time_info' in adata.obs.keys()):
-        logg.error('*time_info* missing from adata.obs')
-
-    if not ('state_info' in adata.obs.keys()):
-        logg.error('*state_info* missing from adata.obs')
 
 
 ############# refine clusters for state_info
@@ -359,38 +330,34 @@ def check_adata_structure(adata):
 def refine_state_info_by_leiden_clustering(adata,selected_time_points=[],
     leiden_resolution=0.5,n_neighbors=5,confirm_change=False,cluster_name_prefix='S'):
     """
-    Refine state info by clustering on states at given time points.
+    Refine state info by clustering states at given time points.
 
     Select states at desired time points to improve the clustering. When
     first run, set confirm_change=False. Only when you are happy with the 
-    result, set confirm_change=True to update the adata.obs['state_info'].
-    The original state_info will be stored at adata.obs['old_state_info'].  
-
-    When you run it the first time, set confirm_change=False. Only when you are happy with 
-    the result, set confirm_change=True to update the adata.obs['state_info'].
+    result, set confirm_change=True to update adata.obs['state_info'].
     The original state_info will be stored at adata.obs['old_state_info'].  
 
     Parameters
     ----------
     adata: :class:`~anndata.AnnData` object
     selected_time_points: `list`, optional (default: include all)
-        A list of selected time points for performing clustering,
-        among adata.obs['time_info']. If set as [], use all time points.
+        A list of selected time points for clustering. Should be 
+        among adata.obs['time_info']. 
     adata: :class:`~anndata.AnnData` object
     n_neighbors: `int`, optional (default: 20)
-        neighber number for constructing the KNN graph, using the UMAP method. 
+        Neighber number for constructing the KNN graph, using the UMAP method. 
     leiden_resolution: `float`, optional (default: 0.5)
         A parameter value controlling the coarseness of the clustering. 
         Higher values lead to more clusters.
     confirm_change: `bool`, optional (default: False)
         If True, update adata.obs['state_info']
     cluster_name_prefix: `str`, optional (default: 'S')
-        prefix for the new cluster name in case they overlap 
-        with existing cluster names.
+        prefix for the new cluster name to distinguish it from 
+        existing cluster names.
 
     Returns
     -------
-    Update the adata.obs['state_info'] if confirm_change=True.
+    Update adata.obs['state_info'] if confirm_change=True.
     """
 
     time_info=adata.obs['time_info']
@@ -438,7 +405,7 @@ def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
     Refine state info according to marker gene expression.
 
     In this method, a state is selected if it expresses all genes in the list 
-    of marker_genes, and the expression are above the relative threshold express_threshold. 
+    of marker_genes, and the expression are above the relative `express_threshold`. 
     You can also specify which time point you want to focus on. In addition, we also include 
     cell states neighboring to these valid states to smooth the selection 
     (controlled by add_neighbor_N).
@@ -456,16 +423,16 @@ def refine_state_info_by_marker_genes(adata,marker_genes,express_threshold=0.1,
         Relative threshold of marker gene expression, in the range [0,1].
         A state must have an expression above this threshold for all genes
         to be included.
-    selected_time_points: `list`, optional (default: include all)
+    selected_time_points: `list`, optional (default: all)
         A list of selected time points for performing clustering,
-        among adata.obs['time_info']. If set as [], use all time points.
+        among adata.obs['time_info']. 
     new_cluster_name: `str`, optional (default: 'new_cluster')
     confirm_change: `bool`, optional (default: False)
-        If True, update adata.obs['state_info']
+        If True, update adata.obs['state_info'].
     add_neighbor_N: `int`, optional (default: 5)
         Add to the new cluster neighboring cells of a qualified 
         high-expressing state according to the KNN graph 
-        with K=add_neighbor_N
+        with K=add_neighbor_N.
 
     Returns
     -------
